@@ -1,0 +1,87 @@
+{% extends 'home.html' %}
+{% from "_macro.html" import render_field %}
+
+
+
+	{% block content %}
+        <script>
+        function imprSelec(muestra){
+    var ficha = document.getElementById(muestra); //obtenemos el objeto a imprimir
+    var ventimp = window.open(' ','popimpr'); //abrimos una ventana vacía nueva
+    ventimp.document.write(ficha.innerHTML); //imprimimos el HTML del objeto en la nueva ventana
+    ventimp.document.close();  //cerramos el documento
+    ventimp.print(); //imprimimos la ventana
+    ventimp.close(); //cerramos la ventana
+}
+        </script>
+        <div class="container">
+			<div class="row-fluid">
+				<form  name="form1" class="form-horizontal" method="POST" accept-charset="utf-8">
+    				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    				<div class="row form-control-feedback form-group">
+    					<div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.placas, class='form-control', placeholder="Seleccione una placa") }}
+                            {{ render_field(form.fechaI, class='form-control', placeholder="01/01/2018") }}
+                            {{ render_field(form.fechaF, class='form-control', placeholder="31/12/2018") }}
+
+                        </div>
+                    </div>
+                    <div class="success">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <button type="submit" class="btn btn-outline-danger" name='buton' value='search'>Search...</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% if lista %}
+        <div class="container" >
+            <div class="row-fluid">
+                <div class="form-goup col-xs-12 floating-label-form-group controls float-sm-right">
+                    <button class="btn btn-danger btn-sm" onclick="imprSelec('muestra')">Imprimir solo datos sin formato </button>
+                    <button class="btn btn-danger btn-sm" name='buton' value="print">Imprimir con encabezado </button>
+                </div>
+
+
+                <div class="container mt-3" id="muestra">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Núm Folio</th>
+                                <th>Fecha</th>
+                                <th>Placas</th>
+                                <th>Cant. Lts.</th>
+                                <th>T. Combus.</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                            <tbody id="myTable">
+                                {% for item in lista %}
+                                    <tr>
+                                        <td>{{item['nuFolio']}}</td>
+                                        <td>{{item['fecha']}}</td>
+                                        <td>{{item['placa']}}</td>
+                                        <td>{{item['litros']}}</td>
+                                        <td>{{item['combustible']}}</td>
+                                        <td>{{item['total']}}</td>
+                                    </tr>
+                                {%endfor%}
+                            </tbody>
+                    </table>
+                </div>
+
+
+                <br>
+                <br>
+             </form>
+            </div>
+
+        </div>
+
+
+<br>
+        <br>
+    {% endif %}
+    {% endblock %}

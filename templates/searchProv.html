@@ -1,0 +1,95 @@
+{% extends 'home.html' %}
+{% from "_macro.html" import render_field %}
+
+<br>
+<br>
+<br>
+<br>
+
+{% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+<br>
+    <div class="container">
+        <div class="row">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group form-inline">
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.select1, class='form-control') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.search, class='form-control') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        
+                </div>
+                <div class="success">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <button type="submit" class="btn btn-outline-danger" name='buton' value='search'>Search...</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+{% if datos %}
+</div>
+    </div>
+    <div class="container mt-3">
+  <h4>Puedes filtrar la tabla</h4>
+  <p>Teclea las iniciales o el nombre y filtra lo que necesites (Razon Social, Propietario y RFC) </p>
+  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+  <br>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Núm.</th>
+        <th>Razon Social </th>
+        <th>Propietario</th>
+        <th>R. F. C.</th>
+        <th>Dirección</th>
+        <th>Contacto</th>
+        <th>Telefono</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      {% for item in datos %}
+        <tr>
+            <td>{{item['id']}}</td>
+            <td>{{item['razonSocial']}}</td>
+            <td>{{item['propietario']}}</td>
+            <td>{{item['rfc']}}</td>
+            <td>{{item['direccion']}}</td>
+            <td>{{item['contacto']}}</td>
+            <td>{{item['telefono']}}</td>
+            <td>{{item['email']}}</td>
+            <td><a type="submit" href="/prov/{{item['id']}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+        </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+  
+  
+</div>
+<br>
+<br>
+{% endif %}
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+
+{% endblock %}

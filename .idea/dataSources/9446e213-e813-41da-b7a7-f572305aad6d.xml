@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="vehiculos@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.1">
+    <root id="1"/>
+    <schema id="2" parent="1" name="vehiculos">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <schema id="4" parent="1" name="mysql"/>
+    <schema id="5" parent="1" name="performance_schema"/>
+    <schema id="6" parent="1" name="sys"/>
+    <table id="7" parent="2" name="resguardantes"/>
+    <table id="8" parent="2" name="tvehiculos"/>
+    <table id="9" parent="2" name="users"/>
+    <table id="10" parent="2" name="vehiculos"/>
+    <column id="11" parent="7" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="12" parent="7" name="nombre">
+      <Position>2</Position>
+      <DataType>varchar(35)|0</DataType>
+    </column>
+    <column id="13" parent="7" name="area">
+      <Position>3</Position>
+      <DataType>varchar(35)|0</DataType>
+    </column>
+    <column id="14" parent="7" name="departamento">
+      <Position>4</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="15" parent="7" name="licencia">
+      <Position>5</Position>
+      <DataType>varchar(12)|0</DataType>
+    </column>
+    <column id="16" parent="7" name="lVigencia">
+      <Position>6</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="17" parent="7" name="created_date">
+      <Position>7</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <index id="18" parent="7" name="nombre">
+      <ColNames>nombre</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="19" parent="7" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="20" parent="7" name="nombre">
+      <ColNames>nombre</ColNames>
+      <UnderlyingIndexName>nombre</UnderlyingIndexName>
+    </key>
+    <column id="21" parent="8" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="22" parent="8" name="tipo">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <index id="23" parent="8" name="tipo">
+      <ColNames>tipo</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="24" parent="8" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="25" parent="8" name="tipo">
+      <ColNames>tipo</ColNames>
+      <UnderlyingIndexName>tipo</UnderlyingIndexName>
+    </key>
+    <column id="26" parent="9" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="27" parent="9" name="username">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="28" parent="9" name="email">
+      <Position>3</Position>
+      <DataType>varchar(40)|0</DataType>
+    </column>
+    <column id="29" parent="9" name="password">
+      <Position>4</Position>
+      <DataType>varchar(93)|0</DataType>
+    </column>
+    <column id="30" parent="9" name="privilegios">
+      <Position>5</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="31" parent="9" name="created_date">
+      <Position>6</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <index id="32" parent="9" name="username">
+      <ColNames>username</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="33" parent="9" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="34" parent="9" name="username">
+      <ColNames>username</ColNames>
+      <UnderlyingIndexName>username</UnderlyingIndexName>
+    </key>
+    <column id="35" parent="10" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="36" parent="10" name="numInv">
+      <Position>2</Position>
+      <DataType>varchar(8)|0</DataType>
+    </column>
+    <column id="37" parent="10" name="marca">
+      <Position>3</Position>
+      <DataType>varchar(13)|0</DataType>
+    </column>
+    <column id="38" parent="10" name="modelo">
+      <Position>4</Position>
+      <DataType>varchar(15)|0</DataType>
+    </column>
+    <column id="39" parent="10" name="tipoVehiculo">
+      <Position>5</Position>
+      <DataType>varchar(15)|0</DataType>
+    </column>
+    <column id="40" parent="10" name="nSerie">
+      <Position>6</Position>
+      <DataType>varchar(17)|0</DataType>
+    </column>
+    <column id="41" parent="10" name="tCombus">
+      <Position>7</Position>
+      <DataType>varchar(10)|0</DataType>
+    </column>
+    <column id="42" parent="10" name="odome">
+      <Position>8</Position>
+      <DataType>varchar(2)|0</DataType>
+    </column>
+    <column id="43" parent="10" name="kmInicio">
+      <Position>9</Position>
+      <DataType>varchar(12)|0</DataType>
+    </column>
+    <column id="44" parent="10" name="nVehi">
+      <Position>10</Position>
+      <DataType>varchar(25)|0</DataType>
+    </column>
+    <column id="45" parent="10" name="resguardo">
+      <Position>11</Position>
+      <DataType>varchar(35)|0</DataType>
+    </column>
+    <column id="46" parent="10" name="cSeguros">
+      <Position>12</Position>
+      <DataType>varchar(35)|0</DataType>
+    </column>
+    <column id="47" parent="10" name="nPoliza">
+      <Position>13</Position>
+      <DataType>varchar(15)|0</DataType>
+    </column>
+    <column id="48" parent="10" name="placa">
+      <Position>14</Position>
+      <DataType>varchar(10)|0</DataType>
+    </column>
+    <column id="49" parent="10" name="created_date">
+      <Position>15</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <index id="50" parent="10" name="numInv">
+      <ColNames>numInv</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="51" parent="10" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="52" parent="10" name="numInv">
+      <ColNames>numInv</ColNames>
+      <UnderlyingIndexName>numInv</UnderlyingIndexName>
+    </key>
+  </database-model>
+</dataSource>

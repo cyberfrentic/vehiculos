@@ -1,0 +1,65 @@
+{% extends 'home.html' %}
+{% from "_macro.html" import render_field %}
+
+<br>
+<br>
+<br>
+<br>
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                 <div class="row form-control-feedback">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.username, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row form-control-feedback">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.password, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row form-control-feedback">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.confirm, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row form-control-feedback">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.email, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <br>
+                <div class="row form-control-feedback">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        <div class="checkbox">
+                            {{ form.vehiculos() }} {{form.vehiculos.label}} <br>
+                            {{ form.proveedores() }} {{form.proveedores.label}} <br>
+                            {{ form.tipo_vehiculos}} {{form.tipo_vehiculos.label}} <br>
+                            {{ form.crear }} {{ form.crear.label }}
+                        </div>
+                    </div>
+                </div>
+                   
+                <div class="success">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <button type="submit" class="btn btn-outline-danger">Send</button>
+                        </div>
+                    </div>
+                </div>
+                {{form.honeypot}}
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+{% endblock %}

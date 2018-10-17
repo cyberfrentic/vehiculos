@@ -1,0 +1,79 @@
+{% extends 'Base.html' %}
+{%block nombre%}  
+    {% if nombre %}
+      <li><a href="#"><icon class="icon-user icon-white"></icon> {{nombre}}</a></li>
+    {% else %}
+        <li><a href="/login"><icon class="icon-user icon-white"></icon> Login</a></li> 
+    {% endif %}
+{%endblock%}
+{% block content %}
+
+<h3 class="mt-5">Captura de Factura de combustible desde Excell</h3>
+<div class="row-fluid">
+    <div class="table-responsive">
+    <table class="table table-hover table-condensed">
+    	<caption>Factura De Combustible No. {{fact}}</caption>
+    	<tbody>
+    	<tr class="success">
+    		<td><strong>Placas</strong></td>
+    		<td><strong>No. Tarjeta</strong></th>
+    		<td><strong>Centro de Costo</strong></th>
+    		<td><strong>Fecha de Carga</strong></th>
+    		<td><strong>No. de Folio</strong></th>
+    		<td><strong>EsCarga</strong></th>
+    		<td><strong>Nombre Esta.</strong></th>
+            <td><strong>Descripción</strong></th>
+            <td><strong>Litros</strong></th>
+            <td><strong>Precio</strong></th>
+            <td><strong>Importe</strong></th>
+            <td><strong>Odomerto</strong></th>
+            <td><strong>Odometro Ant.</strong></th>
+    	</tr>
+    	{% for item in data %}
+    	<tr class="info">
+    		<td>
+    			{{ item['placa'] }}
+    		</td>
+    		<td>
+    			{{ item['nutarjeta'] }}
+    		</td>
+    		<td>
+    			{{ item['centroCosto'] }}
+    		</td>
+    		<td>
+    			{{ item['fechaCarga'] }}
+    		</td>
+    		<td>
+    			{{ item['nuFolio'] }}
+    		</td>
+    		<td>
+    			{{ item['esCarga'] }}
+    		</td>
+    		<td>
+    			{{ item['nombreEs'] }}
+    		</td>
+            <td>
+                {{ item['descripcion'] }}
+            </td>
+            <td>
+                {{ item['litros'] }}
+            </td>
+            <td>
+                {{ item['precio'] }}
+            </td>
+            <td>
+                {{ item['importe'] }}
+            </td>
+            <td>
+                {{ item['odom'] }}
+            </td>
+            <td>
+                {{ item['odoAnt'] }}
+            </td>
+    	</tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}

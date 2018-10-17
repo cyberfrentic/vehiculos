@@ -1,0 +1,102 @@
+{% extends 'home.html' %}
+{% from "_macro.html" import render_field %}
+
+<br>
+<br>
+<br>
+<br>
+
+{% block content %}
+
+    <script>
+        window.onload = function () {
+            document.getElementById('kmIni').disabled=true;
+        };
+        function imprimirValor() {
+            var select = document.getElementsByName("odome")[0].value;
+            if (select === "s"){
+                document.getElementById('kmInicio').disabled=false;
+            } else{
+                document.getElementById('kmInicio').disabled=true;
+            }
+        }
+    </script>
+    <br>
+     <div class="container">
+        <div class="row">
+            <form method="POST" name="Autos">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                 <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.numInv, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.marca, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.modelo, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.tipoVehiculo, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.nSerie, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.tCombus, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.odome, class='form-control', onChange="imprimirValor();") }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.kmInicio, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.nVehiculo, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.resguardo, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.cSeguros, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.nPoliza, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.placa, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                 <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        <button type="submit" class="btn btn-outline-success">Agregar...</button>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </form>
+        </div>
+     </div>
+    <br>
+{% endblock %}
