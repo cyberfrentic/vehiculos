@@ -183,8 +183,7 @@ class Combustible(db.Model):
     pKm = db.Column(db.Float)
     conductor = db.Column(db.String(10))
 
-    def __init__(self, factura, leyenda, placa, nutarjeta, centroCosto, fechacarga, nuFolio, esCarga, nombreEs,
-                 descripcion, litros, precio, importe, odom, odoAnt, kmRec, kmLts, pKm, conductor):
+    def __init__(self, factura, leyenda, placa, nutarjeta, centroCosto, fechacarga, nuFolio, esCarga, nombreEs, descripcion, litros, precio, importe, odom, odoAnt, kmRec, kmLts, pKm, conductor):
         self.factura = factura
         self.leyenda = leyenda
         self.placa = placa
@@ -204,3 +203,19 @@ class Combustible(db.Model):
         self.kmLts = kmLts
         self.pKm = pKm
         self.conductor = conductor
+
+
+class Solicitud_serv(db.Model):
+    __tablename__ = 'solicitud_servicio'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    fecha = db.Column(db.DateTime, default=datetime.datetime.now)
+    nOficio= db.Column(db.String(25), unique=True)
+    placa = db.Column(db.String(10))
+    odome = db.Column(db.String(9))
+    observciones = db.Column(db.Text)
+
+    def __init__(self, nOficio, placa, odome, observaciones):
+        self.nOficio = nOficio
+        self.placa = placa
+        self.odome = odome
+        self.observaciones = observaciones

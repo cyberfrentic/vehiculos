@@ -12,9 +12,9 @@ from wtforms import DateField, DateTimeField
 from wtforms import validators
 #from wtforms import FormField
 #from wtforms.validators import NumberRange
-from models import db, User, tipoVehiculos, Resguardante, Vehiculo, Ticket
-from sqlalchemy.sql import distinct
-
+from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket
+#from sqlalchemy.sql import distinct
+from wtforms_components import TimeField, read_only
 
 def length_honeypot(form, field):
     if len(field.data) > 0:
@@ -218,3 +218,19 @@ class FormConsultaTicket(Form):
 class Form_Grafica(Form):
     placa = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket)
     anio = SelectField('Año', choices=[('', ''), ('2018', '2018'), ('2019', '2019'), ('2020', '2020'),('2021', '2021'),('2022', '2022')], )
+
+
+class Form_Solicitud(Form):
+    nServicio = StringField("Orden de Servicio: ")
+    fecha = StringField("Fecha: ")
+    nOficio = StringField("Núm. Oficio", [
+      validators.DataRequired(message="En Número de oficio es Necesario"),
+      validators.length(min=5, max=25,message="El campo está limitado a 25 caracteres")])
+    placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
+    odome = StringField("Odometro: ")
+    observaciones = TextAreaField("Observaciones")
+
+    def __init__(self, *args, **kwargs):
+        super(Form_Solicitud, self).__init__(*args, **kwargs)
+        read_only(self.nServicio)
+        read_only(self.fecha)

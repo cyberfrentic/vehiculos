@@ -7,7 +7,7 @@ from flask import make_response
 class PDF(FPDF):
     def header(self):
         # Ruta del la carpeta imagenes del servidor
-        imagenes = os.path.abspath("/vehiculos/static/img/")
+        imagenes = os.path.abspath("static/img/")
         # Logo  con esta ruta se dirige al server y no a la maquina cliente
         self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 200)
         # Arial bold 15
@@ -16,25 +16,6 @@ class PDF(FPDF):
         # Move to the right
         # self.cell(100)
         # Title
-        fe = str(datetime.today())[0:10]
-        dia = fe[8:10]
-        mes = fe[5:7]
-        anio = fe[:4]
-        meses = {
-            '01': 'Enero',
-            '02': 'Febrero',
-            '03': 'Marzo',
-            '04': 'Abril',
-            '05': 'Mayo',
-            '06': 'Junio',
-            '07': 'Julio',
-            '08': 'Agosto',
-            '09': 'Septiembre',
-            '10': 'Octubre',
-            '11': 'Noviembre',
-            '12': 'Diciembre',
-        }
-        fecha = str(dia + ' ' + meses[mes] + ' ' + anio)
         self.cell(0, 10, 'Reporte de consulta de Consumo de Combustible'.upper(), 0, 0, 'C')
         self.ln(3)
         self.cell(0, 10, ('Felipe Carrillo Puerto Quintana Roo a '+ fecha_actual()).upper(), 0, 0, 'C')

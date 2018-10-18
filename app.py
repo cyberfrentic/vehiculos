@@ -4,17 +4,18 @@ import os
 import xlrd
 from flask import Flask, session, render_template, url_for, request, flash, redirect
 from werkzeug.utils import secure_filename
-from sqlalchemy.sql import text, distinct
+from sqlalchemy.sql import text, distinct, desc
 from config import DevelopmentConfig
-from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible
+from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
-    VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica
+    VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud
 from tools.fpdf import tabla
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
 import time
+from werkzeug.datastructures import MultiDict
 
 ###########################################
 import pymysql
@@ -778,7 +779,7 @@ def ticketvsfactura():
 
 
 @app.route("/combustible/comparativos/consulta", methods=['POST', 'GET'])
-def bar():
+def grafica():
     nombre = session['username'].upper()
     form = Form_Grafica(request.form)
     if request.method =='POST' and form.validate():
@@ -835,6 +836,33 @@ def bar():
         return render_template('app.html',image_url = img_url, var=var,  form=form, nombre= nombre)
     return render_template('app.html', form=form, nombre= nombre)
     # Charting code will be here
+
+
+@app.route("/Mantenimientos/solicitud/generar-Solicitud", methods=['POST', 'GET'])
+def Solicitud():
+    nombre = session['username']
+    if request.method == 'GET':
+        nu=0
+        ultimo = db.session.query(Solicitud_serv.id).order_by(desc(Solicitud_serv.id)).first() ## encontrar el ultimo registro de una tabla
+        print(ultimo)
+        if ultimo is None:
+            nu = 1
+        else:
+            for x in ultimo:
+                nu=x+1
+        form = Form_Solicitud(formdata=MultiDict({'fecha':(str(datetime.datetime.now().strftime('%m/%d/%Y'))), 'nServicio':str(nu)})) ## inicializar un tetfield con valores como fecha y el siguietne id
+    elif request.method == 'POST':
+        form= Form_Solicitud(request.form)
+        if  form.validate():
+            # servicio=Solicitud_serv(
+            #     nOficio=form.nOficio.data.upper(),
+            #     placa= form.placa.data,
+            #     odome= form.odome.data,
+            #     observaciones=form.observaciones.data.upper())
+            # db.session.add(servicio)
+            # db.session.commit()
+            flash('Orden generada con exito')
+    return render_template("servicios.html", form=form, nombre=nombre)
 
 
 if __name__ == '__main__':
