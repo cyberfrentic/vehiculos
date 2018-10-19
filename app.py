@@ -854,13 +854,13 @@ def Solicitud():
     elif request.method == 'POST':
         form= Form_Solicitud(request.form)
         if  form.validate():
-            # servicio=Solicitud_serv(
-            #     nOficio=form.nOficio.data.upper(),
-            #     placa= form.placa.data,
-            #     odome= form.odome.data,
-            #     observaciones=form.observaciones.data.upper())
-            # db.session.add(servicio)
-            # db.session.commit()
+            servicio=Solicitud_serv(
+                nOficio=form.nOficio.data.upper(),
+                placa= form.placa.data,
+                odome= form.odome.data,
+                observaciones=form.observaciones.data.upper())
+            db.session.add(servicio)
+            db.session.commit()
             flash('Orden generada con exito')
     return render_template("servicios.html", form=form, nombre=nombre)
 

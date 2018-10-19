@@ -208,11 +208,11 @@ class Combustible(db.Model):
 class Solicitud_serv(db.Model):
     __tablename__ = 'solicitud_servicio'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    fecha = db.Column(db.DateTime, default=datetime.datetime.now)
     nOficio= db.Column(db.String(25), unique=True)
     placa = db.Column(db.String(10))
     odome = db.Column(db.String(9))
     observciones = db.Column(db.Text)
+    fecha = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __init__(self, nOficio, placa, odome, observaciones):
         self.nOficio = nOficio
