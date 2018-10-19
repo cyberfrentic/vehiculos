@@ -228,7 +228,8 @@ class Form_Solicitud(Form):
       validators.length(min=5, max=25,message="El campo está limitado a 25 caracteres")])
     placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
     odome = StringField("Odometro: ")
-    observaciones = TextAreaField("Observaciones")
+    observaciones = StringField("Observaciones",[
+      validators.length(min=5, max=150, message="Este campo puede recibir hasta 150 caracteres")])
 
     def __init__(self, *args, **kwargs):
         super(Form_Solicitud, self).__init__(*args, **kwargs)
