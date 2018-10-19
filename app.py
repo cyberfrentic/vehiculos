@@ -859,6 +859,12 @@ def Solicitud():
                 placa= form.placa.data,
                 odome= form.odome.data,
                 observaciones=form.observaciones.data.upper())
+            servicio = Solicitud_serv(
+                nOficio =form.nOficio.data.upper(),
+                placa = str(form.placa.data),
+                odome = form.odome.data,
+                observaciones = form.observaciones.data.upper(),
+                )
             db.session.add(servicio)
             db.session.commit()
             flash('Orden generada con exito')

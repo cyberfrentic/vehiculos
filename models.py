@@ -211,7 +211,7 @@ class Solicitud_serv(db.Model):
     nOficio= db.Column(db.String(25), unique=True)
     placa = db.Column(db.String(10))
     odome = db.Column(db.String(9))
-    observciones = db.Column(db.Text)
+    observaciones = db.Column(db.Text)
     fecha = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __init__(self, nOficio, placa, odome, observaciones):
