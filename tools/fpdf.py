@@ -16,7 +16,7 @@ class PDF(FPDF):
         # Move to the right
         # self.cell(100)
         # Title
-        self.cell(0, 10, 'Reporte de consulta de Consumo de Combustible'.upper(), 0, 0, 'C')
+        self.cell(0, 10, Titulo, 0, 0, 'C')#'Reporte de consulta de Consumo de Combustible'.upper(), 0, 0, 'C')
         self.ln(3)
         self.cell(0, 10, ('Felipe Carrillo Puerto Quintana Roo a '+ fecha_actual()).upper(), 0, 0, 'C')
         # Line break
@@ -124,7 +124,9 @@ def fecha_actual():
     return (dia + ' de ' + meses[mes] + ' de ' + anio).upper()
 
 
-def tabla(datos, totales):
+def tabla(datos, totales, titulo):
+    global Titulo
+    Titulo=titulo
     # Instantiation of inherited class
     pdf = PDF("P", 'mm', 'Letter')
     pdf.alias_nb_pages()

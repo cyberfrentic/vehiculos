@@ -641,7 +641,7 @@ def Consulta_ticket():
                             'total': resultado,
                         }
                         lista2.append(data)
-                imprimir = tabla(lista, lista2)
+                imprimir = tabla(lista, lista2,'Reporte de consulta de Consumo de Combustible'.upper())
                 return imprimir
             else:
                 query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros, Ticket.combustible,
@@ -665,7 +665,7 @@ def Consulta_ticket():
                         'total': val.total,
                     }
                     lista2.append(data)
-                imprimir = tabla(lista, lista2)
+                imprimir = tabla(lista, lista2,'Reporte de consulta de Consumo de Combustible'.upper())
                 return imprimir
 
     return render_template('TicketConsulta.html', form=form, nombre=nombre)

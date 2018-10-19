@@ -227,8 +227,10 @@ class Form_Solicitud(Form):
       validators.DataRequired(message="En Número de oficio es Necesario"),
       validators.length(min=5, max=25,message="El campo está limitado a 25 caracteres")])
     placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
-    odome = StringField("Odometro: ")
-    observaciones = TextAreaField("Observaciones")
+    odome = StringField("Odometro:",[
+      validators.DataRequired(message="Capture los Km Recorridos"),
+      validators.length(min=1,max=9,message="maximo de caracteres 9")])
+    observaciones = TextAreaField("Observaciones",[validators.Required(message='Text is required')])
 
     def __init__(self, *args, **kwargs):
         super(Form_Solicitud, self).__init__(*args, **kwargs)
