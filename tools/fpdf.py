@@ -16,8 +16,8 @@ class PDF(FPDF):
         # Move to the right
         # self.cell(100)
         # Title
-        self.cell(0, 10, Titulo, 0, 0, 'C')#'Reporte de consulta de Consumo de Combustible'.upper(), 0, 0, 'C')
-        self.ln(3)
+        self.cell(0, 10, Titulo, 0, 0, 'C')
+        self.ln(5)
         self.cell(0, 10, ('Felipe Carrillo Puerto Quintana Roo a '+ fecha_actual()).upper(), 0, 0, 'C')
         # Line break
         self.ln(20)
@@ -180,7 +180,70 @@ def tabla(datos, totales, titulo):
         pdf.cell(col_width, th, '$ '+str("{0:.2f}".format(item['total'])), border=1)
         pdf.ln()
     #pdf.cell(30, th, 'TOTAL: $ ' + str(totales), 'C', 1)
+    ##########################################################################
+    ######## imprimir desde una pagina web de flask con estas funciones ######
+    ##########################################################################
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
+    return response
 
+
+def sol(datos, ve):
+    global Titulo
+    Titulo=str(datos['titulo'])
+    # Instantiation of inherited class
+    pdf = PDF("P", 'mm', 'Letter')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_text_color(64)
+    pdf.set_draw_color(0, 0, 0)
+    pdf.set_line_width(.3)
+    pdf.set_font('', 'B')
+    # cabecera de la tabla
+    # Remember to always put one of these at least once.
+    pdf.set_font('Times', '', 10.0)
+    pdf.set_fill_color(184, 188, 191)
+    pdf.ln(10)
+    pdf.cell(20, 8, 'Núm Orden : ', 1,0,'L', True)
+    pdf.cell(20, 8, datos['orden'], 1,0,'C')
+    pdf.ln(15)
+    pdf.cell(20, 8, 'Núm Oficio : ', 0,0,'C', True)
+    pdf.cell(40, 8, datos['oficio'], 'B',0,'C')
+    pdf.cell(20, 8, '  ', 0,0,'C')
+    pdf.cell(20, 8, 'Odometro : ', 0,0,'C', True)
+    pdf.cell(40, 8, datos['odome'], 'B',0,'C')
+    pdf.ln(15)
+    pdf.cell(20, 8, 'Placa : ', 0,0,'C', True)
+    pdf.cell(40, 8, ve.placa, 'B',0,'C')
+    pdf.cell(20, 8, '  ', 0,0,'C')
+    pdf.cell(28, 8,'Núm. Inventario : ', 0,0,'C', True)
+    pdf.cell(40, 8, ve.numInv, 'B',0,'C')
+    pdf.cell(20, 8, '  ', 0,0,'C')
+    pdf.ln(15)
+    pdf.cell(28, 8,'Núm. Serie : ', 0,0,'C', True)
+    pdf.cell(40, 8, ve.nSerie, 'B',0,'C')
+    pdf.cell(12, 8, '  ', 0,0,'C')
+    pdf.cell(28, 8,'Combustible : ', 0,0,'C', True)
+    pdf.cell(40, 8, ve.tCombus, 'B',0,'C')
+    pdf.ln(15)
+    pdf.cell(25, 8,'Resguardante : ', 0,0,'C', True)
+    pdf.cell(50, 8, ve.resguardo, 'B',0,'C')
+    pdf.ln(15)
+    pdf.cell(25, 8,'Observaciones : ', 0,2,'C', True)
+    pdf.ln(3)
+    pdf.multi_cell(180, 5.25, datos['obser'], 1,0,'J')
+    pdf.ln(30)
+    pdf.set_font('Times', '', 9.0)
+    pdf.cell(50, 8, 'C. Pascual Martinz Gamez'.upper(), 'T',0,'L')
+    pdf.cell(12, 8, '  ', 0,0,'C')
+    pdf.cell(50, 8, datos['soli'].upper(), 'T', 0,'C')
+    pdf.cell(12, 8, '  ', 0,0,'C')
+    pdf.cell(60, 8, 'Lic. Ma. de los Angeles May Bacab'.upper(), 'T',0,'R')
+
+    ##########################################################################
+    ######## imprimir desde una pagina web de flask con estas funciones ######
+    ##########################################################################
     response = make_response(pdf.output(dest='S').encode('latin-1'))
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'

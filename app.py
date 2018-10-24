@@ -10,7 +10,7 @@ from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Co
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud
-from tools.fpdf import tabla
+from tools.fpdf import tabla, sol
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
@@ -844,7 +844,6 @@ def Solicitud():
     if request.method == 'GET':
         nu=0
         ultimo = db.session.query(Solicitud_serv.id).order_by(desc(Solicitud_serv.id)).first() ## encontrar el ultimo registro de una tabla
-        print(ultimo)
         if ultimo is None:
             nu = 1
         else:
@@ -856,18 +855,27 @@ def Solicitud():
         if  form.validate():
             servicio=Solicitud_serv(
                 nOficio=form.nOficio.data.upper(),
-                placa= form.placa.data,
+                placa= str(form.placa.data),
                 odome= form.odome.data,
+                solicitante = form.solicitante.data.upper(),
                 observaciones=form.observaciones.data.upper())
-            servicio = Solicitud_serv(
-                nOficio =form.nOficio.data.upper(),
-                placa = str(form.placa.data),
-                odome = form.odome.data,
-                observaciones = form.observaciones.data.upper(),
-                )
             db.session.add(servicio)
             db.session.commit()
             flash('Orden generada con exito')
+            ultimo = db.session.query(Solicitud_serv.id).order_by(desc(Solicitud_serv.id)).first()
+            for t in ultimo:
+                tit=t
+            ve = Vehiculo.query.filter_by(placa = str(form.placa.data)).first()
+            data = {
+                'oficio' : form.nOficio.data.upper(),
+                'odome' : form.odome.data,
+                'obser' : form.observaciones.data.upper(),
+                'orden' : str(tit),
+                'soli': form.solicitante.data,
+                'titulo': 'Solicitud de servicio prventivo o correctivo'.upper(),
+            }
+            x = sol(data, ve)
+            return (x)
     return render_template("servicios.html", form=form, nombre=nombre)
 
 

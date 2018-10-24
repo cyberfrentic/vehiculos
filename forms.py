@@ -230,6 +230,9 @@ class Form_Solicitud(Form):
     odome = StringField("Odometro:",[
       validators.DataRequired(message="Capture los Km Recorridos"),
       validators.length(min=1,max=9,message="maximo de caracteres 9")])
+    solicitante = StringField("Solicitante", [
+      validators.DataRequired(message="El nombre del solicitante es Necesario"),
+      validators.length(min=5, max=35,message="El campo está limitado a 35 caracteres")])
     observaciones = TextAreaField("Observaciones",[validators.Required(message='Text is required')])
 
     def __init__(self, *args, **kwargs):
