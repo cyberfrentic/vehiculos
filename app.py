@@ -9,7 +9,7 @@ from config import DevelopmentConfig
 from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
-    VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud
+    VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol
 from tools.fpdf import tabla, sol
 from sqlalchemy.sql import func
 from pygal.style import Style
@@ -877,6 +877,13 @@ def Solicitud():
             x = sol(data, ve)
             return (x)
     return render_template("servicios.html", form=form, nombre=nombre)
+
+
+@app.route("/Mantenimientos/solicitud/Capturar-Solicitud", methods=['POST', 'GET'])
+def capturar_sol():
+    nombre = session['username']
+    form = Form_CapSol(request.form)
+    return render_template("capSolicitud.html", nombre=nombre, form= form)
 
 
 if __name__ == '__main__':

@@ -221,3 +221,29 @@ class Solicitud_serv(db.Model):
         self.odome = odome
         self.solicitante = solicitante
         self.observaciones = observaciones
+
+class captura_Sol(db.Model):
+    __tablename__ = 'captura_Sol'
+    id = db.Column(db.Integer, primary_key= True, autoincrement=True)
+    numSol = db.Column(db.Integer, unique=True)
+    prov1 = db.Column(db.String(35))
+    costo1 = db.Column(db.Float)
+    serv1 = db.Column(db.Text)
+    prov2 = db.Column(db.String(35))
+    costo2 = db.Column(db.Float)
+    serv2 = db.Column(db.Text)
+    prov3 = db.Column(db.String(35))
+    costo3 = db.Column(db.Float)
+    serv3 = db.Column(db.Text)
+
+    def __init__(self, numSol, prov1, costo1, serv1, prov2, costo2, serv2, prov3, costo3, serv3):
+        self.numSol = numSol
+        self.prov1 = prov1
+        self.costo1 = costo1
+        self.serv1 = serv1
+        self.prov2 = prov2
+        self.costo2 = costo2
+        self.serv2 = serv2
+        self.prov3 = prov3
+        self.costo3 = costo3
+        self.serv3 = serv3

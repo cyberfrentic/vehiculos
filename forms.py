@@ -239,3 +239,21 @@ class Form_Solicitud(Form):
         super(Form_Solicitud, self).__init__(*args, **kwargs)
         read_only(self.nServicio)
         read_only(self.fecha)
+
+
+class Form_CapSol(Form):
+  numSol = IntegerField("Núm. de Solicitud", [validators.required()])
+  cotizacion1 = BooleanField("Cotización 1")
+  proveedor1 = StringField("Proveedor", [
+    validators.DataRequired(message="Debe capturar minimo una cotización"),
+    validators.length(min=5, max=35, message="El nombre del proveedor debe contener min 5 y max 35 caracteres")])
+  costo1 = DecimalField("Costo", places=2, rounding=None)
+  descripcion1 = TextAreaField("Descripcion del servicio")
+  cotizacion2 = BooleanField("Cotización 2")
+  proveedor2 = StringField("Proveedor")
+  costo2 = DecimalField("Costo", places=2, rounding=None)
+  descripcion2 = TextAreaField("Descripcion del servicio")
+  cotizacion3 = BooleanField("Cotización 3")
+  proveedor3 = StringField("Proveedor")
+  costo3 = DecimalField("Costo", places=2, rounding=None)
+  descripcion3 = TextAreaField("Descripcion del servicio")
