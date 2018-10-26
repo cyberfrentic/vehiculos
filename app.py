@@ -910,8 +910,8 @@ def capturar_sol():
                     costo3 = form.costo3.data,
                     serv3 = form.descripcion3.data,
                     elec = elecc)
-                #db.session.add(data)
-                #db.session.commit()
+                db.session.add(data)
+                db.session.commit()
                 flash('solicitud guardada con exito')
                 elegido ='{}'.format((str(db.session.query(captura_Sol.elec).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
                 if elegido == "1":
