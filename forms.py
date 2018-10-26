@@ -242,13 +242,13 @@ class Form_Solicitud(Form):
 
 
 class Form_CapSol(Form):
-  numSol = IntegerField("Núm. de Solicitud", [validators.required()])
+  numSol = IntegerField("Núm. de Solicitud", [validators.DataRequired(message="El número de solicitud es necesario")])
   cotizacion1 = BooleanField("Cotización 1")
   proveedor1 = StringField("Proveedor", [
     validators.DataRequired(message="Debe capturar minimo una cotización"),
     validators.length(min=5, max=35, message="El nombre del proveedor debe contener min 5 y max 35 caracteres")])
   costo1 = DecimalField("Costo", places=2, rounding=None)
-  descripcion1 = TextAreaField("Descripcion del servicio")
+  descripcion1 = TextAreaField("Descripcion del servicio", [validators.required()])
   cotizacion2 = BooleanField("Cotización 2")
   proveedor2 = StringField("Proveedor")
   costo2 = DecimalField("Costo", places=2, rounding=None)

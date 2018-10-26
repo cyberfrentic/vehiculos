@@ -103,6 +103,48 @@ def letras():
     anio = str(datetime.today())[:4]
     return (dias[dia] + ' dias del mes de ' + meses[mes] + ' de ' + anios[anio]).upper()
 
+
+def SetMoneda(num, simbolo="US$", n_decimales=2):
+    """Convierte el numero en un string en formato moneda
+    SetMoneda(45924.457, 'RD$', 2) --> 'RD$ 45,924.46'     
+    """
+    #con abs, nos aseguramos que los dec. sea un positivo.
+    n_decimales = abs(n_decimales)
+    
+    #se redondea a los decimales idicados.
+    num = round(num, n_decimales)
+
+    #se divide el entero del decimal y obtenemos los string
+    num, dec = str(num).split(".")
+
+    #si el num tiene menos decimales que los que se quieren mostrar,
+    #se completan los faltantes con ceros.
+    dec += "0" * (n_decimales - len(dec))
+    
+    #se invierte el num, para facilitar la adicion de comas.
+    num = num[::-1]
+    
+    #se crea una lista con las cifras de miles como elementos.
+    l = [num[pos:pos+3][::-1] for pos in range(0,50,3) if (num[pos:pos+3])]
+    l.reverse()
+    
+    #se pasa la lista a string, uniendo sus elementos con comas.
+    num = str.join(",", l)
+    
+    #si el numero es negativo, se quita una coma sobrante.
+    try:
+        if num[0:2] == "-,":
+            num = "-%s" % num[2:]
+    except IndexError:
+        pass
+    
+    #si no se especifican decimales, se retorna un numero entero.
+    if not n_decimales:
+        return "%s %s" % (simbolo, num)
+        
+    return "%s %s.%s" % (simbolo, num, dec)
+
+
 def fecha_actual():
     meses = {
         '01': 'Enero',
@@ -205,7 +247,7 @@ def sol(datos, ve):
     pdf.set_font('Times', '', 10.0)
     pdf.set_fill_color(184, 188, 191)
     pdf.ln(10)
-    pdf.cell(20, 8, 'Núm Orden : ', 1,0,'L', True)
+    pdf.cell(20, 8, 'Núm Sol : ', 1,0,'L', True)
     pdf.cell(20, 8, datos['orden'], 1,0,'C')
     pdf.ln(15)
     pdf.cell(20, 8, 'Núm Oficio : ', 0,0,'C', True)
@@ -240,6 +282,70 @@ def sol(datos, ve):
     pdf.cell(50, 8, datos['soli'].upper(), 'T', 0,'C')
     pdf.cell(12, 8, '  ', 0,0,'C')
     pdf.cell(60, 8, 'Lic. Ma. de los Angeles May Bacab'.upper(), 'T',0,'R')
+
+    ##########################################################################
+    ######## imprimir desde una pagina web de flask con estas funciones ######
+    ##########################################################################
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
+    return response
+
+
+def orden(datos):
+    global Titulo
+    Titulo = datos['titulo'].upper()
+    # Instantiation of inherited class
+    pdf = PDF("P", 'mm', 'Letter')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_text_color(64)
+    pdf.set_draw_color(0, 0, 0)
+    pdf.set_line_width(.3)
+    pdf.set_font('', 'B')
+    # cabecera de la tabla
+    # Remember to always put one of these at least once.
+    pdf.set_font('Times', '', 10.0)
+    pdf.set_fill_color(184, 188, 191)
+    pdf.ln(10)
+    pdf.cell(20, 8, 'Núm Orden : ', 1,0,'L', True)
+    pdf.cell(20, 8, datos['orden'], 1,0,'C')
+    pdf.ln(15)
+    pdf.cell(200,8, 'Datos del Proveedor', 0, 0, 'C',True)
+    pdf.ln(15)
+    pdf.cell(25, 8, 'Razón Social', 1, 0, 'C', True)
+    pdf.cell(60, 8, datos['proveedor'].replace("'",""), 'B',0,'C')
+    pdf.cell(20, 8, '', 0, 0, 'C')
+    pdf.cell(20, 8, 'Costo', 1, 0, 'C', True)
+    pdf.cell(40, 8, SetMoneda(float(datos['costo']),"$",2), 'B',0,'C')
+    pdf.ln(15)
+    pdf.cell(25, 8, 'Servicios', 1, 0, 'C', True)
+    pdf.ln(15)
+    pdf.multi_cell(180, 5.25, datos['servi'].replace('\\r\\'," ").replace("'","").upper(), 'B',0,'J')
+    pdf.ln(15)
+    pdf.cell(200,8, 'Datos del Vehiculo', 0, 0, 'C',True)
+    pdf.ln(15)
+    pdf.cell(20, 8, 'Placa', 1, 0, 'C', True)
+    pdf.cell(30, 8, datos['placa'].replace("'",""), 'B',0,'C')
+    pdf.cell(10, 8, '', 0, 0, 'C')
+    pdf.cell(30, 8, 'Núm. Inventario', 1, 0, 'C', True)
+    pdf.cell(30, 8, datos['inventario'].replace("'",""), 'B',0,'C')
+    pdf.cell(10, 8, '', 0, 0, 'C')
+    pdf.cell(20, 8, 'Núm Serie', 1, 0, 'C', True)
+    pdf.cell(40, 8, datos['serie'].replace("'",""), 'B',0,'C')
+    pdf.ln(15)
+    pdf.cell(20, 8, 'Marca', 1, 0, 'C', True)
+    pdf.cell(30, 8, datos['marca'].replace("'","").upper(), 'B',0,'C')
+    pdf.cell(10, 8, '', 0, 0, 'C')
+    pdf.cell(20, 8, 'Modelo', 1, 0, 'C', True)
+    pdf.cell(40, 8, datos['modelo'].replace("'","").upper(), 'B',0,'C')
+    pdf.ln(30)
+    pdf.cell(20, 8, '  ', 0,0,'C')
+    pdf.set_font('Times', '', 9.0)
+    pdf.cell(60, 8, 'C. Pascual Martinz Gamez'.upper(), 'T',0,'L')
+    pdf.cell(20, 8, '  ', 0,0,'C')
+    pdf.cell(60, 8, 'Lic. Ma. de los Angeles May Bacab'.upper(), 'T',0,'R')
+
 
     ##########################################################################
     ######## imprimir desde una pagina web de flask con estas funciones ######

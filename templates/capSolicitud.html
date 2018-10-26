@@ -1,16 +1,82 @@
 {% extends 'home.html' %}
 {% from "_macro.html" import render_field %}
 {% block content %}
+<script>
+	 	
+    // Convierte en mayusculas los datos de un input
+    function mayus(e) {
+    	e.value = e.value.toUpperCase();
+	};
+    // Desactivar un input
+    function DesactivarCotiza() {
+    	if (document.getElementById("cotizacion1").checked) {
+    		document.getElementById("cotizacion2").disabled = true;
+    		document.getElementById("cotizacion3").disabled = true;
+            document.getElementById("cotizacion2").checked = false;
+            document.getElementById("cotizacion3").checked = false;
+    	}else{
+    		document.getElementById("cotizacion2").disabled = false;
+            document.getElementById("cotizacion3").disabled = false;
+    	}
+    };
+    function DesactivarCotiza2(){
+            if (document.getElementById("cotizacion2").checked) {
+            document.getElementById("cotizacion1").disabled = true;
+            document.getElementById("cotizacion3").disabled = true;
+            document.getElementById("cotizacion1").checked = false;
+            document.getElementById("cotizacion3").checked = false;
+        }else{
+            document.getElementById("cotizacion1").disabled = false;
+            document.getElementById("cotizacion3").disabled = false;
+        }
+    };
+    function DesactivarCotiza3(){
+    	if (document.getElementById("cotizacion3").checked) {
+            document.getElementById("cotizacion1").disabled = true;
+            document.getElementById("cotizacion2").disabled = true;
+            document.getElementById("cotizacion1").checked = false;
+            document.getElementById("cotizacion2").checked = false;
+        }else{
+            document.getElementById("cotizacion1").disabled = false;
+            document.getElementById("cotizacion2").disabled = false;
+        }
+	};
+	function valida(e){
+    	tecla = (document.all) ? e.keyCode : e.which;
+    	//Tecla de retroceso para borrar, siempre la permite
+    	if (tecla==8){
+       	return true;
+    }
+
+    	
+    // Patron de entrada, en este caso solo acepta numeros
+    patron =/[0-9,'.'']/;
+    tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
+	};
+    function inicio(){
+        document.getElementById("cotizacion1").checked=true;
+        document.form1.costo2.value = 0.00;
+        document.form1.costo3.value = 0.00;
+    };
+    window.onload = inicio;
+</script>
     <div class="container">
         <div class="row">
-            <form method="POST">
+            <form name="form1" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <br>
                 <div class="row form-control-feedback">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         <div class="checkbox">
-                            {{ form.cotizacion1() }} {{form.cotizacion1.label}} <br>
-                            {{ render_field(form.numSol, class='form-control') }}                            
+                            {{ render_field(form.numSol, class='form-control', onkeypress="return valida(event)") }}                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-control-feedback">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        <div class="checkbox">
+                            {{ render_field(form.cotizacion1, class='form-control', onclick="DesactivarCotiza()") }}
                         </div>
                     </div>
                 </div>
@@ -20,16 +86,12 @@
                 	        {{ render_field(form.proveedor1, class='form-control') }}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
-                	</div>
-                	<div class="row form-control-feedback">
                 	    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                	        {{ render_field(form.costo1, class='form-control') }}
+                	        {{ render_field(form.costo1, class='form-control', onkeypress="return valida(event)") }}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
-                	</div>
-                	<div class="row form-control-feedback">
                 	    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                	        {{render_field(form.descripcion1, class='form-control', rows="5", placeholder="Capture los servicios que contiene la cotización")}}
+                	        {{render_field(form.descripcion1, class='form-control', rows="3", cols="50", placeholder="Capture los servicios que contiene la cotización")}}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
                 	</div>
@@ -38,7 +100,7 @@
                 <div class="row form-control-feedback">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         <div class="checkbox">
-                            {{ form.cotizacion2() }} {{form.cotizacion2.label}} <br>                            
+                            {{ render_field(form.cotizacion2, class='form-control', onclick="DesactivarCotiza2()") }}                       
                         </div>
                     </div>
                 </div>
@@ -48,25 +110,21 @@
                 	        {{ render_field(form.proveedor2, class='form-control') }}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
-                	</div>
-                	<div class="row form-control-feedback">
                 	    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                	        {{ render_field(form.costo2, class='form-control') }}
+                	        {{ render_field(form.costo2, class='form-control', onkeypress="return valida(event)") }}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
-                	</div>
-                	<div class="row form-control-feedback">
                 	    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                	        {{render_field(form.descripcion2, class='form-control', rows="5", placeholder="Capture los servicios que contiene la cotización")}}
+                	        {{render_field(form.descripcion2, class='form-control', rows="3", cols="50", placeholder="Capture los servicios que contiene la cotización")}}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
-                	</div>
+                	</div>                
                	</div>
                	<br>
                 <div class="row form-control-feedback">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         <div class="checkbox">
-                            {{ form.cotizacion3() }} {{form.cotizacion3.label}} <br>                            
+                            {{ render_field(form.cotizacion3, class='form-control', onclick="DesactivarCotiza3()") }}                     
                         </div>
                     </div>
                 </div>
@@ -76,25 +134,21 @@
                 	        {{ render_field(form.proveedor3, class='form-control') }}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
-                	</div>
-                	<div class="row form-control-feedback">
-                	    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                	        {{ render_field(form.costo3, class='form-control') }}
+                	     <div class="form-goup col-xs-12 floating-label-form-group controls">
+                	        {{ render_field(form.costo3, class='form-control', onkeypress="return valida(event)") }}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
-                	</div>
-                	<div class="row form-control-feedback">
                 	    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                	        {{render_field(form.descripcion3, class='form-control', rows="5", placeholder="Capture los servicios que contiene la cotización")}}
+                	        {{render_field(form.descripcion3, class='form-control', rows="3", cols="50", placeholder="Capture los servicios que contiene la cotización")}}
                 	        <p class="help-block text-danger"></p>
                 	    </div>
-                	</div>
+                	</div>                	
                	</div>
                	<br>                   
                 <div class="success">
                     <div class="row">
                         <div class="form-group col-xs-12">
-                            <button type="submit" class="btn btn-outline-danger">Generar...</button>
+                            <button type="submit" class="btn btn-outline-danger">Guardar</button>
                         </div>
                     </div>
                 </div>

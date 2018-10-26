@@ -6,11 +6,11 @@ from flask import Flask, session, render_template, url_for, request, flash, redi
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import text, distinct, desc
 from config import DevelopmentConfig
-from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv
+from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol
-from tools.fpdf import tabla, sol
+from tools.fpdf import tabla, sol, orden
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
@@ -883,7 +883,71 @@ def Solicitud():
 def capturar_sol():
     nombre = session['username']
     form = Form_CapSol(request.form)
-    return render_template("capSolicitud.html", nombre=nombre, form= form)
+    x=""
+    if request.method == 'POST' and form.validate():
+        c1 = form.cotizacion1.data
+        c2 = form.cotizacion2.data
+        c3 = form.cotizacion3.data
+        soli = form.numSol.data
+        if c1:
+            elecc = "1"
+        elif c2:
+            elecc = "2"
+        else:
+            elecc = "3"
+        existe = Solicitud_serv.query.filter_by(id=soli).first()
+        if existe is not None:
+            query = captura_Sol.query.filter_by(numSol=soli).first()
+            if query is None :
+                data = captura_Sol(numSol=form.numSol.data,
+                    prov1 = form.proveedor1.data,
+                    costo1 = form.costo1.data,
+                    serv1 = form.descripcion1.data,
+                    prov2 = form.proveedor2.data,
+                    costo2 = form.costo2.data,
+                    serv2 = form.descripcion2.data,
+                    prov3 = form.proveedor3.data,
+                    costo3 = form.costo3.data,
+                    serv3 = form.descripcion3.data,
+                    elec = elecc)
+                #db.session.add(data)
+                #db.session.commit()
+                flash('solicitud guardada con exito')
+                elegido ='{}'.format((str(db.session.query(captura_Sol.elec).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                if elegido == "1":
+                    prv = '{}'.format((str(db.session.query(captura_Sol.prov1).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    cst = '{}'.format((str(db.session.query(captura_Sol.costo1).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    srv = '{}'.format((str(db.session.query(captura_Sol.serv1).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                elif elegido == "2":
+                    prv = '{}'.format((str(db.session.query(captura_Sol.prov2).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    cst = '{}'.format((str(db.session.query(captura_Sol.costo2).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    srv = '{}'.format((str(db.session.query(captura_Sol.serv2).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                else:
+                    prv = '{}'.format((str(db.session.query(captura_Sol.prov3).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    cst = '{}'.format((str(db.session.query(captura_Sol.costo3).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    srv = '{}'.format((str(db.session.query(captura_Sol.serv3).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                plc = '{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")
+                datos={
+                "titulo": 'Orden de Mantenimiento Vehicular',
+                "orden" : '{}'.format((str(db.session.query(captura_Sol.id).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")","")),
+                "proveedor": prv,
+                "costo" : cst,
+                "servi" : srv,
+                "placa": '{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")),
+                "inventario" : '{}'.format(str(db.session.query(Vehiculo.numInv).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
+                "serie" : '{}'.format(str(db.session.query(Vehiculo.nSerie).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
+                "modelo" : '{}'.format(str(db.session.query(Vehiculo.modelo).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
+                "marca" : '{}'.format(str(db.session.query(Vehiculo.marca).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
+                }
+                x = orden(datos)
+                return (x)
+            else:
+                flash("La solicitud ya ha sido capturada")
+                return redirect(url_for('capturar_sol'))
+        else:
+            flash("la solicitud no existe")
+            return redirect(url_for('capturar_sol'))
+    return render_template("capSolicitud.html", nombre=nombre, form=form)
 
 
 if __name__ == '__main__':

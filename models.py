@@ -235,8 +235,9 @@ class captura_Sol(db.Model):
     prov3 = db.Column(db.String(35))
     costo3 = db.Column(db.Float)
     serv3 = db.Column(db.Text)
+    elec = db.Column(db.Integer)
 
-    def __init__(self, numSol, prov1, costo1, serv1, prov2, costo2, serv2, prov3, costo3, serv3):
+    def __init__(self, numSol, prov1, costo1, serv1, prov2, costo2, serv2, prov3, costo3, serv3, elec):
         self.numSol = numSol
         self.prov1 = prov1
         self.costo1 = costo1
@@ -247,3 +248,4 @@ class captura_Sol(db.Model):
         self.prov3 = prov3
         self.costo3 = costo3
         self.serv3 = serv3
+        self.elec = elec
