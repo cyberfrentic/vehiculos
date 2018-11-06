@@ -12,9 +12,13 @@ from wtforms import DateField, DateTimeField
 from wtforms import validators
 #from wtforms import FormField
 #from wtforms.validators import NumberRange
-from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket
+from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket, Ciudades
 #from sqlalchemy.sql import distinct
 from wtforms_components import TimeField, read_only
+
+
+def ciudad():
+    return Ciudades.query.order_by('ciudad')
 
 def length_honeypot(form, field):
     if len(field.data) > 0:
@@ -34,6 +38,7 @@ class Create_Form(Form):
                         validators.Email(message='Ingrese un email valido!.'),
                         validators.length(min=4, max=40, message='Ingrese un email valido!.')
                         ])
+    ciudad = QuerySelectField(label="Ciudad", query_factory=ciudad, allow_blank=True)
     honeypot = HiddenField('', [length_honeypot])
     vehiculos = BooleanField('Vehiculos')
     proveedores = BooleanField('Proveedores')
@@ -257,3 +262,14 @@ class Form_CapSol(Form):
   proveedor3 = StringField("Proveedor")
   costo3 = DecimalField("Costo", places=2, rounding=None)
   descripcion3 = TextAreaField("Descripcion del servicio")
+
+
+class Factura(Form):
+    placas = StringField('Placas',
+        [validators.Required(message = 'El campo es Requerido!.'),
+        validators.length(max = 8, message='El campo debe contener 8 caracteres como Maximo')
+        ])
+    observaciones = StringField('Observaciones', 
+        [validators.Required('El campo es Requerido'),
+        validators.length(min=5, max=150, message='Ingrese un comentarios valido')
+        ])

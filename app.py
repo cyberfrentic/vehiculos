@@ -6,8 +6,9 @@ from flask import Flask, session, render_template, url_for, request, flash, redi
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import text, distinct, desc
 from config import DevelopmentConfig
-from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol
+from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades
 from flask_wtf import CSRFProtect
+from sqlalchemy import and_
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol
 from tools.fpdf import tabla, sol, orden
@@ -68,6 +69,7 @@ def regreso(e):
 def home():
     if 'username' in session:
         nombre = (session['username']).upper()
+        lugar = session['ciudad']
         return render_template("home.html", nombre=nombre)
     else:
         return render_template("home.html")
@@ -93,6 +95,7 @@ def login():
             if user is not None and user.verify_password(psw):
                 session['username'] = user.username
                 session['privilegios'] = user.privilegios
+                session['ciudad']=user.idCiudad
                 return redirect(url_for('home'))
             else:
                 error_message = '{} No es un usuario del sistema'.format(usr)
@@ -105,11 +108,15 @@ def login():
 def logout():
     if 'username' in session:
         session.pop('username')
+        session.pop('privilegios')
+        session.pop('ciudad')
     return redirect(url_for('home'))
 
 
 @app.route('/crearUser', methods=['GET', 'POST'])
 def crearUser():
+    nombre = (session['username']).upper()
+    lugar=session['ciudad']
     pri = ""
     crear = Create_Form(request.form)
     if request.method == 'POST' and crear.validate():
@@ -137,21 +144,24 @@ def crearUser():
                     pri += "1"
                 elif not option4:
                     pri += "0"
+                ciu = Ciudades.query.filter_by(ciudad=str(crear.ciudad.data)).first()                
                 user = User(crear.username.data,
                             crear.password.data,
                             crear.email.data,
-                            pri)
+                            pri,
+                            ciu.id,)
                 db.session.add(user)
                 db.session.commit()
                 succes_message = 'Usuario registrado en la base de datos'
                 flash(succes_message)
+                return redirect(url_for('crearUser'))
             else:
                 succes_message = 'Debera elegir una opcion para el nuevo usuario'
                 flash(succes_message)
         else:
             succes_message = 'El usuario existe en la base de datos'
             flash(succes_message)
-    nombre = (session['username']).upper()
+            return redirect(url_for('crearUser'))
     return render_template('crear.html', form=crear, nombre=nombre)
 
 
@@ -948,6 +958,110 @@ def capturar_sol():
             flash("la solicitud no existe")
             return redirect(url_for('capturar_sol'))
     return render_template("capSolicitud.html", nombre=nombre, form=form)
+
+
+@app.route("/manteniminetos/solicitud/captura_servicio/factura_xml", methods=["GET", "POST"])
+def upload_file():
+    if request.method == "POST":
+        if not "file" in request.files:
+            flash("No file part in the form.")
+        f = request.files["file"]
+        if f.filename == "":
+            flash("No file selected.")
+        if f and allowed_file(f.filename):
+            filename = secure_filename(f.filename)
+            nombre, extension = filename.split('.')
+            if extension=='xml':
+                f.save(os.path.join(app.config["UPLOAD_FOLDER"]+'\\xml', filename))
+                return redirect(url_for("get_fileXml", filename=filename))
+            elif extension=='xls':
+                f.save(os.path.join(app.config["UPLOAD_FOLDER"]+'\\xls', filename))
+                return redirect(url_for("get_fileXls", filename=filename))
+        return "File not allowed."
+    nombre = (session['username']).upper()
+    return render_template("leer.html", nombre=nombre)
+
+
+@app.route("/uploads/xml/<filename>", methods=['GET', 'POST'])
+def get_fileXml(filename):
+    lista1=[]
+    lista2=[]
+    articulo=[]
+    xmlDoc = minidom.parse(app.config["UPLOAD_FOLDER"]+'\\xml\\'+filename)
+    nodes = xmlDoc.childNodes
+    comprobante = nodes[0]
+    compAtrib = dict(comprobante.attributes.items())
+    atributos = dict()
+    articulos = dict()
+    atributos['fecha'] = compAtrib['Fecha']
+    atributos['total'] = compAtrib['Total']
+    atributos['subTotal'] = compAtrib['SubTotal']
+    for nodo in comprobante.getElementsByTagName("cfdi:Impuestos"):
+            atributos['IVA'] = nodo.getAttribute('TotalImpuestosTrasladados')
+            emisor = comprobante.getElementsByTagName('cfdi:Emisor')
+            atributos['rfc'] = emisor[0].getAttribute('Rfc')
+            atributos['nombre'] = emisor[0].getAttribute('Nombre')
+            timbre = comprobante.getElementsByTagName('tfd:TimbreFiscalDigital')
+            try:
+                atributos['UUiD'] = timbre[0].getAttribute('UUID')
+            except KeyError:
+                atributos['UUiD'] = ' '
+            conceptos = comprobante.getElementsByTagName('cfdi:Conceptos')
+            concept = conceptos[0].getElementsByTagName('cfdi:Concepto')
+            x = 0
+            for nodo in comprobante.getElementsByTagName("cfdi:Conceptos"):
+                x=0
+                for nodo2 in nodo.getElementsByTagName("cfdi:Concepto"):
+                    x += 1
+                    articulos['cantidad'+str(x)] = nodo2.getAttribute('Cantidad')
+                    articulos['descripcion'+str(x)] = nodo2.getAttribute('Descripcion')
+                    articulos['valorUnitario'+str(x)] = nodo2.getAttribute('ValorUnitario')
+                    articulos['importe'+str(x)] = nodo2.getAttribute('Importe')                  
+    Cant_Diccio = int(len(articulos)/4)
+    sample = [co.defaultdict(int) for _ in range(Cant_Diccio)]
+    for dc in range(Cant_Diccio):
+        sample[dc] = {
+            'cantidad' : articulos['cantidad'+str(dc+1)],
+            'descripcion' : articulos['descripcion'+str(dc+1)],
+            'valor' : articulos['valorUnitario'+str(dc+1)],
+            'importe' : articulos['importe'+str(dc+1)]
+            }
+    uuid = Compras.query.filter_by(UUiD = atributos['UUiD']).first()
+    if (uuid==None):
+        flash('El registro no existe')  
+    else:
+        flash('El registro Existe en la base de datos')
+        return render_template("leer.html") 
+    factura = Factura(request.form)
+    compras=Compras(
+            UUiD = atributos['UUiD'],
+            rfc = atributos['rfc'],
+            nombre = atributos['nombre'],
+            subtotal = atributos['subTotal'],
+            iva = atributos['IVA'],
+            total = atributos['total'],
+            fecha = atributos['fecha'],
+            placas = factura.placas.data,
+            observaciones = factura.observaciones.data
+            )
+    if (request.method == 'POST') and (factura.validate()):
+        db.session.add(compras)
+        db.session.commit()
+        id_compra = Compras.query.filter_by(UUiD = atributos['UUiD']).first()
+        for dc in range(Cant_Diccio):
+            arti = Articulos(
+                compras_id = id_compra.id,
+                cantidad = articulos['cantidad'+str(dc+1)],
+                descripcion = articulos['descripcion'+str(dc+1)],
+                p_u = articulos['valorUnitario'+str(dc+1)],
+                importe = articulos['importe'+str(dc+1)]
+                )
+            db.session.add(arti)
+            db.session.commit()
+        flash('Registro agregado y tiene el Folio: {}'.format(id_compra.id))
+    lista1.append(atributos)
+    nombre = (session['username']).upper()
+    return render_template("ListaXML.HTML", lista=lista1, lista2=sample, form=factura, nombre=nombre)
 
 
 if __name__ == '__main__':

@@ -11,11 +11,15 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-reboot.min.css') }}" media="screen">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" media="screen">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" media="screen">
-  <script type="text/javascript" async src="{{ url_for('static', filename='js/jsbat.js')}}"></script>
+  <!--<script type="text/javascript" async src="{{ url_for('static', filename='js/jsbat.js')}}"></script>
   <script type="text/javascript" async src="{{ url_for('static', filename='js/jsbat2.js')}}"></script>
   <script type="text/javascript" async src="{{ url_for('static', filename='js/jsbat3.js')}}"></script>
   <script type="text/javascript" async src="{{ url_for('static', filename='js/jsbat4.js')}}"></script>
-  <script type="text/javascript" async src="{{ url_for('static', filename='js/jsbat5.js')}}"></script>
+  <script type="text/javascript" async src="{{ url_for('static', filename='js/jsbat5.js')}}"></script>-->
+  
+
+
+
   <style>
 
       .dropdown-submenu {
@@ -72,6 +76,10 @@
 </head>
 
 <body background="{{ url_for('static', filename='img/capa.jpg') }}">
+
+
+
+
 
 <!-- inicia el menu -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -182,7 +190,7 @@
                               <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/pedido-online.svg')}}" width="16" height="16"> Captura de servicio
                           </a>
                           <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
-                              <a class="dropdown-item" href=""><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/xml.svg')}}" width="16" height="16">Factura xml</a>
+                              <a class="dropdown-item" href="/manteniminetos/solicitud/captura_servicio/factura_xml"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/xml.svg')}}" width="16" height="16">Factura xml</a>
                               <a class="dropdown-item" href=""><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/entrevista.svg')}}" width="16" height="16">Manual</a>
                           </div>
                 </div>
