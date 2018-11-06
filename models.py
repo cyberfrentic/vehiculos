@@ -43,6 +43,7 @@ class Ciudades(db.Model):
         return '{}'.format(self.ciudad)
 
 
+
 class tipoVehiculos(db.Model):
     __tablename__ = 'tvehiculos'
     id = db.Column(db.Integer, primary_key=True)
@@ -63,7 +64,7 @@ class Resguardante(db.Model):
     departamento = db.Column(db.String(20))
     licencia = db.Column(db.String(12))
     lVigencia = db.Column(db.Date)
-    idCiudad=db.Column(db.Integer)
+    idCiudad = db.Column(db.Integer)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __init__(self, nombre, apellidoPat, apellidoMat, nombreCompleto, area, departamento, licencia, lVigencia, idCiudad):
@@ -101,7 +102,7 @@ class Vehiculo(db.Model):
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __init__(self, numInv, marca, modelo, tipoVehiculo, nSerie, tCombus, odome, kmInicio, nVehi, resguardo,
-                 cSeguros, nPoliza, placa):
+                 cSeguros, nPoliza, placa, idCiudad):
         self.numInv = numInv
         self.marca = marca
         self.modelo = modelo
@@ -117,6 +118,7 @@ class Vehiculo(db.Model):
         self.cSeguros = cSeguros
         self.nPoliza = nPoliza
         self.placa = placa
+        self.idCiudad = idCiudad
 
     def __repr__(self):
         return '{}'.format(self.placa)
@@ -134,8 +136,9 @@ class Model_Proveedor(db.Model):
     telefono = db.Column(db.String(15))
     contacto = db.Column(db.String(30))
     email = db.Column(db.String(40))
+    idCiudad = db.Column(db.Integer)
 
-    def __init__(self, razonSocial, propietario, direccion, rfc, municipio, estado, telefono, contacto, email):
+    def __init__(self, razonSocial, propietario, direccion, rfc, municipio, estado, telefono, contacto, email, idCiudad):
         self.razonSocial = razonSocial
         self.propietario = propietario
         self.direccion = direccion
@@ -145,6 +148,7 @@ class Model_Proveedor(db.Model):
         self.telefono = telefono
         self.contacto = contacto
         self.email = email
+        self.idCiudad = idCiudad
 
     def __repr__(self):
         return '{}'.format(self.razonSocial)
@@ -163,8 +167,9 @@ class Ticket(db.Model):
     total = db.Column(db.Float)
     placa = db.Column(db.String(9))
     observaciones = db.Column(db.Text)
+    idCiudad = db.Column(db.Integer)
 
-    def __init__(self, nuFolio, fecha, litros, combustible, precio, subtotal, iva, total, placa, observaciones):
+    def __init__(self, nuFolio, fecha, litros, combustible, precio, subtotal, iva, total, placa, observaciones, idCiudad):
         self.nuFolio = nuFolio
         self.fecha = fecha
         self.litros = litros
@@ -175,6 +180,7 @@ class Ticket(db.Model):
         self.total = total
         self.placa = placa
         self.observaciones = observaciones
+        self.idCiudad = idCiudad
 
 
 class Combustible(db.Model):
@@ -199,8 +205,9 @@ class Combustible(db.Model):
     kmLts = db.Column(db.String(10))
     pKm = db.Column(db.Float)
     conductor = db.Column(db.String(10))
+    idCiudad = db.Column(db.Integer)
 
-    def __init__(self, factura, leyenda, placa, nutarjeta, centroCosto, fechacarga, nuFolio, esCarga, nombreEs, descripcion, litros, precio, importe, odom, odoAnt, kmRec, kmLts, pKm, conductor):
+    def __init__(self, factura, leyenda, placa, nutarjeta, centroCosto, fechacarga, nuFolio, esCarga, nombreEs, descripcion, litros, precio, importe, odom, odoAnt, kmRec, kmLts, pKm, conductor, idCiudad):
         self.factura = factura
         self.leyenda = leyenda
         self.placa = placa
@@ -220,6 +227,7 @@ class Combustible(db.Model):
         self.kmLts = kmLts
         self.pKm = pKm
         self.conductor = conductor
+        self.idCiudad = idCiudad
 
 
 class Solicitud_serv(db.Model):
@@ -230,14 +238,16 @@ class Solicitud_serv(db.Model):
     odome = db.Column(db.String(9))
     solicitante = db.Column(db.String(35))
     observaciones = db.Column(db.Text)
+    idCiudad = db.Column(db.Integer)
     fecha = db.Column(db.DateTime, default=datetime.datetime.now)
 
-    def __init__(self, nOficio, placa, solicitante, odome, observaciones):
+    def __init__(self, nOficio, placa, solicitante, odome, observaciones, idCiudad):
         self.nOficio = nOficio
         self.placa = placa
         self.odome = odome
         self.solicitante = solicitante
         self.observaciones = observaciones
+        self.idCiudad = idCiudad
 
 class captura_Sol(db.Model):
     __tablename__ = 'captura_Sol'
@@ -253,8 +263,9 @@ class captura_Sol(db.Model):
     costo3 = db.Column(db.Float)
     serv3 = db.Column(db.Text)
     elec = db.Column(db.Integer)
+    idCiudad = db.Column(db.Integer)
 
-    def __init__(self, numSol, prov1, costo1, serv1, prov2, costo2, serv2, prov3, costo3, serv3, elec):
+    def __init__(self, numSol, prov1, costo1, serv1, prov2, costo2, serv2, prov3, costo3, serv3, elec, idCiudad):
         self.numSol = numSol
         self.prov1 = prov1
         self.costo1 = costo1
@@ -266,6 +277,7 @@ class captura_Sol(db.Model):
         self.costo3 = costo3
         self.serv3 = serv3
         self.elec = elec
+        self.idCiudad = idCiudad
 
 
 class Compras(db.Model):
@@ -281,8 +293,9 @@ class Compras(db.Model):
     placas = db.Column(db.String(8))
     observaciones = db.Column(db.Text)
     folio = db.Column(db.Integer)
+    idCiudad = db.Column(db.Integer)
 
-    def __init__(self, UUiD, rfc, nombre, subtotal, iva, total, fecha, placas, observaciones, folio):
+    def __init__(self, UUiD, rfc, nombre, subtotal, iva, total, fecha, placas, observaciones, folio, idCiudad):
         self.UUiD = UUiD
         self.rfc = rfc
         self.nombre = nombre
@@ -293,6 +306,7 @@ class Compras(db.Model):
         self.placas = placas
         self.observaciones = observaciones
         self.folio = folio
+        self.idCiudad = idCiudad
 
 
 class Articulos(db.Model):

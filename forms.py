@@ -18,6 +18,10 @@ from wtforms_components import TimeField, read_only
 import flask
 
 
+
+def ciudad():
+    return Ciudades.query.order_by('ciudad')
+
 def length_honeypot(form, field):
   if len(field.data) > 0:
     raise validators.ValidationError('El Campo debe estar vacio.')
