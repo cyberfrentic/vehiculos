@@ -1,13 +1,6 @@
-{% extends 'Base.html' %}
-{%block nombre%}  
-    {% if nombre %}
-      <li><a href="#"><icon class="icon-user icon-white"></icon> {{nombre}}</a></li>
-    {% else %}
-        <li><a href="/login"><icon class="icon-user icon-white"></icon> Login</a></li> 
-    {% endif %}
-{%endblock%}
-{% block content %}
+{% extends 'Home.html' %}
 
+{% block content %}
 <h3 class="mt-5">Captura de Factura de combustible desde Excell</h3>
 <div class="row-fluid">
     <div class="table-responsive">

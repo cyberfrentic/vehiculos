@@ -719,6 +719,7 @@ def comparativo_vehiculos():
 @app.route("/uploads/xls/<filename>", methods=['GET', 'POST'])
 def get_fileXls(filename):
     nombre = (session['username']).upper()
+    lugar = session['ciudad']
     book = xlrd.open_workbook(app.config["UPLOAD_FOLDER"] + '\\xls\\' + filename)
     sheet = book.sheet_by_index(0)
     data = dict()
@@ -754,7 +755,7 @@ def get_fileXls(filename):
                         placa=str(sheet.cell(i + 2, 2).value),
                         nutarjeta=sheet.cell(i + 2, 3).value,
                         centroCosto=sheet.cell(i + 2, 4).value,
-                        fechaCarga=exceldate(sheet.cell(i + 2, 5).value) + ' ' + str(sheet.cell(i + 2, 6).value),
+                        fechacarga=exceldate(sheet.cell(i + 2, 5).value) + ' ' + str(sheet.cell(i + 2, 6).value),
                         nuFolio=sheet.cell(i + 2, 7).value,
                         esCarga=sheet.cell(i + 2, 8).value,
                         nombreEs=sheet.cell(i + 2, 9).value,
@@ -766,8 +767,8 @@ def get_fileXls(filename):
                         odoAnt=sheet.cell(i + 2, 16).value,
                         kmRec=sheet.cell(i + 2, 17).value,
                         kmLts=str(sheet.cell(i + 2, 18).value),
-                        pKm=sheet.cell(i + 2, 19).value,
-                        conductor=sheet.cell(i + 2, 20).value,
+                        pKm=sheet.cell(i + 2, 19).value if sheet.cell(i + 2, 19).value != 'NA' else '0' ,
+                        conductor=(sheet.cell(i + 2, 20).value).replace(" ",""),
                         idCiudad=lugar,
                     )
                     db.session.add(combustible)

@@ -204,7 +204,7 @@ class Combustible(db.Model):
     kmRec = db.Column(db.Float)
     kmLts = db.Column(db.String(10))
     pKm = db.Column(db.Float)
-    conductor = db.Column(db.String(10))
+    conductor = db.Column(db.String(35))
     idCiudad = db.Column(db.Integer)
 
     def __init__(self, factura, leyenda, placa, nutarjeta, centroCosto, fechacarga, nuFolio, esCarga, nombreEs, descripcion, litros, precio, importe, odom, odoAnt, kmRec, kmLts, pKm, conductor, idCiudad):
