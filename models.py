@@ -14,19 +14,33 @@ class User(db.Model):
     password = db.Column(db.String(93))
     email = db.Column(db.String(40))
     privilegios = db.Column(db.String(20))
+    idCiudad = db.Column(db.Integer)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
 
-    def __init__(self, username, password, email, privilegios):
+    def __init__(self, username, password, email, privilegios, idCiudad):
         self.username = username
         self.password = self.__crate_password(password)
         self.email = email
         self.privilegios = privilegios
+        self.idCiudad = idCiudad
 
     def __crate_password(self, password):
         return generate_password_hash(password)
 
     def verify_password(self, password):
         return check_password_hash(self.password, password)
+
+
+class Ciudades(db.Model):
+    __tablename__ = 'Ciudades'
+    id = db.Column(db.Integer, primary_key=True)
+    ciudad = db.Column(db.String(35), unique=True)
+
+    def __init__(self, ciudad):
+        self.ciudad = ciudad
+
+    def __repr__(self):
+        return '{}'.format(self.ciudad)
 
 
 class tipoVehiculos(db.Model):
@@ -49,9 +63,10 @@ class Resguardante(db.Model):
     departamento = db.Column(db.String(20))
     licencia = db.Column(db.String(12))
     lVigencia = db.Column(db.Date)
+    idCiudad=db.Column(db.Integer)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
 
-    def __init__(self, nombre, apellidoPat, apellidoMat, nombreCompleto, area, departamento, licencia, lVigencia):
+    def __init__(self, nombre, apellidoPat, apellidoMat, nombreCompleto, area, departamento, licencia, lVigencia, idCiudad):
         self.nombre = nombre
         self.apellidoPat = apellidoPat
         self.apellidoMat = apellidoMat
@@ -60,6 +75,7 @@ class Resguardante(db.Model):
         self.departamento = departamento
         self.licencia = licencia
         self.lVigencia = lVigencia
+        self.idCiudad = idCiudad
 
     def __repr__(self):
         return '{}'.format(self.nombre)
@@ -81,6 +97,7 @@ class Vehiculo(db.Model):
     cSeguros = db.Column(db.String(35))
     nPoliza = db.Column(db.String(15))
     placa = db.Column(db.String(10), unique=True)
+    idCiudad=db.Column(db.Integer)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __init__(self, numInv, marca, modelo, tipoVehiculo, nSerie, tCombus, odome, kmInicio, nVehi, resguardo,
@@ -249,3 +266,49 @@ class captura_Sol(db.Model):
         self.costo3 = costo3
         self.serv3 = serv3
         self.elec = elec
+
+
+class Compras(db.Model):
+    __tablename__='compras'
+    id = db.Column(db.Integer, primary_key=True)
+    UUiD = db.Column(db.String(36), unique=True)
+    rfc = db.Column(db.String(13), index=True)
+    nombre = db.Column(db.String(150))
+    subtotal = db.Column(db.Float)
+    iva = db.Column(db.Float)
+    total = db.Column(db.Float)
+    fecha = db.Column(db.DateTime)
+    placas = db.Column(db.String(8))
+    observaciones = db.Column(db.Text)
+    folio = db.Column(db.Integer)
+
+    def __init__(self, UUiD, rfc, nombre, subtotal, iva, total, fecha, placas, observaciones, folio):
+        self.UUiD = UUiD
+        self.rfc = rfc
+        self.nombre = nombre
+        self.subtotal = subtotal
+        self.iva = iva
+        self. total = total
+        self.fecha = fecha
+        self.placas = placas
+        self.observaciones = observaciones
+        self.folio = folio
+
+
+class Articulos(db.Model):
+    __tablename__ = 'articulos'
+    id = db.Column(db.Integer, primary_key=True)
+    compras_id = db.Column(db.Integer, db.ForeignKey("compras.id"), nullable=False)
+    compras = relationship(Compras, backref = backref('comprass', uselist=True))
+    cantidad = db.Column(db.Float)
+    descripcion = db.Column(db.String(150))
+    p_u = db.Column(db.Float)
+    importe = db.Column(db.Float)
+
+    def __init__(self,compras_id, compras, cantidad, descripcion, p_u, importe):
+        self.compras_id = compras_id
+        self.compras = compras
+        self.cantidad = cantidad
+        self.descripcion = descripcion
+        self.p_u = p_u
+        self.importe = importe
