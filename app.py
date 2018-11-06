@@ -167,6 +167,7 @@ def crearUser():
 
 @app.route('/vehiculo/captura', methods=['GET', 'POST'])
 def Vehiculow():
+    lugar = session['ciudad']
     vehi = FormVehiculos(request.form)
     if request.method == 'POST' and vehi.validate():
         km = ""
@@ -189,7 +190,8 @@ def Vehiculow():
                                 vehi.resguardo.data,
                                 vehi.cSeguros.data,
                                 vehi.nPoliza.data,
-                                vehi.placa.data)
+                                vehi.placa.data,
+                                lugar)
             db.session.add(vehiculo)
             db.session.commit()
             succes_message = 'Vehiculo registrado en la base de datos'
@@ -204,15 +206,14 @@ def Vehiculow():
 def searchvehiculo():
     datos = []
     nombre = session['username'].upper()
+    lugar = session['ciudad']
     form = VehiSearchForm(request.form)
     if request.method == 'POST' and form.validate():
         if 'search' in request.form['buton']:
             opcion = dict(form.select1.choices).get(form.select1.data)
             search1 = len(form.search.data)
             if opcion == 'Núm. Inv.' and search1 > 0:
-                query = Vehiculo.query.filter(
-                    Vehiculo.numInv.contains(
-                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                query = Vehiculo.query.filter(and_(Vehiculo.numInv.contains(str(form.search.data.upper()))),Vehiculo.idCiudad==lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -231,9 +232,7 @@ def searchvehiculo():
                     flash('No existen datos del vehiculo con num. inventario {} en la base de datos'.format(
                         form.search.data.upper()))
             elif opcion == 'Núm. Serie' and search1 > 0:
-                query = Vehiculo.query.filter(
-                    Vehiculo.nSerie.contains(
-                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                query = Vehiculo.query.filter(and_(Vehiculo.numInv.contains(str(form.search.data.upper()))),Vehiculo.idCiudad==lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -252,9 +251,7 @@ def searchvehiculo():
                     flash('No existen datos del vehiculo con Núm. de serie: {} no existen en la base de datos'.format(
                         form.search.data.upper()))
             elif opcion == 'Resguardante' and search1 > 0:
-                query = Vehiculo.query.filter(
-                    Vehiculo.resguardo.contains(
-                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                query = Vehiculo.query.filter(and_(Vehiculo.numInv.contains(str(form.search.data.upper()))),Vehiculo.idCiudad==lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -278,7 +275,8 @@ def searchvehiculo():
 @app.route("/itemVehi/<numInv>", methods=['GET', 'POST'])
 def editarVehi(numInv):
     nombre = session["username"].upper()
-    x = Vehiculo.query.filter_by(numInv=numInv).first()
+    lugar = session['ciudad']
+    x = Vehiculo.query.filter_by(and_(numInv=numInv, idCiudad=lugar)).first()
     form = FormVehiculos(formdata=request.form, obj=x)
     if request.method == 'POST' and form.validate():
         x.numInv = form.numInv.data.upper()
@@ -303,10 +301,11 @@ def editarVehi(numInv):
 @app.route('/resguardante', methods=["GET", "POST"])
 def resguardante():
     nombre = session["username"].upper()
+    lugar = session['ciudad']
     resg = Form_resguardos(request.form)
     if request.method == 'POST' and resg.validate():
         nombreCompleto = (resg.nombre.data + ' ' + resg.apellidoPat.data + ' ' + resg.apellidoMat.data).upper()
-        result = Resguardante.query.filter_by(nombreCompleto=nombreCompleto).first()
+        result = Resguardante.query.filter_by(and_(nombreCompleto=nombreCompleto, idCiudad=lugar)).first()
         if result is None:
             resguardante = Resguardante(resg.nombre.data.upper(),
                                         resg.apellidoPat.data.upper(),
@@ -315,7 +314,8 @@ def resguardante():
                                         resg.area.data.upper(),
                                         resg.departamento.data.upper(),
                                         resg.licencia.data.upper(),
-                                        resg.lVigencia.data)
+                                        resg.lVigencia.data,
+                                        lugar)
             db.session.add(resguardante)
             db.session.commit()
             succes_message = 'El resguardante {} ha sido Agregado con Éxito!!'.format(resg.nombre.data.upper())
@@ -331,14 +331,14 @@ def resguardante():
 def search():
     datos = []
     nombre = session["username"].upper()
+    lugar = session['ciudad']
     sea = ResSearchForm(request.form)
     if request.method == 'POST' and sea.validate():
         if 'search' in request.form['buton']:
             opcion = dict(sea.select1.choices).get(sea.select1.data)
             select2 = len(sea.search.data)
             if opcion.upper() == 'nombre'.upper() and select2 > 0:
-                query = Resguardante.query.filter(Resguardante.nombre.contains(
-                    str(sea.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                query = Resguardante.query.filter(and_(Resguardante.nombre.contains(str(sea.search.data.upper())), Resguardante.idCiudad==lugar))  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         data = {'id': x.id,
