@@ -165,10 +165,11 @@ def crearUser():
 @app.route('/vehiculo/captura', methods=['GET', 'POST'])
 def Vehiculow():
     vehi = FormVehiculos(request.form)
+    lugar = session['ciudad']
     if request.method == 'POST' and vehi.validate():
         km = ""
         numInv = vehi.numInv.data
-        existe = Vehiculo.query.filter_by(numInv=numInv).first()
+        existe = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
         if existe is None:
             if (dict(vehi.odome.choices).get(vehi.odome.data)) == 'Si':
                 km = vehi.kmInicio.data
@@ -186,7 +187,8 @@ def Vehiculow():
                                 vehi.resguardo.data,
                                 vehi.cSeguros.data,
                                 vehi.nPoliza.data,
-                                vehi.placa.data)
+                                vehi.placa.data,
+                                lugar)
             db.session.add(vehiculo)
             db.session.commit()
             succes_message = 'Vehiculo registrado en la base de datos'
@@ -201,6 +203,7 @@ def Vehiculow():
 def searchvehiculo():
     datos = []
     nombre = session['username'].upper()
+    lugar = session['ciudad']
     form = VehiSearchForm(request.form)
     if request.method == 'POST' and form.validate():
         if 'search' in request.form['buton']:
@@ -209,7 +212,7 @@ def searchvehiculo():
             if opcion == 'Núm. Inv.' and search1 > 0:
                 query = Vehiculo.query.filter(
                     Vehiculo.numInv.contains(
-                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                        str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -230,7 +233,7 @@ def searchvehiculo():
             elif opcion == 'Núm. Serie' and search1 > 0:
                 query = Vehiculo.query.filter(
                     Vehiculo.nSerie.contains(
-                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                        str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -251,7 +254,7 @@ def searchvehiculo():
             elif opcion == 'Resguardante' and search1 > 0:
                 query = Vehiculo.query.filter(
                     Vehiculo.resguardo.contains(
-                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                        str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -275,7 +278,8 @@ def searchvehiculo():
 @app.route("/itemVehi/<numInv>", methods=['GET', 'POST'])
 def editarVehi(numInv):
     nombre = session["username"].upper()
-    x = Vehiculo.query.filter_by(numInv=numInv).first()
+    lugar = session['ciudad']
+    x = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
     form = FormVehiculos(formdata=request.form, obj=x)
     if request.method == 'POST' and form.validate():
         x.numInv = form.numInv.data.upper()
@@ -300,10 +304,11 @@ def editarVehi(numInv):
 @app.route('/resguardante', methods=["GET", "POST"])
 def resguardante():
     nombre = session["username"].upper()
+    lugar = session['ciudad']
     resg = Form_resguardos(request.form)
     if request.method == 'POST' and resg.validate():
         nombreCompleto = (resg.nombre.data + ' ' + resg.apellidoPat.data + ' ' + resg.apellidoMat.data).upper()
-        result = Resguardante.query.filter_by(nombreCompleto=nombreCompleto).first()
+        result = Resguardante.query.filter_by(nombreCompleto=nombreCompleto).filter_by(idCiudad=lugar).first()
         if result is None:
             resguardante = Resguardante(resg.nombre.data.upper(),
                                         resg.apellidoPat.data.upper(),
@@ -312,7 +317,8 @@ def resguardante():
                                         resg.area.data.upper(),
                                         resg.departamento.data.upper(),
                                         resg.licencia.data.upper(),
-                                        resg.lVigencia.data)
+                                        resg.lVigencia.data,
+                                        lugar)
             db.session.add(resguardante)
             db.session.commit()
             succes_message = 'El resguardante {} ha sido Agregado con Éxito!!'.format(resg.nombre.data.upper())
@@ -328,6 +334,7 @@ def resguardante():
 def search():
     datos = []
     nombre = session["username"].upper()
+    lugar = session['ciudad']
     sea = ResSearchForm(request.form)
     if request.method == 'POST' and sea.validate():
         if 'search' in request.form['buton']:
@@ -335,7 +342,7 @@ def search():
             select2 = len(sea.search.data)
             if opcion.upper() == 'nombre'.upper() and select2 > 0:
                 query = Resguardante.query.filter(Resguardante.nombre.contains(
-                    str(sea.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                    str(sea.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         data = {'id': x.id,
@@ -349,7 +356,7 @@ def search():
                 else:
                     flash('No existen datos de esta persona {}'.format(sea.nombre.data.upper()))
             elif opcion.upper() == 'area'.upper() and select2 > 0:
-                query = Resguardante.query.filter(Resguardante.area.contains(sea.search.data.upper()))
+                query = Resguardante.query.filter(Resguardante.area.contains(sea.search.data.upper())).filter_by(idCiudad=lugar)
                 if query is not None:
                     for x in query:
                         data = {'id': x.id,
@@ -363,7 +370,7 @@ def search():
                 else:
                     flash('No existen datos de esta persona {}'.format(sea.nombre.data.upper()))
             elif opcion.upper() == 'departamento'.upper() and select2 > 0:
-                query = Resguardante.query.filter(Resguardante.departamento.contains(sea.search.data.upper()))
+                query = Resguardante.query.filter(Resguardante.departamento.contains(sea.search.data.upper())).filter_by(idCiudad=lugar)
                 if query is not None:
                     for x in query:
                         data = {'id': x.id,
@@ -385,7 +392,8 @@ def search():
 @app.route('/item/<int:id>', methods=['GET', 'POST'])
 def editar(id):
     nombre = session["username"].upper()
-    x = Resguardante.query.filter_by(id=id).first()
+    lugar = session['ciudad']
+    x = Resguardante.query.filter_by(id=id).filter_by(idCiudad=lugar).first()
     form = Form_resguardos(formdata=request.form, obj=x)
     if request.method == 'POST' and form.validate():
         x.nombre = form.nombre.data.upper()
@@ -404,9 +412,10 @@ def editar(id):
 @app.route('/proveedores', methods=['GET', 'POST'])
 def proveedores():
     nombre = session['username'].upper()
+    lugar = session['ciudad']
     form = Form_Proveedor(request.form)
     if request.method == 'POST' and form.validate():
-        x = Model_Proveedor.query.filter_by(rfc=form.rfc.data.upper()).first()
+        x = Model_Proveedor.query.filter_by(rfc=form.rfc.data.upper()).filter_by(idCiudad=lugar).first()
         if x is None:
             prov = Model_Proveedor(form.razonSocial.data.upper(),
                                    form.propietario.data.upper(),
@@ -416,7 +425,8 @@ def proveedores():
                                    form.estado.data.upper(),
                                    form.telefono.data,
                                    form.contacto.data.upper(),
-                                   form.email.data, )
+                                   form.email.data,
+                                   lugar,)
             db.session.add(prov)
             db.session.commit()
             succes_message = 'El proveedor {} ha sido Agregado con Éxito!!'.format(form.razonSocial.data.upper())
@@ -433,6 +443,7 @@ def proveedores():
 def provSearch():
     datos = []
     nombre = session['username'].upper()
+    lugar = session['ciudad']
     form = ProvSearchForm(request.form)
     if request.method == 'POST' and form.validate():
         if 'search' in request.form['buton']:
@@ -441,7 +452,7 @@ def provSearch():
             if opcion == 'Razon Social' and search1 > 0:
                 query = Model_Proveedor.query.filter(
                     Model_Proveedor.razonSocial.contains(
-                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                        str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -460,7 +471,7 @@ def provSearch():
                     flash('No existen datos del proveedor {} en la base de datos'.format(form.nombre.data.upper()))
             elif opcion == 'Propietario' and search1 > 0:
                 query = Model_Proveedor.query.filter(Model_Proveedor.propietario.contains(
-                    str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                    str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -479,7 +490,7 @@ def provSearch():
                     flash('No existen datos del proveedor {} en la base de datos'.format(form.propietario.data.upper()))
             elif opcion == 'R. F. C.' and search1 > 0:
                 query = Model_Proveedor.query.filter(Model_Proveedor.rfc.contains(
-                    str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
+                    str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -506,7 +517,8 @@ def provSearch():
 @app.route("/prov/<int:id>", methods=['GET', 'POST'])
 def editarprov(id):
     nombre = session["username"].upper()
-    x = Model_Proveedor.query.filter_by(id=id).first()
+    lugar = session['ciudad']
+    x = Model_Proveedor.query.filter_by(id=id).filter_by(idCiudad=lugar).first()
     form = Form_Proveedor(formdata=request.form, obj=x)
     if request.method == 'POST' and form.validate():
         x.razonSocial = form.razonSocial.data.upper()
@@ -527,11 +539,12 @@ def editarprov(id):
 @app.route('/combustible/tickets/captura', methods=['GET', 'POST'])
 def ticket():
     nombre = session["username"].upper()
+    lugar = session['ciudad']
     form = Form_Ticket(request.form)
     if request.method == 'POST' and form.validate():
         if (len(request.form.getlist('plancha'))) < 1:
             tra = request.form["transaccion"]
-            query1 = Ticket.query.filter_by(nuFolio=tra).first()
+            query1 = Ticket.query.filter_by(nuFolio=tra).filter_by(idCiudad=lugar).first()
             if query1 != None:
                 flash("El ticket ya fue capturado")
                 return redirect(url_for('ticket'))
@@ -549,6 +562,7 @@ def ticket():
             total=form.total.data,
             placa=form.placa.data,
             observaciones=form.obser.data,
+            idciudad=lugar,
         )
         db.session.add(ticket)
         db.session.commit()
@@ -563,6 +577,7 @@ def Consulta_ticket():
     global totales
     total = []
     nombre = session['username'].upper()
+    lugar = session['ciudad']
     form = FormConsultaTicket(request.form)
     if request.method == 'POST' and form.validate():
         if 'search' in request.form['buton']:
@@ -583,7 +598,7 @@ def Consulta_ticket():
                 if placa != 'TODOS':
                     query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros,
                                              Ticket.combustible,
-                                             Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(placa=placa)
+                                             Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(placa=placa).filter_by(idCiudad=lugar)
                     for x in query:
                         data = {
                             'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
@@ -602,7 +617,7 @@ def Consulta_ticket():
                 else:
                     query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros,
                                              Ticket.combustible,
-                                             Ticket.total).filter(Ticket.fecha.between(fi, ff)).order_by(Ticket.placa)
+                                             Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(idCiudad=lugar).order_by(Ticket.placa)
                     for x in query:
                         data = {
                             'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
@@ -624,7 +639,7 @@ def Consulta_ticket():
             placa = str(form.placas.data)
             if placa == 'TODOS':
                 query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros, Ticket.combustible,
-                                         Ticket.total).filter(Ticket.fecha.between(fi, ff)).order_by(Ticket.placa)
+                                         Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(idCiudad=lugar).order_by(Ticket.placa)
                 for x in query:
                     data = {
                         'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
@@ -635,12 +650,11 @@ def Consulta_ticket():
                         'total': x.total,
                     }
                     lista.append(data)
-                    x = Vehiculo.query.order_by('placa')
+                    x = Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa')
                     lista2 = []
                 for item in x:
                     if len(item.numInv) > 1 and item.numInv != '0':
-                        valor = db.session.query(func.sum(Ticket.total).label("total")).filter(
-                            Ticket.placa == (str(item)))
+                        valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == (str(item))).filter(Ticket.idCiudad==lugar)
                         for it in valor.all():
                             resultado = it.total
                         data = {
@@ -653,7 +667,7 @@ def Consulta_ticket():
             else:
                 query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros, Ticket.combustible,
                                          Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter(
-                    Ticket.placa == placa)
+                    Ticket.placa == placa).filter(Ticket.idCiudad==lugar)
                 lista2 = []
                 for x in query:
                     data = {
@@ -665,7 +679,7 @@ def Consulta_ticket():
                         'total': x.total,
                     }
                     lista.append(data)
-                valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa)
+                valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.idCiudad==lugar)
                 for val in valor.all():
                     data = {
                         'placa': placa,
@@ -681,6 +695,7 @@ def Consulta_ticket():
 @app.route('/combustible/ticket/excell', methods=['GET', 'POST'])
 def comparativo_vehiculos():
     nombre = session['username'].upper()
+    lugar = session['ciudad']
     if request.method == "POST":
         if not "file" in request.files:
             flash("No file part in the form.")
@@ -753,6 +768,7 @@ def get_fileXls(filename):
                         kmLts=str(sheet.cell(i + 2, 18).value),
                         pKm=sheet.cell(i + 2, 19).value,
                         conductor=sheet.cell(i + 2, 20).value,
+                        idCiudad=lugar,
                     )
                     db.session.add(combustible)
                     db.session.commit()
@@ -771,14 +787,15 @@ def get_fileXls(filename):
 @app.route("/combustible/comparativos/ticketvsfactura",  methods=["GET", "POST"])
 def ticketvsfactura():
     nombre = (session['username']).upper()
+    lugar = session['ciudad']
     if request.method=='POST':
         num = request.form['numero']
-        strq = "select t1.nuFolio, t1.placa,t1.litros, t1.importe from combustible t1 where t1.nufolio not in\
-         (select t2.nuFolio from ticket t2 where t1.nuFolio = t2.nuFolio) and t1.factura = '%s' and t1.descripcion != 'COMISION'" % num
+        strq = "select t1.nuFolio, t1.placa,t1.litros, t1.importe, t1.idCiudad from combustible t1 where t1.nufolio not in\
+         (select t2.nuFolio from ticket t2 where t1.nuFolio = t2.nuFolio) and t1.factura = '%s' and t1.descripcion != 'COMISION' and t1.idCiudad='%s'"  % (num, lugar)
         stmt = text(strq)
         result = db.session.execute(stmt)
         strq = "select count(*) from combustible t1 where t1.nufolio not in\
-         (select t2.nuFolio from ticket t2 where t1.nuFolio = t2.nuFolio) and t1.factura = '%s' and t1.descripcion != 'COMISION'" % num
+         (select t2.nuFolio from ticket t2 where t1.nuFolio = t2.nuFolio) and t1.factura = '%s' and t1.descripcion != 'COMISION' and t1.idCiudad='%s'" % (num,lugar)
         stmt = text(strq)
         cant = db.session.execute(stmt)
         return render_template("ticketvsfactura.html", lista=result, nombre=nombre, factura=num, cantidad=cant)
@@ -788,6 +805,7 @@ def ticketvsfactura():
 @app.route("/combustible/comparativos/consulta", methods=['POST', 'GET'])
 def grafica():
     nombre = session['username'].upper()
+    lugar = session['ciudad']
     form = Form_Grafica(request.form)
     if request.method =='POST' and form.validate():
         placa= str(form.placa.data)
@@ -796,7 +814,7 @@ def grafica():
             colors=('#991515','#1cbc7c'),
             background='#d2ddd9'
             )
-        placa2= 'SZ-1007-H'
+        #placa2= 'SZ-1007-H'
 
         data=dict
         lista=[]
@@ -818,10 +836,10 @@ def grafica():
                 12: 'Dic',
             }
             if dia<10:
-                query = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31'))
+                query = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31')).filter(Ticket.idCiudad==lugar)
                 #query2 = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa2).filter(Ticket.fecha==('2018-08-0'+str(dia)))
             else:
-                query = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31'))
+                query = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31')).filter(Ticket.idCiudad==lugar)
                 #query2 = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa2).filter(Ticket.fecha==('2018-08-'+str(dia)))
             suna=0
             suna2=0
@@ -848,9 +866,10 @@ def grafica():
 @app.route("/Mantenimientos/solicitud/generar-Solicitud", methods=['POST', 'GET'])
 def Solicitud():
     nombre = session['username']
+    lugar = session['ciudad']
     if request.method == 'GET':
         nu=0
-        ultimo = db.session.query(Solicitud_serv.id).order_by(desc(Solicitud_serv.id)).first() ## encontrar el ultimo registro de una tabla
+        ultimo = db.session.query(Solicitud_serv.id).filter(Solicitud_serv.idCiudad==lugar).order_by(desc(Solicitud_serv.id)).first() ## encontrar el ultimo registro de una tabla
         if ultimo is None:
             nu = 1
         else:
@@ -865,14 +884,15 @@ def Solicitud():
                 placa= str(form.placa.data),
                 odome= form.odome.data,
                 solicitante = form.solicitante.data.upper(),
-                observaciones=form.observaciones.data.upper())
+                observaciones=form.observaciones.data.upper(),
+                idCiudad=lugar,)
             db.session.add(servicio)
             db.session.commit()
             flash('Orden generada con exito')
-            ultimo = db.session.query(Solicitud_serv.id).order_by(desc(Solicitud_serv.id)).first()
+            ultimo = db.session.query(Solicitud_serv.id).filter(Solicitud_serv.idCiudad==lugar).order_by(desc(Solicitud_serv.id)).first()
             for t in ultimo:
                 tit=t
-            ve = Vehiculo.query.filter_by(placa = str(form.placa.data)).first()
+            ve = Vehiculo.query.filter_by(placa = str(form.placa.data)).filter_by(idCiudad=lugar).first()
             data = {
                 'oficio' : form.nOficio.data.upper(),
                 'odome' : form.odome.data,
@@ -889,6 +909,7 @@ def Solicitud():
 @app.route("/Mantenimientos/solicitud/Capturar-Solicitud", methods=['POST', 'GET'])
 def capturar_sol():
     nombre = session['username']
+    lugar = session['ciudad']
     form = Form_CapSol(request.form)
     x=""
     if request.method == 'POST' and form.validate():
@@ -902,9 +923,9 @@ def capturar_sol():
             elecc = "2"
         else:
             elecc = "3"
-        existe = Solicitud_serv.query.filter_by(id=soli).first()
+        existe = Solicitud_serv.query.filter_by(id=soli).filter_by(idCiudad=lugar).first()
         if existe is not None:
-            query = captura_Sol.query.filter_by(numSol=soli).first()
+            query = captura_Sol.query.filter_by(numSol=soli).filter_by(idCiudad=lugar).first()
             if query is None :
                 data = captura_Sol(numSol=form.numSol.data,
                     prov1 = form.proveedor1.data,
@@ -916,35 +937,36 @@ def capturar_sol():
                     prov3 = form.proveedor3.data,
                     costo3 = form.costo3.data,
                     serv3 = form.descripcion3.data,
-                    elec = elecc)
+                    elec = elecc,
+                    idCiudad=lugar,)
                 db.session.add(data)
                 db.session.commit()
                 flash('solicitud guardada con exito')
-                elegido ='{}'.format((str(db.session.query(captura_Sol.elec).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                elegido ='{}'.format((str(db.session.query(captura_Sol.elec).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
                 if elegido == "1":
-                    prv = '{}'.format((str(db.session.query(captura_Sol.prov1).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
-                    cst = '{}'.format((str(db.session.query(captura_Sol.costo1).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
-                    srv = '{}'.format((str(db.session.query(captura_Sol.serv1).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    prv = '{}'.format((str(db.session.query(captura_Sol.prov1).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    cst = '{}'.format((str(db.session.query(captura_Sol.costo1).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    srv = '{}'.format((str(db.session.query(captura_Sol.serv1).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
                 elif elegido == "2":
-                    prv = '{}'.format((str(db.session.query(captura_Sol.prov2).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
-                    cst = '{}'.format((str(db.session.query(captura_Sol.costo2).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
-                    srv = '{}'.format((str(db.session.query(captura_Sol.serv2).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    prv = '{}'.format((str(db.session.query(captura_Sol.prov2).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    cst = '{}'.format((str(db.session.query(captura_Sol.costo2).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    srv = '{}'.format((str(db.session.query(captura_Sol.serv2).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
                 else:
-                    prv = '{}'.format((str(db.session.query(captura_Sol.prov3).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
-                    cst = '{}'.format((str(db.session.query(captura_Sol.costo3).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
-                    srv = '{}'.format((str(db.session.query(captura_Sol.serv3).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
-                plc = '{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")
+                    prv = '{}'.format((str(db.session.query(captura_Sol.prov3).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    cst = '{}'.format((str(db.session.query(captura_Sol.costo3).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                    srv = '{}'.format((str(db.session.query(captura_Sol.serv3).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))
+                plc = '{}'.format(str(db.session.query(Solicitud_serv.placa).filter(captura_Sol.idCiudad==lugar).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")
                 datos={
                 "titulo": 'Orden de Mantenimiento Vehicular',
-                "orden" : '{}'.format((str(db.session.query(captura_Sol.id).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")","")),
+                "orden" : '{}'.format((str(db.session.query(captura_Sol.id).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")","")),
                 "proveedor": prv,
                 "costo" : cst,
                 "servi" : srv,
-                "placa": '{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")),
-                "inventario" : '{}'.format(str(db.session.query(Vehiculo.numInv).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
-                "serie" : '{}'.format(str(db.session.query(Vehiculo.nSerie).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
-                "modelo" : '{}'.format(str(db.session.query(Vehiculo.modelo).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
-                "marca" : '{}'.format(str(db.session.query(Vehiculo.marca).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
+                "placa": '{}'.format(str(db.session.query(Solicitud_serv.placa).filter(Solicitud_serv.idCiudad==lugar).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")),
+                "inventario" : '{}'.format(str(db.session.query(Vehiculo.numInv).filter(Vehiculo.idCiudad==lugar).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter(Solicitud_serv.idCiudad==lugar).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
+                "serie" : '{}'.format(str(db.session.query(Vehiculo.nSerie).filter(Vehiculo.idciudad==lugar).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter(Solicitud_serv.idCiudad==lugar).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
+                "modelo" : '{}'.format(str(db.session.query(Vehiculo.modelo).filter(Vehiculo.idCiudad==lugar).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter(Solicitud_serv.idCiudad==lugar).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
+                "marca" : '{}'.format(str(db.session.query(Vehiculo.marca).filter(Vehiculo.idCiudad==lugar).filter_by(placa ='{}'.format(str(db.session.query(Solicitud_serv.placa).filter(Solicitud_serv.idCiudad==lugar).filter_by(id = '{}'.format((str(db.session.query(captura_Sol.numSol).filter(captura_Sol.idCiudad==lugar).order_by(desc(captura_Sol.id)).first())).replace("(","").replace(",","").replace(")",""))).first()).replace("(","").replace(",","").replace(")","")).replace("'","")).first()).replace("(","").replace(",","").replace(")","")),
                 }
                 x = orden(datos)
                 return (x)
@@ -981,6 +1003,7 @@ def upload_file():
 
 @app.route("/uploads/xml/<filename>", methods=['GET', 'POST'])
 def get_fileXml(filename):
+    lugar = session['ciudad']
     lista1=[]
     lista2=[]
     articulo=[]
@@ -1023,7 +1046,7 @@ def get_fileXml(filename):
             'valor' : articulos['valorUnitario'+str(dc+1)],
             'importe' : articulos['importe'+str(dc+1)]
             }
-    uuid = Compras.query.filter_by(UUiD = atributos['UUiD']).first()
+    uuid = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = atributos['UUiD']).first()
     if (uuid==None):
         flash('El registro no existe')  
     else:
@@ -1039,12 +1062,13 @@ def get_fileXml(filename):
             total = atributos['total'],
             fecha = atributos['fecha'],
             placas = factura.placas.data,
-            observaciones = factura.observaciones.data
+            observaciones = factura.observaciones.data,
+            idCiudad = lugar,
             )
     if (request.method == 'POST') and (factura.validate()):
         db.session.add(compras)
         db.session.commit()
-        id_compra = Compras.query.filter_by(UUiD = atributos['UUiD']).first()
+        id_compra = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = atributos['UUiD']).first()
         for dc in range(Cant_Diccio):
             arti = Articulos(
                 compras_id = id_compra.id,
