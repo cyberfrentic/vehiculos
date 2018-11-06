@@ -8,7 +8,6 @@ from sqlalchemy.sql import text, distinct, desc
 from config import DevelopmentConfig
 from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades
 from flask_wtf import CSRFProtect
-from sqlalchemy import and_
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol
 from tools.fpdf import tabla, sol, orden
@@ -69,7 +68,6 @@ def regreso(e):
 def home():
     if 'username' in session:
         nombre = (session['username']).upper()
-        lugar = session['ciudad']
         return render_template("home.html", nombre=nombre)
     else:
         return render_template("home.html")
@@ -115,8 +113,6 @@ def logout():
 
 @app.route('/crearUser', methods=['GET', 'POST'])
 def crearUser():
-    nombre = (session['username']).upper()
-    lugar=session['ciudad']
     pri = ""
     crear = Create_Form(request.form)
     if request.method == 'POST' and crear.validate():
@@ -144,11 +140,7 @@ def crearUser():
                     pri += "1"
                 elif not option4:
                     pri += "0"
-<<<<<<< HEAD
                 ciu = Ciudades.query.filter_by(ciudad=crear.ciudad.data).first()
-=======
-                ciu = Ciudades.query.filter_by(ciudad=str(crear.ciudad.data)).first()                
->>>>>>> 3c09acec0d1c2cdd7f0ec1154926b97ef7d06e22
                 user = User(crear.username.data,
                             crear.password.data,
                             crear.email.data,
@@ -166,16 +158,12 @@ def crearUser():
             succes_message = 'El usuario existe en la base de datos'
             flash(succes_message)
             return redirect(url_for('crearUser'))
-<<<<<<< HEAD
     nombre = (session['username']).upper()
-=======
->>>>>>> 3c09acec0d1c2cdd7f0ec1154926b97ef7d06e22
     return render_template('crear.html', form=crear, nombre=nombre)
 
 
 @app.route('/vehiculo/captura', methods=['GET', 'POST'])
 def Vehiculow():
-    lugar = session['ciudad']
     vehi = FormVehiculos(request.form)
     if request.method == 'POST' and vehi.validate():
         km = ""
@@ -198,8 +186,7 @@ def Vehiculow():
                                 vehi.resguardo.data,
                                 vehi.cSeguros.data,
                                 vehi.nPoliza.data,
-                                vehi.placa.data,
-                                lugar)
+                                vehi.placa.data)
             db.session.add(vehiculo)
             db.session.commit()
             succes_message = 'Vehiculo registrado en la base de datos'
@@ -214,14 +201,15 @@ def Vehiculow():
 def searchvehiculo():
     datos = []
     nombre = session['username'].upper()
-    lugar = session['ciudad']
     form = VehiSearchForm(request.form)
     if request.method == 'POST' and form.validate():
         if 'search' in request.form['buton']:
             opcion = dict(form.select1.choices).get(form.select1.data)
             search1 = len(form.search.data)
             if opcion == 'Núm. Inv.' and search1 > 0:
-                query = Vehiculo.query.filter(and_(Vehiculo.numInv.contains(str(form.search.data.upper()))),Vehiculo.idCiudad==lugar)  # consulta de nombre se incluye en el nombre completo
+                query = Vehiculo.query.filter(
+                    Vehiculo.numInv.contains(
+                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -240,7 +228,9 @@ def searchvehiculo():
                     flash('No existen datos del vehiculo con num. inventario {} en la base de datos'.format(
                         form.search.data.upper()))
             elif opcion == 'Núm. Serie' and search1 > 0:
-                query = Vehiculo.query.filter(and_(Vehiculo.numInv.contains(str(form.search.data.upper()))),Vehiculo.idCiudad==lugar)  # consulta de nombre se incluye en el nombre completo
+                query = Vehiculo.query.filter(
+                    Vehiculo.nSerie.contains(
+                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -259,7 +249,9 @@ def searchvehiculo():
                     flash('No existen datos del vehiculo con Núm. de serie: {} no existen en la base de datos'.format(
                         form.search.data.upper()))
             elif opcion == 'Resguardante' and search1 > 0:
-                query = Vehiculo.query.filter(and_(Vehiculo.numInv.contains(str(form.search.data.upper()))),Vehiculo.idCiudad==lugar)  # consulta de nombre se incluye en el nombre completo
+                query = Vehiculo.query.filter(
+                    Vehiculo.resguardo.contains(
+                        str(form.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         lista = {
@@ -283,8 +275,7 @@ def searchvehiculo():
 @app.route("/itemVehi/<numInv>", methods=['GET', 'POST'])
 def editarVehi(numInv):
     nombre = session["username"].upper()
-    lugar = session['ciudad']
-    x = Vehiculo.query.filter_by(and_(numInv=numInv, idCiudad=lugar)).first()
+    x = Vehiculo.query.filter_by(numInv=numInv).first()
     form = FormVehiculos(formdata=request.form, obj=x)
     if request.method == 'POST' and form.validate():
         x.numInv = form.numInv.data.upper()
@@ -309,11 +300,10 @@ def editarVehi(numInv):
 @app.route('/resguardante', methods=["GET", "POST"])
 def resguardante():
     nombre = session["username"].upper()
-    lugar = session['ciudad']
     resg = Form_resguardos(request.form)
     if request.method == 'POST' and resg.validate():
         nombreCompleto = (resg.nombre.data + ' ' + resg.apellidoPat.data + ' ' + resg.apellidoMat.data).upper()
-        result = Resguardante.query.filter_by(and_(nombreCompleto=nombreCompleto, idCiudad=lugar)).first()
+        result = Resguardante.query.filter_by(nombreCompleto=nombreCompleto).first()
         if result is None:
             resguardante = Resguardante(resg.nombre.data.upper(),
                                         resg.apellidoPat.data.upper(),
@@ -322,8 +312,7 @@ def resguardante():
                                         resg.area.data.upper(),
                                         resg.departamento.data.upper(),
                                         resg.licencia.data.upper(),
-                                        resg.lVigencia.data,
-                                        lugar)
+                                        resg.lVigencia.data)
             db.session.add(resguardante)
             db.session.commit()
             succes_message = 'El resguardante {} ha sido Agregado con Éxito!!'.format(resg.nombre.data.upper())
@@ -339,14 +328,14 @@ def resguardante():
 def search():
     datos = []
     nombre = session["username"].upper()
-    lugar = session['ciudad']
     sea = ResSearchForm(request.form)
     if request.method == 'POST' and sea.validate():
         if 'search' in request.form['buton']:
             opcion = dict(sea.select1.choices).get(sea.select1.data)
             select2 = len(sea.search.data)
             if opcion.upper() == 'nombre'.upper() and select2 > 0:
-                query = Resguardante.query.filter(and_(Resguardante.nombre.contains(str(sea.search.data.upper())), Resguardante.idCiudad==lugar))  # consulta de nombre se incluye en el nombre completo
+                query = Resguardante.query.filter(Resguardante.nombre.contains(
+                    str(sea.search.data.upper())))  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     for x in query:
                         data = {'id': x.id,
@@ -1072,15 +1061,12 @@ def get_fileXml(filename):
     return render_template("ListaXML.HTML", lista=lista1, lista2=sample, form=factura, nombre=nombre)
 
 
-<<<<<<< HEAD
 @app.route("/manteniminetos/solicitud/capturaDeServicio/manual", methods=['GET', 'POST'])
 def capturaManual():
     pass
 
 
 
-=======
->>>>>>> 3c09acec0d1c2cdd7f0ec1154926b97ef7d06e22
 if __name__ == '__main__':
     crsf.init_app(app)
     db.init_app(app)
