@@ -1,18 +1,19 @@
 {% extends 'home.html' %}
 {% block content %}
+<div class="container">
     <h4 class="mt-5"></h4>
     <div class="table-responsive">
     <table class="table table-hover">
     	<caption>Datos de Factura</caption>
     	<tbody>
     	<tr class="success">
-    		<td><strong>Fecha</strong></td>
-    		<td><strong>Total</strong></th>
-    		<td><strong>Subtotal</strong></th>
-    		<td><strong>I. V. A.</strong></th>
-    		<td><strong>R. F. C.</strong></th>
-    		<td><strong>Nombre</strong></th>
-    		<td><strong>UUID</strong></th>
+    		<th><strong>Fecha</strong></th>
+    		<th><strong>Total</strong></th>
+            <th><strong>SubTotal</strong></th>
+    		<th><strong>I. V. A.</strong></th>
+    		<th><strong>R. F. C.</strong></th>
+    		<th><strong>Nombre</strong></th>
+    		<th><strong>UUID</strong></th>
     	</tr>
     	{% for item in lista %}
     	
@@ -108,5 +109,10 @@
             </div>
         </div>
     </form>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
     
 {% endblock %}

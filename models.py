@@ -292,10 +292,9 @@ class Compras(db.Model):
     fecha = db.Column(db.DateTime)
     placas = db.Column(db.String(8))
     observaciones = db.Column(db.Text)
-    folio = db.Column(db.Integer)
     idCiudad = db.Column(db.Integer)
 
-    def __init__(self, UUiD, rfc, nombre, subtotal, iva, total, fecha, placas, observaciones, folio, idCiudad):
+    def __init__(self, UUiD, rfc, nombre, subtotal, iva, total, fecha, placas, observaciones, idCiudad):
         self.UUiD = UUiD
         self.rfc = rfc
         self.nombre = nombre
@@ -305,7 +304,6 @@ class Compras(db.Model):
         self.fecha = fecha
         self.placas = placas
         self.observaciones = observaciones
-        self.folio = folio
         self.idCiudad = idCiudad
 
 
@@ -319,9 +317,8 @@ class Articulos(db.Model):
     p_u = db.Column(db.Float)
     importe = db.Column(db.Float)
 
-    def __init__(self,compras_id, compras, cantidad, descripcion, p_u, importe):
+    def __init__(self, compras_id, cantidad, descripcion, p_u, importe):
         self.compras_id = compras_id
-        self.compras = compras
         self.cantidad = cantidad
         self.descripcion = descripcion
         self.p_u = p_u

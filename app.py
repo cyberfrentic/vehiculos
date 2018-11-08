@@ -9,13 +9,15 @@ from config import DevelopmentConfig
 from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
-    VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol
+    VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura
 from tools.fpdf import tabla, sol, orden
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
 import time
 from werkzeug.datastructures import MultiDict
+from xml.dom import minidom
+import collections as co
 
 ###########################################
 import pymysql
@@ -61,7 +63,7 @@ def exceldate(serial):
 def regreso(e):
     nombre = (session['username']).upper()
     x = request.endpoint
-    return render_template(x + '.html', nombre=nombre), 400
+    return ('fallo la pagina'),400#render_template(x + '.html', nombre=nombre), 400
 
 
 @app.route('/home')
@@ -93,7 +95,7 @@ def login():
             if user is not None and user.verify_password(psw):
                 session['username'] = user.username
                 session['privilegios'] = user.privilegios
-                session['ciudad']=user.idCiudad
+                session['ciudad']= user.idCiudad
                 return redirect(url_for('home'))
             else:
                 error_message = '{} No es un usuario del sistema'.format(usr)
@@ -140,7 +142,7 @@ def crearUser():
                     pri += "1"
                 elif not option4:
                     pri += "0"
-                ciu = Ciudades.query.filter_by(ciudad=crear.ciudad.data).first()
+                ciu = Ciudades.query.filter_by(ciudad=str(crear.ciudad.data)).first()
                 user = User(crear.username.data,
                             crear.password.data,
                             crear.email.data,
@@ -791,7 +793,7 @@ def ticketvsfactura():
     lugar = session['ciudad']
     if request.method=='POST':
         num = request.form['numero']
-        strq = "select t1.nuFolio, t1.placa,t1.litros, t1.importe, t1.idCiudad from combustible t1 where t1.nufolio not in\
+        strq = "select t1.nuFolio, t1.placa,t1.litros, t1.importe from combustible t1 where t1.nufolio not in\
          (select t2.nuFolio from ticket t2 where t1.nuFolio = t2.nuFolio) and t1.factura = '%s' and t1.descripcion != 'COMISION' and t1.idCiudad='%s'"  % (num, lugar)
         stmt = text(strq)
         result = db.session.execute(stmt)
@@ -1086,9 +1088,74 @@ def get_fileXml(filename):
     return render_template("ListaXML.HTML", lista=lista1, lista2=sample, form=factura, nombre=nombre)
 
 
+global lista
+lista = []
+
 @app.route("/manteniminetos/solicitud/capturaDeServicio/manual", methods=['GET', 'POST'])
 def capturaManual():
-    pass
+    nombre = session['username']
+    lugar = session['ciudad']
+    item={}
+    global lista
+    form =capturaFactura(request.form)
+    if request.method == 'POST' and form.validate():
+        if 'agregar' in request.form:
+            item = {
+            'cantidad': str(form.cantidad.data),
+            'descripcion': form.descripcion.data,
+            'pUnit': str(form.pUnit.data),
+            'importe': str(form.importe.data),
+            'id': 0,
+            }
+            lista.append(item)
+            x=len(lista)
+            contador=0
+            if x > 0:
+                for it in lista:
+                    it['id'] = contador
+                    contador+=1
+        elif 'guardar' in request.form:
+            uuid = Compras.query.filter_by(UUiD = form.uuid.data.upper()).first()
+            if (uuid==None):
+                compras=Compras(
+                UUiD = form.uuid.data.upper(),
+                rfc = form.rfc.data.upper().replace("-",""),
+                nombre = form.nombre.data.upper(),
+                subtotal = float(form.subtotal.data),
+                iva = float(form.iva.data),
+                total = float(form.total.data),
+                fecha = form.fecha.data,
+                placas = form.placas.data.upper(),
+                observaciones = form.obser.data.upper(),
+                idCiudad = lugar,
+                )
+                print(form.uuid.data.upper())
+                db.session.add(compras)
+                db.session.commit()
+                id_compra = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
+                for dc in lista:
+                    arti = Articulos(
+                        compras_id = id_compra.id,
+                        cantidad = dc['cantidad'],
+                        descripcion = dc['descripcion'],
+                        p_u = dc['pUnit'],
+                        importe = dc['importe'],
+                    )
+                    db.session.add(arti)
+                    db.session.commit()
+                    lista=[]
+                flash('Registro guardado con exito con folio {}'.format(id_compra.id))
+                return redirect(url_for('capturaManual'))
+            else:
+                lista=[]
+                flash('El registro Existe en la base de datos')
+                return redirect(url_for('capturaManual'))
+        else:
+            if len(lista)==1:
+                lista.pop(0)
+            else:
+                lista.pop(int(request.form['eliminar']))
+    return render_template('capturaManual.html', nombre=nombre, form=form, articulos=lista, boton=len(lista))
 
 
 

@@ -274,6 +274,17 @@ class Form_CapSol(Form):
 
 
 class Factura(Form):
+  placas = StringField('Placas',
+        [validators.Required(message = 'El campo es Requerido!.'),
+        validators.length(max = 8, message='El campo debe contener 8 caracteres como Maximo')
+        ])
+  observaciones = StringField('Observaciones', 
+        [validators.Required('El campo es Requerido'),
+        validators.length(min=5, max=150, message='Ingrese un comentarios valido')
+        ])
+
+
+class Factura(Form):
     placas = StringField('Placas',
         [validators.Required(message = 'El campo es Requerido!.'),
         validators.length(max = 8, message='El campo debe contener 8 caracteres como Maximo')
@@ -282,3 +293,30 @@ class Factura(Form):
         [validators.Required('El campo es Requerido'),
         validators.length(min=5, max=150, message='Ingrese un comentarios valido')
         ])
+
+
+class capturaFactura(Form):
+  fecha = DateTimeField('Fecha y Hora', format='%d/%m/%Y %H:%M:%S')
+  total = DecimalField('Total',  places=4, rounding=None)
+  subtotal = DecimalField('SubTotal',  places=4, rounding=None)
+  iva = DecimalField('I. V. A.',  places=4, rounding=None)
+  rfc = StringField('R. F. C.',
+                      [validators.DataRequired(message='El RFC es un campo obligatorio'),
+                       validators.length(min=14, max=15,
+                                         message='El RFC debe contar minimo con 14 y maximo 15 caracteres')])
+  nombre = StringField("Nombre",
+                         [validators.DataRequired(message="El campo nombre es obligatorio"),
+                          validators.length(min=4, max=35, message="Ingrese un nombre valido")])
+  uuid = StringField("UUiD",
+                         [validators.DataRequired(message="El campo nombre es obligatorio"),
+                          validators.length(min=4, max=36, message="Ingrese un UUId valido")])
+  placas = StringField('Placas', 
+    [validators.DataRequired(message="Las placas son necesarias para identificar la unidad"),
+    validators.length(min=6, max=9, message="La longitud no debe se menor a 6 caracteres ni mayot a 9")])
+  obser = TextAreaField('Observaciones',[validators.Required(message='Text is required')])
+  cantidad = DecimalField('',  places=4, rounding=None)
+  descripcion = StringField('', [
+    validators.DataRequired(message='Tiene que especificar la descripcion del Serviocio o articulo'),
+    validators.length(min=5, max=35)])
+  pUnit = DecimalField('',  places=4, rounding=None)
+  importe = DecimalField('',  places=4, rounding=None)
