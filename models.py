@@ -306,6 +306,9 @@ class Compras(db.Model):
         self.observaciones = observaciones
         self.idCiudad = idCiudad
 
+    def __repr__(self):
+        return '{}'.format(self.nombre)
+
 
 class Articulos(db.Model):
     __tablename__ = 'articulos'

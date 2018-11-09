@@ -2,12 +2,6 @@
 
 {% block content %}
 {% from "_macro.html" import render_field %}
-<script>
-	function impiar(){
-		document.articulos.cantidad.value="";
-	};
-</script>
-
 	<br>
 	<br>
 	<div class="container">
@@ -15,15 +9,15 @@
 			<form  method="POST" name="articulos">
 				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 				<div class="form-inline form-group align-items-center">
-					{{ render_field(form.fecha, class='form-control mx-sm-3', placeholder="DD/MM/YYYY HH:mm:seg  24Hrs") }}
+					{{ render_field(form.fecha, class='form-control mx-sm-3', onkeypress="return valida(event);",placeholder="DD/MM/YYYY HH:mm:seg  24Hrs") }}
                 	<p class="help-block text-danger"></p>
-                	{{ render_field(form.subtotal, class='form-control mx-sm-3', placeholder="SubTotal de la Factura") }}
+                	{{ render_field(form.subtotal, class='form-control mx-sm-3', onkeypress="return valida(event)", placeholder="SubTotal de la Factura") }}
                 	<p class="help-block text-danger"></p>
                 </div>
                 <div class="form-inline form-group align-items-center">
-                	{{ render_field(form.iva, class='form-control mx-sm-3', placeholder="IVA de la Factura") }}
+                	{{ render_field(form.iva, class='form-control mx-sm-3',onkeypress="return valida(event)", placeholder="IVA de la Factura") }}
                 	<p class="help-block text-danger"></p>
-                	{{ render_field(form.total, class='form-control mx-sm-3', placeholder="Total de la Factura") }}
+                	{{ render_field(form.total, class='form-control mx-sm-3', onkeypress="return valida(event)", placeholder="Total de la Factura") }}
                 	<p class="help-block text-danger"></p>              
 				</div>
 				<div class="form-inline form-group align-items-center">
@@ -51,7 +45,7 @@
 					<table>
 						<thead>
 							<tr>
-								<th scope="col">Cantidad</th>
+								<th>Cantidad</th>
 								<th>Descripcion</th>
 								<th>Precio Unitario</th>
 								<th>Importe</th>
@@ -60,26 +54,22 @@
 						</thead>
 						<tbody>
 							<tr>
-								<th scope="row">
-									{{ form.cantidad }}
-                					<p class="help-block text-danger"></p>
-                				</th>
+								<td >
+									{{(form.cantidad) }}
+                				</td>
 								<td>
-									{{ form.descripcion}}
-									<p class="help-block text-danger"></p>
+									{{(form.descripcion)}}
 								</td>
 								<td>
 									{{ form.pUnit }}
-                					<p class="help-block text-danger"></p>
 								</td>
 								<td>
-									{{ form.importe }}
-                	                <p class="help-block text-danger"></p>   
+									{{ form.importe }} 
 								</td>
 								<td>
-									<button type="submit" class="btn btn-outline-primary d-flex align-items-center" id="agregar" name="agregar" value="agregar" onclick="limpiar();">Agregar Articulo</button>
+									<button type="submit" class="btn btn-outline-primary d-flex align-items-center" id="agregar" name="agregar" value="agregar">Agregar Articulo</button>
 								</td>
-								<td><button type="reset" class="btn btn-outline-warning d-flex align-items-center" id="agregar" name="agregar" value="limpiar" >Limpiar campos</button></td>
+								<td><button type="button" class="btn btn-outline-warning d-flex align-items-center" id="agregar" name="agregar" value="limpiar" onclick="limpiar();">Limpiar campos</button></td>
 							</tr>
 						</tbody>
 					</table>
@@ -126,4 +116,30 @@
 	</div>
 	<br>
 	<br>
+	<script>
+	function limpiar() {
+    	document.getElementById("cantidad").value = "";
+    	document.getElementById("descripcion").value = "";
+    	document.getElementById("pUnit").value = "";
+    	document.getElementById("importe").value = "";
+	};
+	function valida(e){
+    		tecla = (document.all) ? e.keyCode : e.which;
+    		//Tecla de retroceso para borrar, siempre la permite
+    		if (tecla==8){
+        	return true;
+    	}
+    	// Patron de entrada, en este caso solo acepta numeros
+    	patron =/[0-9,"."]/;
+    	tecla_final = String.fromCharCode(tecla);
+    	return patron.test(tecla_final);
+		};
+
+	var cantidad = document.getElementById("cantidad");
+	cantidad.setAttribute("onkeypress", "return valida(event);");
+	var pUnit = document.getElementById("pUnit");
+	pUnit.setAttribute("onkeypress", "return valida(event);");
+	var importe = document.getElementById("importe");
+	importe.setAttribute("onkeypress", "return valida(event);");
+</script>
 {% endblock %}

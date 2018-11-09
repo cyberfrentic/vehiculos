@@ -1,0 +1,74 @@
+{% extends 'Home.html' %}
+{% from "_macro.html" import render_field %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		<br>
+		<br>
+		<div class="container justify-content-md-center" style="background:#27ecf5;">
+			<h2 class="text-center" style="color: #1903fc;">Consulta General</h2>
+		</div class="col-sm-12 col-s-4">
+		<form class="form-horizontal" method="POST" name="consulta">
+			<div>
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+			</div>
+			<div class="form-goup col-xs-12 floating-label-form-group controls">
+				{{ form.bProv }}
+                {{ render_field(form.sProv, class='form-control') }}
+                <p class="help-block text-danger"></p>
+            </div>
+            <div class="form-goup col-xs-12 floating-label-form-group controls">
+            	{{ form.bFecha }}
+                {{ render_field(form.sFechaI, class='form-control', placeholder="DD/MM/YYYY") }}
+                <p class="help-block text-danger"></p>
+                {{ render_field(form.sFechaF, class='form-control', placeholder="DD/MM/YYYY") }}
+                <p class="help-block text-danger"></p>
+            </div>
+            <div class="form-goup col-xs-12 floating-label-form-group controls">
+            	{{ form.bPlaca }}
+                {{ render_field(form.qPlaca, class='form-control', placeholder="DD/MM/YYYY") }}
+                <p class="help-block text-danger"></p>
+            </div>
+             <div class="form-group mx-sm-3 mb-2 form-inline">
+            	<button type="submit" class="btn btn-outline-primary d-flex align-items-center" id="consultar" name="consultar" value="consultar">Consultar</button>
+            	<div class="mx-sm-3 mb-2">
+            	</div>
+            	<button type="reset" class="btn btn-outline-warning d-flex align-items-center" id="agregar" name="agregar" value="limpiar">Limpiar campos</button>
+            </div>
+
+		</form>
+	</div>
+</div>
+<script>
+	function DesactivarFolio() {
+    		document.getElementById("sProv").disabled = !document.getElementById("bProv").checked;
+		}
+		function DesactivarFechas() {
+    		document.getElementById("sFechaI").disabled = !document.getElementById("bFecha").checked;
+    		document.getElementById("sFechaF").disabled = !document.getElementById("bFecha").checked;
+		}
+		function DesactivarPlaca() {
+    		document.getElementById("qPlaca").disabled = !document.getElementById("bPlaca").checked;
+		};
+
+	//desactivo los campos select y fecha	
+	document.getElementById("sProv").disabled=true;
+	document.getElementById("sFechaI").disabled =true;
+	document.getElementById("sFechaF").disabled = true;
+	document.getElementById("qPlaca").disabled = true;
+
+	// le pongo la funcion descativar a los checkbox'es como atributo Onclick
+	var bProv = document.getElementById("bProv");
+	bProv.setAttribute("onclick","DesactivarFolio();");
+	var bFecha = document.getElementById("bFecha");
+	bFecha.setAttribute("onclick", "DesactivarFechas();");
+	var bPlaca = document.getElementById("bPlaca");
+	bPlaca.setAttribute("onclick", "DesactivarPlaca();");
+
+	// le doy el atributo date para que aparezca el calendario a los input's fecha
+	var sFechaI = document.getElementById("sFechaI");
+	sFechaI.setAttribute("type", "date");
+	var sFechaF = document.getElementById("sFechaF");
+	sFechaF.setAttribute("type", "date");
+</script>
+{% endblock %}

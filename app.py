@@ -9,7 +9,8 @@ from config import DevelopmentConfig
 from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
-    VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura
+    VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
+    filtroServ
 from tools.fpdf import tabla, sol, orden
 from sqlalchemy.sql import func
 from pygal.style import Style
@@ -1056,6 +1057,10 @@ def get_fileXml(filename):
         flash('El registro Existe en la base de datos')
         return render_template("leer.html") 
     factura = Factura(request.form)
+    proveedor = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(rfc=(atributos['rfc'].upper().replace("-",""))).first()
+    if (proveedor==None):
+        flash('El proveedor no existe, tiene que darlo de alta')
+        return redirect(url_for("proveedores"))
     compras=Compras(
             UUiD = atributos['UUiD'],
             rfc = atributos['rfc'],
@@ -1115,7 +1120,12 @@ def capturaManual():
                     it['id'] = contador
                     contador+=1
         elif 'guardar' in request.form:
-            uuid = Compras.query.filter_by(UUiD = form.uuid.data.upper()).first()
+            uuid = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
+            proveedor = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(rfc=(form.rfc.data.upper().replace("-",""))).first()
+            if (proveedor==None):
+                flash('El proveedor no existe, tiene que darlo de alta')
+                lista=[]
+                return redirect(url_for("proveedores"))
             if (uuid==None):
                 compras=Compras(
                 UUiD = form.uuid.data.upper(),
@@ -1129,7 +1139,6 @@ def capturaManual():
                 observaciones = form.obser.data.upper(),
                 idCiudad = lugar,
                 )
-                print(form.uuid.data.upper())
                 db.session.add(compras)
                 db.session.commit()
                 id_compra = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
@@ -1157,6 +1166,13 @@ def capturaManual():
                 lista.pop(int(request.form['eliminar']))
     return render_template('capturaManual.html', nombre=nombre, form=form, articulos=lista, boton=len(lista))
 
+
+@app.route("/manteniminetos/solicitud/reportes/general", methods=['GET', 'POST'])
+def filtroServicios():
+    nombre = session['username']
+    lugar = session['ciudad']
+    form = filtroServ(request.form)
+    return render_template('filtroServicios.html', nombre=nombre, form=form)
 
 
 if __name__ == '__main__':

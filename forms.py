@@ -10,12 +10,11 @@ from wtforms import DecimalField
 from wtforms import IntegerField
 from wtforms import DateField, DateTimeField
 from wtforms import validators
-#from wtforms import FormField
-#from wtforms.validators import NumberRange
-from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket, Ciudades
-#from sqlalchemy.sql import distinct
+from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket, Ciudades, Compras
+from sqlalchemy.sql import distinct
 from wtforms_components import TimeField, read_only
 import flask
+from models import db
 
 
 
@@ -29,6 +28,17 @@ def length_honeypot(form, field):
 
 def ciudad():
   return Ciudades.query.order_by('ciudad')
+
+
+def proveedor():
+  lugar = flask.session.get('ciudad')
+  lista=()
+  query1 = db.session.query(Compras.nombre).distinct(Compras.nombre).filter_by(idCiudad=lugar).order_by(Compras.nombre)
+  row = query1.all()
+  if query1 != None:
+    for item in row:
+      lista+=item
+  return lista
 
 
 def Query_placas():
@@ -51,7 +61,7 @@ def tipos():
 
 def resguard():
   lugar = flask.session.get('ciudad')
-  return Resguardante.query.filter_by(id_ciudad=lugar).order_by('nombre')
+  return Resguardante.query.filter_by(idCiudad=lugar).order_by('nombre')
 
 
 class Create_Form(Form):
@@ -320,3 +330,13 @@ class capturaFactura(Form):
     validators.length(min=5, max=35)])
   pUnit = DecimalField('',  places=4, rounding=None)
   importe = DecimalField('',  places=4, rounding=None)
+
+
+class filtroServ(Form):
+  bProv = BooleanField(label=None)
+  sProv = QuerySelectField(label="Proveedor", query_factory=proveedor, allow_blank=True)
+  bFecha = BooleanField(label=None)
+  sFechaI = DateField("Fecha Ini", format='%d/%m/%Y', validators=(validators.Optional(),))
+  sFechaF = DateField("Fecha Fin", format='%d/%m/%Y', validators=(validators.Optional(),))
+  bPlaca = BooleanField(label=None)
+  qPlaca = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
