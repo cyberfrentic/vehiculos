@@ -181,13 +181,13 @@ def Vehiculow():
             vehiculo = Vehiculo(vehi.numInv.data,
                                 vehi.marca.data,
                                 vehi.modelo.data,
-                                vehi.tipoVehiculo.data,
+                                str(vehi.tipoVehiculo.data),
                                 vehi.nSerie.data,
                                 vehi.tCombus.data,
                                 dict(vehi.odome.choices).get(vehi.odome.data),
                                 km,
                                 vehi.nVehiculo.data,
-                                vehi.resguardo.data,
+                                str(vehi.resguardo.data),
                                 vehi.cSeguros.data,
                                 vehi.nPoliza.data,
                                 vehi.placa.data,
@@ -1121,7 +1121,7 @@ def capturaManual():
                     contador+=1
         elif 'guardar' in request.form:
             uuid = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
-            proveedor = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(rfc=(form.rfc.data.upper().replace("-",""))).first()
+            proveedor = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(rfc=(form.rfc.data.upper())).first()
             if (proveedor==None):
                 flash('El proveedor no existe, tiene que darlo de alta')
                 lista=[]
@@ -1130,7 +1130,7 @@ def capturaManual():
                 compras=Compras(
                 UUiD = form.uuid.data.upper(),
                 rfc = form.rfc.data.upper().replace("-",""),
-                nombre = form.nombre.data.upper(),
+                nombre = str(form.nombre.data),
                 subtotal = float(form.subtotal.data),
                 iva = float(form.iva.data),
                 total = float(form.total.data),
@@ -1172,6 +1172,49 @@ def filtroServicios():
     nombre = session['username']
     lugar = session['ciudad']
     form = filtroServ(request.form)
+    if request.method == 'POST':
+        if form.bProv.data and form.bFecha.data:
+            query = Compras.query.filter_by(idCiudad=lugar).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data))).filter_by(nombre=(str(form.sProv.data)))
+            lista=[]
+            for x in query:
+                lista.append(x)
+            titulo="Consulta por Proveedor y fecha: "+ str(form.sFechaI.data)+ " a "+ str(form.sFechaF.data)
+            return render_template('filtroServicios.html', nombre=nombre, form=form, lista3=lista, titulo=titulo, tipo="Proveedor y Fecha")
+        elif form.bFecha.data and form.bPlaca.data:
+            query = Compras.query.filter_by(idCiudad=lugar).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data))).filter_by(placas=(str(form.qPlaca.data)))
+            lista=[]
+            for x in query:
+                lista.append(x)
+            titulo="Consulta por Proveedor y Placa"+ str(form.qplaca.data)
+            return render_template('filtroServicios.html', nombre=nombre, form=form, lista5=lista, titulo=titulo, tipo="Proveedor y Fecha")
+        elif form.bPlaca.data and form.bProv.data:
+            query = Compras.query.filter_by(idCiudad=lugar).filter_by(nombre=(str(form.sProv.data))).filter_by(placas=(str(form.qPlaca.data)))
+            lista=[]
+            for x in query:
+                lista.append(x)
+            titulo="Consulta por Proveedor"
+            return render_template('filtroServicios.html', nombre=nombre, form=form, lista=lista, titulo=titulo, tipo="Proveedor")
+        elif form.bProv.data:
+            query = Compras.query.filter_by(idCiudad=lugar).filter_by(nombre=(str(form.sProv.data)))
+            lista=[]
+            for x in query:
+                lista.append(x)
+            titulo="Consulta por Proveedor"
+            return render_template('filtroServicios.html', nombre=nombre, form=form, lista=lista, titulo=titulo, tipo="Proveedor")
+        elif form.bFecha.data:
+            lista=[]
+            query = Compras.query.filter(Compras.idCiudad==lugar).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data)))
+            for x in query:
+                lista.append(x)
+            titulo="Consulta por fecha: "+ str(form.sFechaI.data)+ " a "+ str(form.sFechaF.data)
+            return render_template('filtroServicios.html', nombre=nombre, form=form, lista2=lista, titulo=titulo, tipo="Rango de Fecha")
+        elif form.bPlaca.data:
+            query = Compras.query.filter_by(idCiudad=lugar).filter_by(placas=(str(form.qPlaca.data)))
+            lista=[]
+            for x in query:
+                lista.append(x)
+            titulo="Consulta por Proveedor"
+            return render_template('filtroServicios.html', nombre=nombre, form=form, lista=lista, titulo=titulo, tipo="Proveedor")
     return render_template('filtroServicios.html', nombre=nombre, form=form)
 
 

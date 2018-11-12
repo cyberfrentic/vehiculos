@@ -290,7 +290,7 @@ class Compras(db.Model):
     iva = db.Column(db.Float)
     total = db.Column(db.Float)
     fecha = db.Column(db.DateTime)
-    placas = db.Column(db.String(8))
+    placas = db.Column(db.String(9))
     observaciones = db.Column(db.Text)
     idCiudad = db.Column(db.Integer)
 

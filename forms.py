@@ -10,7 +10,7 @@ from wtforms import DecimalField
 from wtforms import IntegerField
 from wtforms import DateField, DateTimeField
 from wtforms import validators
-from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket, Ciudades, Compras
+from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket, Ciudades, Compras, Model_Proveedor
 from sqlalchemy.sql import distinct
 from wtforms_components import TimeField, read_only
 import flask
@@ -32,13 +32,8 @@ def ciudad():
 
 def proveedor():
   lugar = flask.session.get('ciudad')
-  lista=()
-  query1 = db.session.query(Compras.nombre).distinct(Compras.nombre).filter_by(idCiudad=lugar).order_by(Compras.nombre)
-  row = query1.all()
-  if query1 != None:
-    for item in row:
-      lista+=item
-  return lista
+  return Model_Proveedor.query.filter_by(idCiudad=lugar)
+
 
 
 def Query_placas():
@@ -314,9 +309,7 @@ class capturaFactura(Form):
                       [validators.DataRequired(message='El RFC es un campo obligatorio'),
                        validators.length(min=14, max=15,
                                          message='El RFC debe contar minimo con 14 y maximo 15 caracteres')])
-  nombre = StringField("Nombre",
-                         [validators.DataRequired(message="El campo nombre es obligatorio"),
-                          validators.length(min=4, max=35, message="Ingrese un nombre valido")])
+  nombre = QuerySelectField(label="Proveedor", query_factory=proveedor, allow_blank=True)
   uuid = StringField("UUiD",
                          [validators.DataRequired(message="El campo nombre es obligatorio"),
                           validators.length(min=4, max=36, message="Ingrese un UUId valido")])
