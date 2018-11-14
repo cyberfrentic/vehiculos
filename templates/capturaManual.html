@@ -9,7 +9,7 @@
 			<form  method="POST" name="articulos">
 				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 				<div class="form-inline form-group align-items-center">
-					{{ render_field(form.fecha, class='form-control mx-sm-3', onkeypress="return valida(event);",placeholder="DD/MM/YYYY HH:mm:seg  24Hrs") }}
+					{{ render_field(form.fecha, class='form-control mx-sm-3',placeholder="DD/MM/YYYY") }}
                 	<p class="help-block text-danger"></p>
                 	{{ render_field(form.subtotal, class='form-control mx-sm-3', onkeypress="return valida(event)", placeholder="SubTotal de la Factura") }}
                 	<p class="help-block text-danger"></p>

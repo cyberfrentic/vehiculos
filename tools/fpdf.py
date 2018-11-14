@@ -9,7 +9,10 @@ class PDF(FPDF):
         # Ruta del la carpeta imagenes del servidor
         imagenes = os.path.abspath("static/img/")
         # Logo  con esta ruta se dirige al server y no a la maquina cliente
-        self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 200)
+        if tamaño:
+            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 200)
+        else:
+            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 270)
         # Arial bold 15
         self.set_font('Arial', 'B', 8)
         self.ln(15)
@@ -169,6 +172,8 @@ def fecha_actual():
 def tabla(datos, totales, titulo):
     global Titulo
     Titulo=titulo
+    global tamaño
+    tamaño = False
     # Instantiation of inherited class
     pdf = PDF("P", 'mm', 'Letter')
     pdf.alias_nb_pages()
@@ -234,6 +239,8 @@ def tabla(datos, totales, titulo):
 def sol(datos, ve):
     global Titulo
     Titulo=str(datos['titulo'])
+    global tamaño
+    tamaño = False
     # Instantiation of inherited class
     pdf = PDF("P", 'mm', 'Letter')
     pdf.alias_nb_pages()
@@ -295,6 +302,8 @@ def sol(datos, ve):
 def orden(datos):
     global Titulo
     Titulo = datos['titulo'].upper()
+    global tamaño
+    tamaño = True
     # Instantiation of inherited class
     pdf = PDF("P", 'mm', 'Letter')
     pdf.alias_nb_pages()
@@ -347,6 +356,115 @@ def orden(datos):
     pdf.cell(60, 8, 'Lic. Ma. de los Angeles May Bacab'.upper(), 'T',0,'R')
 
 
+    ##########################################################################
+    ######## imprimir desde una pagina web de flask con estas funciones ######
+    ##########################################################################
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
+    return response
+
+
+def consultaGeneral(datos, totales, titulo, con):
+    global Titulo
+    Titulo=titulo
+    global tamaño
+    tamaño = False
+    # Instantiation of inherited class
+    pdf = PDF("L", 'mm', 'LETTER')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_fill_color(255, 0, 0)
+    pdf.set_fill_color(62, 255, 175)
+    pdf.set_text_color(64)
+    pdf.set_draw_color(0, 0, 0)
+    pdf.set_line_width(.3)
+    pdf.set_font('', 'B')
+    # cabecera de la tabla
+    # Remember to always put one of these at least once.
+    pdf.set_font('Times', '', 10.0)
+
+    # Effective page width, or just epw
+    epw = pdf.w - 2 * pdf.l_margin
+
+    # Set column width to 1/4 of effective page width to distribute content 
+    # evenly across table and page
+    col_width = epw / 8
+    data = ('No.', 'RFC', 'Nombre', 'Subtotal', 'IVA', 'Total', 'Fecha', 'Placa', 'Observaciones')
+
+    # Document title centered, 'B'old, 14 pt
+    pdf.set_font('Times', 'B', 14.0)
+    # pdf.cell(epw, 0.0, 'Demographic data', align='C')
+    pdf.set_font('Times', '', 10.0)
+    pdf.ln(0.5)
+    #cont=0
+    # Text height is the same as current font size
+    th = pdf.font_size
+    #for item in data:
+    #    cont+=1
+    #    if cont ==1:
+    pdf.cell(col_width-15, th+5, str(data[0]), border=1,align='C')
+    pdf.cell(col_width+5, th+5, str(data[1]), border=1, align='C')
+    pdf.cell(col_width+15, th+5, str(data[2]), border=1, align='C')
+    pdf.cell(col_width-10 , th+5, str(data[3]), border=1, align='C')
+    pdf.cell(col_width-15, th+5, str(data[4]), border=1, align='C')
+    pdf.cell(col_width-5 , th+5, str(data[5]), border=1, align='C')
+    pdf.cell(col_width , th+5, str(data[6]), border=1, align='C')
+    pdf.cell(col_width-10 , th+5, str(data[7]), border=1, align='C')
+    pdf.cell(0, th+5, str(data[8]), border=1, align='C')
+    total = 0
+    pdf.ln()
+    if con==1:
+        bandera=0
+        for row in datos:
+            bandera+=1
+            pdf.cell(col_width-15, th+10, str(bandera), border=1, align='C')
+            pdf.cell(col_width+5, th+10, str(row.rfc), border=1, align='C')
+            pdf.cell(col_width+15, th+10, str(row.nombre), border=1, align='C')
+            pdf.cell(col_width-10, th+10, str(row.subtotal), border=1, align='C')
+            pdf.cell(col_width-15, th+10, str(row.iva), border=1, align='C')
+            pdf.cell(col_width-5, th+10, str(row.total), border=1, align='C')
+            pdf.cell(col_width, th+10, str(row.fecha), border=1, align='C')
+            pdf.cell(col_width-10, th+10, str(row.placas), border=1, align='C')
+            pdf.multi_cell(0, th+1, str(row.observaciones).upper()[:38], border=1)
+            pdf.ln(th-3.5)
+            total += float(row.total)
+        pdf.ln(2)
+        pdf.set_font('Times', 'B', 14.0)
+        th = pdf.font_size
+        pdf.cell(30, th, 'TOTAL' , 'C', 1)
+        pdf.cell(30, th, '$ '+str("{0:.2f}".format(total)) , 'C', 1)
+    elif con==2:
+        bandera=0
+        for row in datos:
+            bandera+=1
+            pdf.cell(col_width-15, th+10, str(bandera), border=1, align='C')
+            pdf.cell(col_width+5, th+10, str(row.rfc), border=1, align='C')
+            pdf.cell(col_width+15, th+10, str(row.nombre), border=1, align='C')
+            pdf.cell(col_width-10, th+10, str(row.subtotal), border=1, align='C')
+            pdf.cell(col_width-15, th+10, str(row.iva), border=1, align='C')
+            pdf.cell(col_width-5, th+10, str(row.total), border=1, align='C')
+            pdf.cell(col_width, th+10, str(row.fecha), border=1, align='C')
+            pdf.cell(col_width-10, th+10, str(row.placas), border=1, align='C')
+            pdf.multi_cell(0, th+1, str(row.observaciones).upper()[:38], border=1)
+            pdf.ln(th-3.5)
+            total += float(row.total)
+        pdf.ln(2)
+        pdf.set_font('Times', 'B', 14.0)
+        th = pdf.font_size
+        print(totales)
+        for item in totales:
+            pdf.cell(col_width+50, th+3, str(item[1]), border=1)
+            pdf.cell(col_width, th+3, SetMoneda(float(item[0]),"$",2), border=1)
+            pdf.ln()
+    pdf.set_font('Times', 'B', 10.0)
+    pdf.ln(2)
+    th = pdf.font_size
+    # for item in totales:
+    #     pdf.cell(col_width, th, str(item['placa']), border=1)
+    #     pdf.cell(col_width, th, '$ '+str("{0:.2f}".format(item['total'])), border=1)
+    #     pdf.ln()
+    #pdf.cell(30, th, 'TOTAL: $ ' + str(totales), 'C', 1)
     ##########################################################################
     ######## imprimir desde una pagina web de flask con estas funciones ######
     ##########################################################################

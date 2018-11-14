@@ -11,7 +11,7 @@ from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
     filtroServ
-from tools.fpdf import tabla, sol, orden
+from tools.fpdf import tabla, sol, orden, consultaGeneral
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
@@ -1092,10 +1092,8 @@ def get_fileXml(filename):
     nombre = (session['username']).upper()
     return render_template("ListaXML.HTML", lista=lista1, lista2=sample, form=factura, nombre=nombre)
 
-
 global lista
-lista = []
-
+lista=[]
 @app.route("/manteniminetos/solicitud/capturaDeServicio/manual", methods=['GET', 'POST'])
 def capturaManual():
     nombre = session['username']
@@ -1164,18 +1162,48 @@ def capturaManual():
                 lista.pop(0)
             else:
                 lista.pop(int(request.form['eliminar']))
-    return render_template('capturaManual.html', nombre=nombre, form=form, articulos=lista, boton=len(lista))
+    return render_template('capturaManual.html', nombre=nombre, form=form, articulos=lista, boton=(len(lista) if len(lista)>0 else 0))
 
-
+global opcion
+opcion=0
+global f1,f2,plac, nombre
+f1,f2,plac,nombre="","","",""
 @app.route("/manteniminetos/solicitud/reportes/general", methods=['GET', 'POST'])
 def filtroServicios():
+    global lista
+    global opcion
+    global f1,f2, plac, nombre
     nombre = session['username']
     lugar = session['ciudad']
     form = filtroServ(request.form)
     if request.method == 'POST':
+        if'imprimir' in request.form.getlist('consultar'):
+            if opcion == 1:
+                return consultaGeneral(lista,"0","consulta general por Proveedor",1)
+            elif opcion == 2:
+                total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.fecha.between(str(f1),str(f2))).group_by(Compras.rfc).order_by(Compras.nombre)
+                totales=[]
+                for item in total:
+                    totales.append(item)
+                return consultaGeneral(lista,totales,"consulta general Por Fecha",2)
+            elif opcion == 3:
+                total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.placas==plac).group_by(Compras.rfc).order_by(Compras.nombre)
+                totales=[]
+                for item in total:
+                    totales.append(item)
+                return consultaGeneral(lista,totales,"consulta general Por Fecha",2)
+            elif opcion == 4:
+                total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.fecha.between(str(f1),str(f2))).filter(Compras.nombre==nombre)
+                print(total)
+                totales=[]
+                for item in total:
+                    totales.append(item)
+                return consultaGeneral(lista,totales,"consulta general Por Fecha",2)
         if form.bProv.data and form.bFecha.data:
             query = Compras.query.filter_by(idCiudad=lugar).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data))).filter_by(nombre=(str(form.sProv.data)))
             lista=[]
+            opcion=4
+            nombre=str(form.sProv.data)
             for x in query:
                 lista.append(x)
             titulo="Consulta por Proveedor y fecha: "+ str(form.sFechaI.data)+ " a "+ str(form.sFechaF.data)
@@ -1197,13 +1225,17 @@ def filtroServicios():
         elif form.bProv.data:
             query = Compras.query.filter_by(idCiudad=lugar).filter_by(nombre=(str(form.sProv.data)))
             lista=[]
+            opcion = 1
             for x in query:
                 lista.append(x)
             titulo="Consulta por Proveedor"
             return render_template('filtroServicios.html', nombre=nombre, form=form, lista=lista, titulo=titulo, tipo="Proveedor")
         elif form.bFecha.data:
+            f1 = form.sFechaI.data
+            f2 = form.sFechaF.data
             lista=[]
-            query = Compras.query.filter(Compras.idCiudad==lugar).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data)))
+            opcion = 2
+            query = Compras.query.filter(Compras.idCiudad==lugar).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data))).order_by(Compras.nombre)
             for x in query:
                 lista.append(x)
             titulo="Consulta por fecha: "+ str(form.sFechaI.data)+ " a "+ str(form.sFechaF.data)
@@ -1211,6 +1243,8 @@ def filtroServicios():
         elif form.bPlaca.data:
             query = Compras.query.filter_by(idCiudad=lugar).filter_by(placas=(str(form.qPlaca.data)))
             lista=[]
+            opcion=3
+            plac=str(form.qPlaca.data)
             for x in query:
                 lista.append(x)
             titulo="Consulta por Proveedor"

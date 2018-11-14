@@ -1,6 +1,31 @@
 {% extends 'Home.html' %}
 {% from "_macro.html" import render_field %}
 {% block content %}
+<style>
+    .ajustar{ /* sirve para */
+width: 300px;
+float: left;
+white-space: pre; /* CSS 2.0 */
+white-space: pre-wrap; /* CSS 2.1 */
+white-space: pre-line; /* CSS 3.0 */
+white-space: -pre-wrap; /* Opera 4-6 */
+white-space: -o-pre-wrap; /* Opera 7 */
+white-space: -moz-pre-wrap; /* Mozilla */
+white-space: -hp-pre-wrap; /* HP */
+word-wrap: break-word; /* IE 5+ */
+}
+    div.limpiar{
+    clear: both;
+    }
+    td {
+  max-width: 250px;
+  font-size: 15px;
+  border: solid 2px gray;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+</style>
 <div class="container">
 	<div class="row">
 		<br>
@@ -8,7 +33,7 @@
 		<div class="container justify-content-md-center" style="background:#27ecf5;">
 			<h2 class="text-center" style="color: #1903fc;">Consulta General</h2>
 		</div class="col-sm-12 col-s-4">
-		<form class="form-horizontal" method="POST" name="consulta">
+        <form class="form-horizontal" method="POST" name="consulta">
 			<div>
 				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 			</div>
@@ -35,334 +60,105 @@
             	</div>
             	<button type="reset" class="btn btn-outline-warning d-flex align-items-center" id="agregar" name="agregar" value="limpiar">Limpiar campos</button>
             </div>
-		</form>
-	</div>
-</div>
-{% if lista %}
-<div class="container">
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-   		mostrar consulta
-  	</button>
-  	
-	<div class="modal fade" id="myModal">
-		<br>
-  	<br>
-  	<br>
-		
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">{{titulo}}</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
+    {% if lista or lista2 or lista3 or lista4 or lista5 %}
         <div class="table-responsive table-responsive-sm">
-         <table class="table table-striped table-hover">
-         	<caption>Consulta por Proveedor</caption>
-         	<thead>
-         		<tr class="table-success">
-         			<th>#</th>
-         			<th>UUiD</th>
-         			<th>RFC</th>
-         			<th>Nombre</th>
-         			<th>Subtotal</th>
-         			<th>IVA</th>
-         			<th>Total</th>
-         			<th>Fecha</th>
-         			<th>Placa</th>
-         			<th>Observaciones</th>
-         		</tr>
-         	</thead>
-         	<tbody>
-         		{% for item in lista%}
-         		<tr class="table-info">
-         			<td>{{item.id}}</td>
-         			<td>{{item.UUiD}}</td>
-         			<td>{{item.rfc}}</td>
-         			<td>{{item.nombre}}</td>
-         			<td>{{item.subtotal}}</td>
-         			<td>{{item.iva}}</td>
-         			<td>{{item.total}}</td>
-         			<td>{{item.fecha}}</td>
-         			<td>{{item.placas}}</td>
-         			<td>{{item.observaciones}}</td>
-         		</tr>
-         		{% endfor %}
-         	</tbody>
+         <table class="table table-bordered table-striped table-hover">
+            <caption>Consulta por Proveedor</caption>
+            <thead>
+                <tr class="table-success">
+                    <th>#</th>
+                    <th>UUiD</th>
+                    <th>RFC</th>
+                    <th>Nombre</th>
+                    <th>Subtotal</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Placa</th>
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in lista%}
+                <tr class="table-info">
+                    <td>{{item.id}}</td>
+                    <td>{{item.UUiD}}</td>
+                    <td>{{item.rfc}}</td>
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.subtotal}}</td>
+                    <td>{{item.iva}}</td>
+                    <td>{{item.total}}</td>
+                    <td>{{item.fecha}}</td>
+                    <td>{{item.placas}}</td>
+                    <td >{{item.observaciones}}</td>
+                </tr>
+                {% endfor %}
+                {% for item in lista2%}
+                <tr class="table-info">
+                    <td>{{item.id}}</td>
+                    <td>{{item.UUiD}}</td>
+                    <td>{{item.rfc}}</td>
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.subtotal}}</td>
+                    <td>{{item.iva}}</td>
+                    <td>{{item.total}}</td>
+                    <td>{{item.fecha}}</td>
+                    <td>{{item.placas}}</td>
+                    <td>{{item.observaciones}}</td>
+                </tr>
+                {% endfor %}
+                {% for item in lista3%}
+                <tr class="table-info">
+                    <td>{{item.id}}</td>
+                    <td>{{item.UUiD}}</td>
+                    <td>{{item.rfc}}</td>
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.subtotal}}</td>
+                    <td>{{item.iva}}</td>
+                    <td>{{item.total}}</td>
+                    <td>{{item.fecha}}</td>
+                    <td>{{item.placas}}</td>
+                    <td>{{item.observaciones}}</td>
+                </tr>
+                {% endfor %}
+                {% for item in lista4%}
+                <tr class="table-info">
+                    <td>{{item.id}}</td>
+                    <td>{{item.UUiD}}</td>
+                    <td>{{item.rfc}}</td>
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.subtotal}}</td>
+                    <td>{{item.iva}}</td>
+                    <td>{{item.total}}</td>
+                    <td>{{item.fecha}}</td>
+                    <td>{{item.placas}}</td>
+                    <td>{{item.observaciones}}</td>
+                </tr>
+                {% endfor %}
+                {% for item in lista5%}
+                <tr class="table-info">
+                    <td>{{item.id}}</td>
+                    <td>{{item.UUiD}}</td>
+                    <td>{{item.rfc}}</td>
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.subtotal}}</td>
+                    <td>{{item.iva}}</td>
+                    <td>{{item.total}}</td>
+                    <td>{{item.fecha}}</td>
+                    <td>{{item.placas}}</td>
+                    <td>{{item.observaciones}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
          </table>
+         <div class="limpiar"><!-- fix --></div>
+         <button type="submit" class="btn btn-danger" name="consultar" value="imprimir" data-dismiss="modal">imprimir</button>
+         <br>
+    <br>    <br>
+    <br>
      </div>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-</div>
-{%elif lista2 %}
-<div class="container">
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">mostrar consulta</button>
-	<div class="modal fade" id="myModal">
-		<br>
-  		<br>
-  		<br>	
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">{{titulo}}</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-        <div class="table-responsive table-responsive-sm">
-         <table class="table table-striped table-hover">
-         	<caption>Consulta por {{tipo}}</caption>
-         	<thead>
-         		<tr class="table-success">
-         			<th>#</th>
-         			<th>UUiD</th>
-         			<th>RFC</th>
-         			<th>Nombre</th>
-         			<th>Subtotal</th>
-         			<th>IVA</th>
-         			<th>Total</th>
-         			<th>Fecha</th>
-         			<th>Placa</th>
-         			<th>Observaciones</th>
-         		</tr>
-         	</thead>
-         	<tbody>
-         		{% for item in lista2%}
-         		<tr class="table-info">
-         			<td>{{item.id}}</td>
-         			<td>{{item.UUiD}}</td>
-         			<td>{{item.rfc}}</td>
-         			<td>{{item.nombre}}</td>
-         			<td>{{item.subtotal}}</td>
-         			<td>{{item.iva}}</td>
-         			<td>{{item.total}}</td>
-         			<td>{{item.fecha}}</td>
-         			<td>{{item.placas}}</td>
-         			<td>{{item.observaciones}}</td>
-         		</tr>
-         		{% endfor %}
-         	</tbody>
-         </table>
-     </div>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-</div>
-{%elif lista3 %}
-<div class="container">
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">mostrar consulta</button>
-	<div class="modal fade" id="myModal">
-		<br>
-  		<br>
-  		<br>	
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">{{titulo}}</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-        <div class="table-responsive table-responsive-sm">
-         <table class="table table-striped table-hover">
-         	<caption>Consulta por {{tipo}}</caption>
-         	<thead>
-         		<tr class="table-success">
-         			<th>#</th>
-         			<th>UUiD</th>
-         			<th>RFC</th>
-         			<th>Nombre</th>
-         			<th>Subtotal</th>
-         			<th>IVA</th>
-         			<th>Total</th>
-         			<th>Fecha</th>
-         			<th>Placa</th>
-         			<th>Observaciones</th>
-         		</tr>
-         	</thead>
-         	<tbody>
-         		{% for item in lista3%}
-         		<tr class="table-info">
-         			<td>{{item.id}}</td>
-         			<td>{{item.UUiD}}</td>
-         			<td>{{item.rfc}}</td>
-         			<td>{{item.nombre}}</td>
-         			<td>{{item.subtotal}}</td>
-         			<td>{{item.iva}}</td>
-         			<td>{{item.total}}</td>
-         			<td>{{item.fecha}}</td>
-         			<td>{{item.placas}}</td>
-         			<td>{{item.observaciones}}</td>
-         		</tr>
-         		{% endfor %}
-         	</tbody>
-         </table>
-     </div>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-</div>
-{%elif lista4 %}
-<div class="container">
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">mostrar consulta</button>
-	<div class="modal fade" id="myModal">
-		<br>
-  		<br>
-  		<br>	
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">{{titulo}}</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-        <div class="table-responsive table-responsive-sm">
-         <table class="table table-striped table-hover">
-         	<caption>Consulta por {{tipo}}</caption>
-         	<thead>
-         		<tr class="table-success">
-         			<th>#</th>
-         			<th>UUiD</th>
-         			<th>RFC</th>
-         			<th>Nombre</th>
-         			<th>Subtotal</th>
-         			<th>IVA</th>
-         			<th>Total</th>
-         			<th>Fecha</th>
-         			<th>Placa</th>
-         			<th>Observaciones</th>
-         		</tr>
-         	</thead>
-         	<tbody>
-         		{% for item in lista4%}
-         		<tr class="table-info">
-         			<td>{{item.id}}</td>
-         			<td>{{item.UUiD}}</td>
-         			<td>{{item.rfc}}</td>
-         			<td>{{item.nombre}}</td>
-         			<td>{{item.subtotal}}</td>
-         			<td>{{item.iva}}</td>
-         			<td>{{item.total}}</td>
-         			<td>{{item.fecha}}</td>
-         			<td>{{item.placas}}</td>
-         			<td>{{item.observaciones}}</td>
-         		</tr>
-         		{% endfor %}
-         	</tbody>
-         </table>
-     </div>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-</div>
-{%elif lista5 %}
-<div class="container">
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">mostrar consulta</button>
-	<div class="modal fade" id="myModal">
-		<br>
-  		<br>
-  		<br>	
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">{{titulo}}</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-        <div class="table-responsive table-responsive-sm">
-         <table class="table table-striped table-hover">
-         	<caption>Consulta por {{tipo}}</caption>
-         	<thead>
-         		<tr class="table-success">
-         			<th>#</th>
-         			<th>UUiD</th>
-         			<th>RFC</th>
-         			<th>Nombre</th>
-         			<th>Subtotal</th>
-         			<th>IVA</th>
-         			<th>Total</th>
-         			<th>Fecha</th>
-         			<th>Placa</th>
-         			<th>Observaciones</th>
-         		</tr>
-         	</thead>
-         	<tbody>
-         		{% for item in lista5%}
-         		<tr class="table-info">
-         			<td>{{item.id}}</td>
-         			<td>{{item.UUiD}}</td>
-         			<td>{{item.rfc}}</td>
-         			<td>{{item.nombre}}</td>
-         			<td>{{item.subtotal}}</td>
-         			<td>{{item.iva}}</td>
-         			<td>{{item.total}}</td>
-         			<td>{{item.fecha}}</td>
-         			<td>{{item.placas}}</td>
-         			<td>{{item.observaciones}}</td>
-         		</tr>
-         		{% endfor %}
-         	</tbody>
-         </table>
-     </div>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-</div>
-{% endif%}
+     {% endif%}
+</form>
 <script>
 	function DesactivarFolio() {
     		document.getElementById("sProv").disabled = !document.getElementById("bProv").checked;
