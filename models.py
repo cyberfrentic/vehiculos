@@ -85,11 +85,11 @@ class Resguardante(db.Model):
 class Vehiculo(db.Model):
     __tablename__ = 'carros'
     id = db.Column(db.Integer, primary_key=True)
-    numInv = db.Column(db.String(8), unique=True)
+    numInv = db.Column(db.String(8))
     marca = db.Column(db.String(13))
     modelo = db.Column(db.String(15))
     tipoVehiculo = db.Column(db.String(15))
-    nSerie = db.Column(db.String(17))
+    nSerie = db.Column(db.String(20))
     tCombus = db.Column(db.String(10))
     odome = db.Column(db.String(2))
     kmInicio = db.Column(db.String(12))
