@@ -11,7 +11,7 @@ from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
     filtroServ
-from tools.fpdf import tabla, sol, orden, consultaGeneral
+from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
@@ -886,7 +886,14 @@ def Solicitud():
         form = Form_Solicitud(formdata=MultiDict({'fecha':(str(datetime.datetime.now().strftime('%m/%d/%Y'))), 'nServicio':str(nu)})) ## inicializar un tetfield con valores como fecha y el siguietne id
     elif request.method == 'POST':
         if 'imprimir' in request.form.getlist("buton"):
-            print(form.Cotización.data)
+            algo=""
+            data = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(razonSocial=(str(form.Cotización.data)))
+            for item in data:
+                algo=str(item.id)
+            if len(algo)==0:
+                data=False
+            x=cotizacionPdf(data, "Formato de cotizacion")
+            return x
         elif form.validate():
             servicio=Solicitud_serv(
                 nOficio=form.nOficio.data.upper(),

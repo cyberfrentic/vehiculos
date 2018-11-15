@@ -460,14 +460,84 @@ def consultaGeneral(datos, totales, titulo, con):
     pdf.set_font('Times', 'B', 10.0)
     pdf.ln(2)
     th = pdf.font_size
-    # for item in totales:
-    #     pdf.cell(col_width, th, str(item['placa']), border=1)
-    #     pdf.cell(col_width, th, '$ '+str("{0:.2f}".format(item['total'])), border=1)
-    #     pdf.ln()
-    #pdf.cell(30, th, 'TOTAL: $ ' + str(totales), 'C', 1)
     ##########################################################################
     ######## imprimir desde una pagina web de flask con estas funciones ######
     ##########################################################################
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
+    return response
+
+
+
+def cotizacionPdf(datos, titulo):
+    global Titulo
+    Titulo=titulo
+    global tamaño
+    tamaño = True
+    # Instantiation of inherited class
+    pdf = PDF("P", 'mm', 'LETTER')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_fill_color( 184, 184, 187 )
+    pdf.set_text_color(64)
+    pdf.set_draw_color(0, 0, 0)
+    pdf.set_line_width(.3)
+    pdf.set_font('', 'B')
+    # cabecera de la tabla
+    # Remember to always put one of these at least once.
+    pdf.set_font('Times', '', 10.0)
+
+    # Effective page width, or just epw
+    epw = pdf.w - 2 * pdf.l_margin
+
+    #########################################
+    ###       Cuerpo del procedimiento    ###
+    #########################################
+    pdf.cell(200,7,"Datos Proveedor",0,0,'C',True)
+    pdf.ln()
+    pdf.ln()
+    if datos:
+        for item in datos:
+            pdf.cell(17,5, "Proveedor: ",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(90, 5, item.razonSocial, 'B',0,'C',False)
+            pdf.cell(3, 5, " ", 0,0,'C',False)
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(15, 5, "Telefono:", 0,0,'L', True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(20, 5, item.telefono,'B',0,'C',False)
+            pdf.cell(3, 5, "  ", 0,0,'C',False)
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(10, 5, "Email:", 0,0,'L', True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(40, 5, item.email,'B',0,'C',False)
+            pdf.ln()
+            pdf.ln()
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(17,5, "Dirección: ",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(180, 5, item.direccion, 'B',0,'C',False)
+            pdf.cell(3, 5, " ", 0,0,'C',False)
+            pdf.ln()
+            pdf.ln()
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(17,5, "R. F. C.: ",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(35, 5, item.rfc, 'B',0,'C',False)
+            pdf.cell(3, 5, "  ", 0,0,'C',False)
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(20,5, "Municipio: ",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(50, 5, item.municipio, 'B',0,'C',False)
+            pdf.cell(3, 5, "  ", 0,0,'C',False)
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(20,5, "Estado: ",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(50, 5, item.estado, 'B',0,'C',False)
+
+
+    #########################################
     response = make_response(pdf.output(dest='S').encode('latin-1'))
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
