@@ -58,6 +58,10 @@ def resguard():
   lugar = flask.session.get('ciudad')
   return Resguardante.query.filter_by(idCiudad=lugar).order_by('nombre')
 
+def QProv():
+  lugar = flask.session.get('ciudad')
+  return Model_Proveedor.query.filter_by(idCiudad=lugar).order_by('razonSocial')
+
 
 class Create_Form(Form):
     username = StringField('Usuario',
@@ -89,7 +93,7 @@ class Create_Form(Form):
 class FormVehiculos(Form):
     numInv = StringField('Núm. Inventario',
                          [validators.DataRequired(message='El Número de inventario es necesario'),
-                          validators.length(min=8, max=8, message='ingrese un numero de inventario valido!.')
+                          validators.length(min=8, max=18, message='ingrese un numero de inventario valido!.')
                           ])
     marca = StringField('Marca',
                         [validators.DataRequired(message='La marca del vehiculo es necesario'),
@@ -165,16 +169,16 @@ class TelephoneForm(Form):
 class Form_Proveedor(Form):
     razonSocial = StringField('Razón social',
                               [validators.DataRequired(message='El campo es obligatorio'),
-                               validators.length(min=2, max=35, message='El campo tiene un maximo de 35 caracteres')])
+                               validators.length(min=2, max=50, message='El campo tiene un maximo de 50 caracteres')])
     propietario = StringField('Propietario',
                               [validators.DataRequired(message='Campo es obligatorio'),
                                validators.length(min=4, max=50, message='el campo solo soporta 50 caracteres')])
     direccion = StringField('Direccion',
                             [validators.DataRequired(message='La direccion debe capturarse'),
-                             validators.length(min=4, max=80, message='Maximo 80 caracteres')])
+                             validators.length(min=4, max=120, message='Maximo 120 caracteres')])
     rfc = StringField('R. F. C.  (XXXx-aammdd-XXX)',
                       [validators.DataRequired(message='El RFC es un campo obligatorio'),
-                       validators.length(min=14, max=15,
+                       validators.length(min=12, max=15,
                                          message='El RFC debe contar minimo con 14 y maximo 15 caracteres')])
     municipio = StringField('Municipio',
                             [validators.DataRequired(message='Campo es obligatorio'),
@@ -187,7 +191,7 @@ class Form_Proveedor(Form):
                             validators.length(min=10, max=15, message='el campo solo soporta 15 caracteres')])
 
     contacto = StringField('Contacto',
-                           [validators.length(min=4, max=30, message='el campo solo soporta 30 caracteres')])
+                           [validators.length(min=4, max=50, message='el campo solo soporta 50 caracteres')])
     email = EmailField('Correo electronico',
                        [validators.Required(message='El Email es requerido!.'),
                         validators.Email(message='Ingrese un email valido!.'),
@@ -243,16 +247,17 @@ class Form_Solicitud(Form):
     nServicio = StringField("Orden de Servicio: ")
     fecha = StringField("Fecha: ")
     nOficio = StringField("Núm. Oficio", [
-      validators.DataRequired(message="En Número de oficio es Necesario"),
+      
       validators.length(min=5, max=25,message="El campo está limitado a 25 caracteres")])
     placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
     odome = StringField("Odometro:",[
-      validators.DataRequired(message="Capture los Km Recorridos"),
+      
       validators.length(min=1,max=9,message="maximo de caracteres 9")])
     solicitante = StringField("Solicitante", [
-      validators.DataRequired(message="El nombre del solicitante es Necesario"),
+      
       validators.length(min=5, max=35,message="El campo está limitado a 35 caracteres")])
-    observaciones = TextAreaField("Observaciones",[validators.Required(message='Text is required')])
+    observaciones = TextAreaField("Observaciones",)
+    Cotización= QuerySelectField(label='Proveedores', query_factory=QProv, allow_blank=True)
 
     def __init__(self, *args, **kwargs):
         super(Form_Solicitud, self).__init__(*args, **kwargs)
@@ -265,7 +270,7 @@ class Form_CapSol(Form):
   cotizacion1 = BooleanField("Cotización 1")
   proveedor1 = StringField("Proveedor", [
     validators.DataRequired(message="Debe capturar minimo una cotización"),
-    validators.length(min=5, max=35, message="El nombre del proveedor debe contener min 5 y max 35 caracteres")])
+    validators.length(min=5, max=50, message="El nombre del proveedor debe contener min 5 y max 50 caracteres")])
   costo1 = DecimalField("Costo", places=2, rounding=None)
   descripcion1 = TextAreaField("Descripcion del servicio", [validators.required()])
   cotizacion2 = BooleanField("Cotización 2")

@@ -288,13 +288,13 @@ def editarVehi(numInv):
         x.numInv = form.numInv.data.upper()
         x.marca = form.marca.data.upper()
         x.modelo = form.modelo.data.upper()
-        x.tipoVehiculo = form.tipoVehiculo.data.upper()
+        x.tipoVehiculo = str(form.tipoVehiculo.data)
         x.nSerie = form.nSerie.data.upper()
         x.tCombus = form.tCombus.data.upper()
         x.odome = dict(form.odome.choices).get(form.odome.data)
         x.kmInicio = form.kmInicio.data.upper()
         x.nVehi = form.nVehiculo.data.upper()
-        x.resguardo = form.resguardo.upper()
+        x.resguardo = str(form.resguardo.data)
         x.cSeguros = form.cSeguros.data.upper()
         x.nPoliza = form.nPoliza.data.upper()
         x.placa = form.placa.data.upper()
@@ -871,6 +871,7 @@ def grafica():
 def Solicitud():
     nombre = session['username']
     lugar = session['ciudad']
+    form= Form_Solicitud(request.form)
     if request.method == 'GET':
         nu=0
         ultimo = db.session.query(Solicitud_serv.id).filter(Solicitud_serv.idCiudad==lugar).order_by(desc(Solicitud_serv.id)).first() ## encontrar el ultimo registro de una tabla
@@ -881,8 +882,9 @@ def Solicitud():
                 nu=x+1
         form = Form_Solicitud(formdata=MultiDict({'fecha':(str(datetime.datetime.now().strftime('%m/%d/%Y'))), 'nServicio':str(nu)})) ## inicializar un tetfield con valores como fecha y el siguietne id
     elif request.method == 'POST':
-        form= Form_Solicitud(request.form)
-        if  form.validate():
+        if 'imprimir' in request.form.getlist("buton"):
+            print(form.Cotización.data)
+        elif form.validate():
             servicio=Solicitud_serv(
                 nOficio=form.nOficio.data.upper(),
                 placa= str(form.placa.data),
@@ -1193,6 +1195,7 @@ def filtroServicios():
                     totales.append(item)
                 return consultaGeneral(lista,totales,"consulta general Por Fecha",2)
             elif opcion == 4:
+                print(f1,f2,nombre)
                 total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.fecha.between(str(f1),str(f2))).filter(Compras.nombre==nombre)
                 print(total)
                 totales=[]
@@ -1204,6 +1207,7 @@ def filtroServicios():
             lista=[]
             opcion=4
             nombre=str(form.sProv.data)
+            f1,f2 =  form.sFechaI.data,form.sFechaF.data
             for x in query:
                 lista.append(x)
             titulo="Consulta por Proveedor y fecha: "+ str(form.sFechaI.data)+ " a "+ str(form.sFechaF.data)

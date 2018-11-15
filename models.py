@@ -30,6 +30,19 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password, password)
 
+class jefes(db.Model):
+    __tablename__ = 'Bosses'
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(50))
+    cargo = db.Column(db.String(35))
+
+    def __init__(self,nombre, cargo):
+        self.nombre = nombre
+        self.cargo = cargo
+
+    def __repr__(self):
+        return '{}'.format(self.nombre)
+
 
 class Ciudades(db.Model):
     __tablename__ = 'Ciudades'
@@ -79,13 +92,13 @@ class Resguardante(db.Model):
         self.idCiudad = idCiudad
 
     def __repr__(self):
-        return '{}'.format(self.nombre)
+        return '{}'.format(self.nombre + " " + self.apellidoPat + " " + self.apellidoMat)
 
 
 class Vehiculo(db.Model):
     __tablename__ = 'carros'
     id = db.Column(db.Integer, primary_key=True)
-    numInv = db.Column(db.String(8), unique=True)
+    numInv = db.Column(db.String(18), unique=True)
     marca = db.Column(db.String(13))
     modelo = db.Column(db.String(15))
     tipoVehiculo = db.Column(db.String(15))
@@ -96,7 +109,7 @@ class Vehiculo(db.Model):
     nVehi = db.Column(db.String(25))
     resguardo = db.Column(db.String(35))
     cSeguros = db.Column(db.String(35))
-    nPoliza = db.Column(db.String(15))
+    nPoliza = db.Column(db.String(19))
     placa = db.Column(db.String(10), unique=True)
     idCiudad=db.Column(db.Integer)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
