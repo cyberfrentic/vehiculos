@@ -192,8 +192,11 @@ def Vehiculow():
                                 vehi.nPoliza.data,
                                 vehi.placa.data,
                                 lugar)
-            db.session.add(vehiculo)
-            db.session.commit()
+            try:
+                db.session.add(vehiculo)
+                db.session.commit()
+            except sqlalchemy.exc.IntegrityError as e:
+                print("sucedio un error" + e)
             succes_message = 'Vehiculo registrado en la base de datos'
             flash(succes_message)
         else:

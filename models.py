@@ -102,7 +102,7 @@ class Vehiculo(db.Model):
     marca = db.Column(db.String(13))
     modelo = db.Column(db.String(15))
     tipoVehiculo = db.Column(db.String(15))
-    nSerie = db.Column(db.String(17))
+    nSerie = db.Column(db.String(20))
     tCombus = db.Column(db.String(10))
     odome = db.Column(db.String(2))
     kmInicio = db.Column(db.String(12))
