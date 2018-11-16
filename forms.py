@@ -169,7 +169,7 @@ class TelephoneForm(Form):
 class Form_Proveedor(Form):
     razonSocial = StringField('Razón social',
                               [validators.DataRequired(message='El campo es obligatorio'),
-                               validators.length(min=2, max=50, message='El campo tiene un maximo de 50 caracteres')])
+                               validators.length(min=2, max=100, message='El campo tiene un maximo de 100 caracteres')])
     propietario = StringField('Propietario',
                               [validators.DataRequired(message='Campo es obligatorio'),
                                validators.length(min=4, max=50, message='el campo solo soporta 50 caracteres')])

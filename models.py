@@ -140,7 +140,7 @@ class Vehiculo(db.Model):
 class Model_Proveedor(db.Model):
     __tablename__ = 'proveedores'
     id = db.Column(db.Integer, primary_key=True)
-    razonSocial = db.Column(db.String(50))
+    razonSocial = db.Column(db.String(100))
     propietario = db.Column(db.String(50))
     direccion = db.Column(db.String(120))
     rfc = db.Column(db.String(15), unique=True)
