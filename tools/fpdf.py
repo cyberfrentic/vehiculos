@@ -354,6 +354,10 @@ def orden(datos):
     pdf.cell(60, 8, 'C. Pascual Martinz Gamez'.upper(), 'T',0,'L')
     pdf.cell(20, 8, '  ', 0,0,'C')
     pdf.cell(60, 8, 'Lic. Ma. de los Angeles May Bacab'.upper(), 'T',0,'R')
+    pdf.ln()
+    pdf.cell(60, 8, 'jefe departamento'.upper(), 'T',0,'L')
+    pdf.cell(20, 8, '  ', 0,0,'C')
+    pdf.cell(60, 8, 'subgerente administrativo'.upper(), 'T',0,'R')
 
 
     ##########################################################################
@@ -403,7 +407,7 @@ def consultaGeneral(datos, totales, titulo, con):
     #for item in data:
     #    cont+=1
     #    if cont ==1:
-    pdf.cell(col_width-15, th+5, str(data[0]), border=1,align='C')
+    pdf.cell(col_width-25, th+5, str(data[0]), border=1,align='C')
     pdf.cell(col_width+5, th+5, str(data[1]), border=1, align='C')
     pdf.cell(col_width+15, th+5, str(data[2]), border=1, align='C')
     pdf.cell(col_width-10 , th+5, str(data[3]), border=1, align='C')
@@ -418,7 +422,7 @@ def consultaGeneral(datos, totales, titulo, con):
         bandera=0
         for row in datos:
             bandera+=1
-            pdf.cell(col_width-15, th+10, str(bandera), border=1, align='C')
+            pdf.cell(col_width-25, th+10, str(bandera), border=1, align='C')
             pdf.cell(col_width+5, th+10, str(row.rfc), border=1, align='C')
             pdf.cell(col_width+15, th+10, str(row.nombre), border=1, align='C')
             pdf.cell(col_width-10, th+10, str(row.subtotal), border=1, align='C')
@@ -426,7 +430,10 @@ def consultaGeneral(datos, totales, titulo, con):
             pdf.cell(col_width-5, th+10, str(row.total), border=1, align='C')
             pdf.cell(col_width, th+10, str(row.fecha), border=1, align='C')
             pdf.cell(col_width-10, th+10, str(row.placas), border=1, align='C')
-            pdf.multi_cell(0, th+1, str(row.observaciones).upper()[:38], border=1)
+            if len(str(row.observaciones).upper())<38:
+                pdf.multi_cell(0, th+10, str(row.observaciones).upper(), border=1)
+            else:
+                pdf.multi_cell(0, th+1, str(row.observaciones).upper()[:38], border=1)
             pdf.ln(th-3.5)
             total += float(row.total)
         pdf.ln(2)
@@ -438,15 +445,18 @@ def consultaGeneral(datos, totales, titulo, con):
         bandera=0
         for row in datos:
             bandera+=1
-            pdf.cell(col_width-15, th+10, str(bandera), border=1, align='C')
+            pdf.cell(col_width-25, th+10, str(bandera), border=1, align='C')
             pdf.cell(col_width+5, th+10, str(row.rfc), border=1, align='C')
-            pdf.cell(col_width+15, th+10, str(row.nombre), border=1, align='C')
+            pdf.cell(col_width+15, th+10, str(row.nombre)[:20], border=1, align='C')
             pdf.cell(col_width-10, th+10, str(row.subtotal), border=1, align='C')
             pdf.cell(col_width-15, th+10, str(row.iva), border=1, align='C')
             pdf.cell(col_width-5, th+10, str(row.total), border=1, align='C')
             pdf.cell(col_width, th+10, str(row.fecha), border=1, align='C')
             pdf.cell(col_width-10, th+10, str(row.placas), border=1, align='C')
-            pdf.multi_cell(0, th+1, str(row.observaciones).upper()[:38], border=1)
+            if len(str(row.observaciones).upper())<38:
+                pdf.multi_cell(0, th+10, str(row.observaciones).upper(), border=1)
+            else:
+                pdf.multi_cell(0, th+1, str(row.observaciones).upper()[:38], border=1)
             pdf.ln(th-3.5)
             total += float(row.total)
         pdf.ln(2)
@@ -454,8 +464,8 @@ def consultaGeneral(datos, totales, titulo, con):
         th = pdf.font_size
         print(totales)
         for item in totales:
-            pdf.cell(col_width+50, th+3, str(item[1]), border=1)
-            pdf.cell(col_width, th+3, SetMoneda(float(item[0]),"$",2), border=1)
+            pdf.cell(col_width+50, th+3, str(item[1])[:25], border=1)
+            pdf.cell(col_width, th+3, str(item[0]), border=1)
             pdf.ln()
     pdf.set_font('Times', 'B', 10.0)
     pdf.ln(2)

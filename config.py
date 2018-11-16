@@ -7,7 +7,7 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    #SQLALCHEMY_DATABASE_URI = 'mysql://administrador:ha260182ha@192.168.15.45/vehiculos'
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/vehiculos'
+    SQLALCHEMY_DATABASE_URI = 'mysql://administrador:ha260182ha@192.168.15.45/vehiculos'
+    #SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/vehiculos'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = os.path.abspath("static/uploads/")

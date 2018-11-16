@@ -884,15 +884,6 @@ def Solicitud():
                 nu=x+1
         form = Form_Solicitud(formdata=MultiDict({'fecha':(str(datetime.datetime.now().strftime('%m/%d/%Y'))), 'nServicio':str(nu)})) ## inicializar un tetfield con valores como fecha y el siguietne id
     elif request.method == 'POST':
-        # if 'imprimir' in request.form.getlist("buton"):
-        #     algo=""
-        #     data = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(razonSocial=(str(form.Cotización.data)))
-        #     for item in data:
-        #         algo=str(item.id)
-        #     if len(algo)==0:
-        #         data=False
-        #     x=cotizacionPdf(data, "Formato de cotizacion")
-        #     return x
         if form.validate():
             servicio=Solicitud_serv(
                 nOficio=form.nOficio.data.upper(),
@@ -1177,13 +1168,13 @@ def capturaManual():
 
 global opcion
 opcion=0
-global f1,f2,plac, nombre
-f1,f2,plac,nombre="","","",""
+global f1,f2,plac, nom, titulo
+f1,f2,plac,nom, titulo="","","","",""
 @app.route("/manteniminetos/solicitud/reportes/general", methods=['GET', 'POST'])
 def filtroServicios():
     global lista
     global opcion
-    global f1,f2, plac, nombre
+    global f1,f2, plac, nom, titulo
     nombre = session['username']
     lugar = session['ciudad']
     form = filtroServ(request.form)
@@ -1202,35 +1193,70 @@ def filtroServicios():
                 totales=[]
                 for item in total:
                     totales.append(item)
-                return consultaGeneral(lista,totales,"consulta general Por Fecha",2)
+                return consultaGeneral(lista,totales,titulo,2)
             elif opcion == 4:
-                print(f1,f2,nombre)
-                total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.fecha.between(str(f1),str(f2))).filter(Compras.nombre==nombre)
-                print(total)
+                print(f1,f2,nom)
+                total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.fecha.between(str(f1),str(f2))).filter(Compras.nombre==nom)
+
                 totales=[]
                 for item in total:
                     totales.append(item)
-                return consultaGeneral(lista,totales,"consulta general Por Fecha",2)
-        if form.bProv.data and form.bFecha.data:
+                return consultaGeneral(lista,totales,titulo,2)
+            elif opcion == 5:
+                total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.fecha.between(str(f1),str(f2))).filter(Compras.placas==plac)
+                totales=[]
+                for item in total:
+                    totales.append(item)
+                return consultaGeneral(lista,totales,titulo,2)
+            elif opcion == 6:
+                total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.nombre==nom).filter(Compras.placas==plac)
+                totales=[]
+                for item in total:
+                    totales.append(item)
+                return consultaGeneral(lista,totales,titulo,2)
+            elif opcion == 7:
+                total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.nombre==nom).filter(Compras.placas==plac).filter(Compras.fecha.between(str(f1),str(f2)))
+                totales=[]
+                for item in total:
+                    totales.append(item)
+                return consultaGeneral(lista,totales,titulo,2)
+        if form.bProv.data and form.bFecha.data and form.bPlaca.data:
+            query = Compras.query.filter_by(idCiudad=lugar).filter(Compras.nombre==str(form.sProv.data)).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data))).filter_by(placas=(str(form.qPlaca.data)))
+            lista=[]
+            opcion=7
+            f1,f2 =  form.sFechaI.data,form.sFechaF.data
+            plac=str(form.qPlaca.data)
+            nom=str(form.sProv.data)
+            for x in query:
+                lista.append(x)
+            titulo="Consulta por proveedor {}, fecha {} a {} y Placa {}".format(nom[:15],f1,f2,str(form.qPlaca.data))
+            return render_template('filtroServicios.html', nombre=nombre, form=form, lista5=lista, titulo=titulo, tipo="Proveedor y Fecha")
+        elif form.bProv.data and form.bFecha.data:
             query = Compras.query.filter_by(idCiudad=lugar).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data))).filter_by(nombre=(str(form.sProv.data)))
             lista=[]
             opcion=4
-            nombre=str(form.sProv.data)
+            nom=str(form.sProv.data)
             f1,f2 =  form.sFechaI.data,form.sFechaF.data
             for x in query:
                 lista.append(x)
-            titulo="Consulta por Proveedor y fecha: "+ str(form.sFechaI.data)+ " a "+ str(form.sFechaF.data)
+            titulo="Consulta por Proveedor {} y fecha {} a {}: ".format(nom, str(form.sFechaI.data),str(form.sFechaF.data))
             return render_template('filtroServicios.html', nombre=nombre, form=form, lista3=lista, titulo=titulo, tipo="Proveedor y Fecha")
         elif form.bFecha.data and form.bPlaca.data:
             query = Compras.query.filter_by(idCiudad=lugar).filter(Compras.fecha.between((form.sFechaI.data),(form.sFechaF.data))).filter_by(placas=(str(form.qPlaca.data)))
             lista=[]
+            opcion=5
+            f1,f2 =  form.sFechaI.data,form.sFechaF.data
+            plac=str(form.qPlaca.data)
             for x in query:
                 lista.append(x)
-            titulo="Consulta por Proveedor y Placa"+ str(form.qplaca.data)
+            titulo="Consulta por fecha {} a {} y Placa {}".format(f1,f2,str(form.qPlaca.data))
             return render_template('filtroServicios.html', nombre=nombre, form=form, lista5=lista, titulo=titulo, tipo="Proveedor y Fecha")
         elif form.bPlaca.data and form.bProv.data:
             query = Compras.query.filter_by(idCiudad=lugar).filter_by(nombre=(str(form.sProv.data))).filter_by(placas=(str(form.qPlaca.data)))
             lista=[]
+            opcion=6
+            plac = str(form.qPlaca.data)
+            nom = str(form.sProv.data)
             for x in query:
                 lista.append(x)
             titulo="Consulta por Proveedor"

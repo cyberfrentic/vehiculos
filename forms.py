@@ -304,7 +304,7 @@ class Factura(Form):
 
 
 class capturaFactura(Form):
-  fecha = DateField('Fecha y Hora', format='%d/%m/%Y %H:%M:%S')
+  fecha = DateField('Fecha y Hora', format='%d/%m/%Y')
   total = DecimalField('Total',  places=4, rounding=None)
   subtotal = DecimalField('SubTotal',  places=4, rounding=None)
   iva = DecimalField('I. V. A.',  places=4, rounding=None)
