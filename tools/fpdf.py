@@ -469,8 +469,7 @@ def consultaGeneral(datos, totales, titulo, con):
     return response
 
 
-
-def cotizacionPdf(datos, titulo):
+def cotizacionPdf(datos, datos2, titulo, numero=0):
     global Titulo
     Titulo=titulo
     global tamaño
@@ -484,21 +483,50 @@ def cotizacionPdf(datos, titulo):
     pdf.set_draw_color(0, 0, 0)
     pdf.set_line_width(.3)
     pdf.set_font('', 'B')
-    # cabecera de la tabla
-    # Remember to always put one of these at least once.
     pdf.set_font('Times', '', 10.0)
 
     # Effective page width, or just epw
     epw = pdf.w - 2 * pdf.l_margin
+    col_width = epw / 5
+    data3 = ('Cantidad', 'Unidad', 'Concepto', 'P. U.', 'Subtotal.')
 
     #########################################
     ###       Cuerpo del procedimiento    ###
     #########################################
+    pdf.cell(200,7,"Datos Solicitud",0,0,'C',True)
+    pdf.ln()
+    pdf.ln()
+    if datos2:
+        for item in datos2:
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(25, 5, "Núm. Solicitud:",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(20,5,str(item.id), 'B',0,'C',False)
+            pdf.cell(3, 5, " ", 0,0,'C',False)
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(10, 5, "Placa:",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(15,5,item.placa, 'B',0,'C',False)
+            pdf.cell(3, 5, " ", 0,0,'C',False)
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(18, 5, "Solicitante:",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(45,5,item.solicitante, 'B',0,'C',False)
+            pdf.cell(3, 5, " ", 0,0,'C',False)
+            pdf.set_font('Times', '', 10.0)
+            pdf.cell(20, 5, "Odometro:",0,0,'L',True)
+            pdf.set_font('Times', '', 7.0)
+            pdf.cell(35,5,item.odome, 'B',0,'C',False)
+            pdf.cell(3, 5, " ", 0,0,'C',False)
+    pdf.ln()
+    pdf.ln()
+    pdf.set_font('Times', '', 10.0)
     pdf.cell(200,7,"Datos Proveedor",0,0,'C',True)
     pdf.ln()
     pdf.ln()
     if datos:
         for item in datos:
+            pdf.set_font('Times', '', 10.0)
             pdf.cell(17,5, "Proveedor: ",0,0,'L',True)
             pdf.set_font('Times', '', 7.0)
             pdf.cell(90, 5, item.razonSocial, 'B',0,'C',False)
@@ -536,6 +564,55 @@ def cotizacionPdf(datos, titulo):
             pdf.set_font('Times', '', 7.0)
             pdf.cell(50, 5, item.estado, 'B',0,'C',False)
 
+    pdf.ln()
+    pdf.ln()
+    pdf.set_font('Times', '', 10.0)
+    pdf.cell(200,7,"Conceptos de Servicio",0,0,'C',True)
+    pdf.ln()
+    pdf.ln()
+    pdf.set_font('Times', '', 10.0)
+    th = pdf.font_size
+    for item in data3:
+        if item == "Concepto":
+            pdf.cell(col_width*2.5, th+5, str(item), fill=True,border=1,align='C')
+        else:
+            pdf.cell(col_width/2+5, th+5, str(item),fill=True,border=1,align='C')
+    pdf.ln()
+    lista = range(8)
+    banda=0
+    for i in lista:
+        banda+=1
+        if banda == 6:
+            pdf.cell((col_width/2+5)*2+col_width*2.5, th+5, "", border=0,align='C')
+            pdf.cell(col_width/2+5, th+5, "Subtotal", border=1,align='C')
+            pdf.cell(col_width/2+5, th+5, "", border=1,align='C')
+            pdf.ln()
+        elif banda == 7:
+            pdf.cell((col_width/2+5)*2+col_width*2.5, th+5, "", border=0,align='C')
+            pdf.cell(col_width/2+5, th+5, "I. V. A.", border=1,align='C')
+            pdf.cell(col_width/2+5, th+5, "", border=1,align='C')
+            pdf.ln()
+        elif banda == 8:
+            pdf.cell((col_width/2+5)*2+col_width*2.5, th+5, "", border=0,align='C')
+            pdf.cell(col_width/2+5, th+5, "Total", border=1,align='C')
+            pdf.cell(col_width/2+5, th+5, "", border=1,align='C')
+        else:
+            bandera=0
+            for e in range(5):
+                bandera+=1
+                if bandera == 3:
+                    pdf.cell(col_width*2.5, th+5, "", border=1,align='C')
+                else:
+                    pdf.cell(col_width/2+5, th+5, "", border=1,align='C')
+            pdf.ln()
+
+    pdf.ln()
+    pdf.ln()
+    pdf.ln()
+    pdf.ln()
+
+    pdf.cell((col_width/2+5)*2,7,"",0,0,'C',False)
+    pdf.cell(50,7,"Nombre y Firma",'T',0,'C',False)
 
     #########################################
     response = make_response(pdf.output(dest='S').encode('latin-1'))

@@ -1270,6 +1270,13 @@ def imprimirCotizaciones():
     nombre = session['username']
     lugar = session['ciudad']
     form = formCotizacion(request.form)
+    if request.method == 'POST' and form.validate():
+        query = Solicitud_serv.query.filter_by(idCiudad=lugar).filter_by(id=form.solicitud.data)
+        if query is not None:
+            data = Model_Proveedor.query.filter_by(razonSocial=str(form.Cotizacion.data)).filter_by(idCiudad=lugar)
+            data2 = Solicitud_serv.query.filter_by(id=str(form.solicitud.data)).filter_by(idCiudad=lugar)
+            x = cotizacionPdf(data, data2, "Solicitud de Cotizacion", form.solicitud.data)
+            return x
     return render_template("imprimircotizacion.html", nombre=nombre, form=form)
 
 
