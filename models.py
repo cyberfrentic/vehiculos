@@ -74,7 +74,7 @@ class Resguardante(db.Model):
     apellidoMat = db.Column(db.String(20))
     nombreCompleto = db.Column(db.String(45))
     area = db.Column(db.String(35))
-    departamento = db.Column(db.String(20))
+    departamento = db.Column(db.String(35))
     licencia = db.Column(db.String(12))
     lVigencia = db.Column(db.Date)
     idCiudad = db.Column(db.Integer)
@@ -140,14 +140,14 @@ class Vehiculo(db.Model):
 class Model_Proveedor(db.Model):
     __tablename__ = 'proveedores'
     id = db.Column(db.Integer, primary_key=True)
-    razonSocial = db.Column(db.String(35))
+    razonSocial = db.Column(db.String(50))
     propietario = db.Column(db.String(50))
-    direccion = db.Column(db.String(80))
+    direccion = db.Column(db.String(120))
     rfc = db.Column(db.String(15), unique=True)
     municipio = db.Column(db.String(35))
     estado = db.Column(db.String(20))
     telefono = db.Column(db.String(15))
-    contacto = db.Column(db.String(30))
+    contacto = db.Column(db.String(50))
     email = db.Column(db.String(40))
     idCiudad = db.Column(db.Integer)
 

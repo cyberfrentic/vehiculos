@@ -10,7 +10,7 @@ from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Co
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
-    filtroServ
+    filtroServ, formCotizacion
 from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf
 from sqlalchemy.sql import func
 from pygal.style import Style
@@ -192,13 +192,12 @@ def Vehiculow():
                                 vehi.nPoliza.data,
                                 vehi.placa.data,
                                 lugar)
-            try:
-                db.session.add(vehiculo)
-                db.session.commit()
-            except sqlalchemy.exc.IntegrityError as e:
-                print("sucedio un error" + e)
+            
+            db.session.add(vehiculo)
+            db.session.commit()
             succes_message = 'Vehiculo registrado en la base de datos'
             flash(succes_message)
+            return redirect(url_for("Vehiculow"))
         else:
             flash("El Num de Inventario que identifica al vehiculo, Ya existe en la base de datos!.")
     nombre = (session['username']).upper()
@@ -885,16 +884,16 @@ def Solicitud():
                 nu=x+1
         form = Form_Solicitud(formdata=MultiDict({'fecha':(str(datetime.datetime.now().strftime('%m/%d/%Y'))), 'nServicio':str(nu)})) ## inicializar un tetfield con valores como fecha y el siguietne id
     elif request.method == 'POST':
-        if 'imprimir' in request.form.getlist("buton"):
-            algo=""
-            data = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(razonSocial=(str(form.Cotización.data)))
-            for item in data:
-                algo=str(item.id)
-            if len(algo)==0:
-                data=False
-            x=cotizacionPdf(data, "Formato de cotizacion")
-            return x
-        elif form.validate():
+        # if 'imprimir' in request.form.getlist("buton"):
+        #     algo=""
+        #     data = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(razonSocial=(str(form.Cotización.data)))
+        #     for item in data:
+        #         algo=str(item.id)
+        #     if len(algo)==0:
+        #         data=False
+        #     x=cotizacionPdf(data, "Formato de cotizacion")
+        #     return x
+        if form.validate():
             servicio=Solicitud_serv(
                 nOficio=form.nOficio.data.upper(),
                 placa= str(form.placa.data),
@@ -1264,6 +1263,14 @@ def filtroServicios():
             titulo="Consulta por Proveedor"
             return render_template('filtroServicios.html', nombre=nombre, form=form, lista=lista, titulo=titulo, tipo="Proveedor")
     return render_template('filtroServicios.html', nombre=nombre, form=form)
+
+
+@app.route("/Mantenimientos/solicitud/imprimir-cotizaciones", methods=["GET","POST"])
+def imprimirCotizaciones():
+    nombre = session['username']
+    lugar = session['ciudad']
+    form = formCotizacion(request.form)
+    return render_template("imprimircotizacion.html", nombre=nombre, form=form)
 
 
 if __name__ == '__main__':

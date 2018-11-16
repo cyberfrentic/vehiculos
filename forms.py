@@ -144,7 +144,7 @@ class Form_resguardos(Form):
                         validators.length(min=4, max=20, message="Ingrese un Area valido")])
     departamento = StringField("Departamento",
                                [validators.DataRequired(message="El campo Departamento es obligatorio"),
-                                validators.length(min=4, max=15, message="Ingrese un Departamento valido")])
+                                validators.length(min=4, max=35, message="Ingrese un Departamento valido")])
     licencia = StringField("Licencia",
                            [validators.DataRequired(message="El campo Licencia es obligatorio"),
                             validators.length(min=4, max=15, message="Ingrese un licencia valido")])
@@ -244,10 +244,9 @@ class Form_Grafica(Form):
 
 
 class Form_Solicitud(Form):
-    nServicio = StringField("Orden de Servicio: ")
+    nServicio = StringField("Solicitud de Servicio: ")
     fecha = StringField("Fecha: ")
     nOficio = StringField("Núm. Oficio", [
-      
       validators.length(min=5, max=25,message="El campo está limitado a 25 caracteres")])
     placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
     odome = StringField("Odometro:",[
@@ -257,7 +256,6 @@ class Form_Solicitud(Form):
       
       validators.length(min=5, max=35,message="El campo está limitado a 35 caracteres")])
     observaciones = TextAreaField("Observaciones",)
-    Cotización= QuerySelectField(label='Proveedores', query_factory=QProv, allow_blank=True)
 
     def __init__(self, *args, **kwargs):
         super(Form_Solicitud, self).__init__(*args, **kwargs)
@@ -338,3 +336,9 @@ class filtroServ(Form):
   sFechaF = DateField("Fecha Fin", format='%d/%m/%Y', validators=(validators.Optional(),))
   bPlaca = BooleanField(label=None)
   qPlaca = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
+
+
+class formCotizacion(Form):
+  solicitud = StringField("Núm. Solicitud",[
+    validators.DataRequired(message="Tiene que capturar el numero de Solicitud")])
+  Cotizacion= QuerySelectField(label='Proveedores', query_factory=QProv, allow_blank=True)

@@ -183,6 +183,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
                     <a class="dropdown-item" href="/Mantenimientos/solicitud/generar-Solicitud"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/administracion.svg')}}" width="16" height="16">Generar Solicitud</a>
+                    <a class="dropdown-item" href="/Mantenimientos/solicitud/imprimir-cotizaciones"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/imprimir.svg')}}" width="16" height="16">Imprimir Cotización</a>
                     <a class="dropdown-item" href="/Mantenimientos/solicitud/Capturar-Solicitud"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/proceso.svg')}}" width="16" height="16">Captura Solicitud</a>
                     
                     <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
@@ -272,7 +273,7 @@
       </div>
     </div>
   {% block contador%}
-  <SCRIPT type="text/javascript">
+<!--<SCRIPT type="text/javascript">
 
 /*
 Count Down - Annual Occasions Script
@@ -310,7 +311,7 @@ if (calculatediff>0)
 else if (calculatediff==0)
   document.write("<B>"+onOccasiontext+" "+showdate+"</B>")
 
-</SCRIPT>
+</SCRIPT>-->
 
   {%endblock%}
   {% block content%}

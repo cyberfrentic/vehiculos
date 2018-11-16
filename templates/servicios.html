@@ -2,9 +2,6 @@
 {% from "_macro.html" import render_field %}
 
 {% block content %}
-<script>
-    alert("imprima primero sus cotizaciones antes de capturar su solicitud")
-</script>
     <br>
     <div class="container">
         <div class="row">
@@ -46,61 +43,14 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
-                <br>  
-                <br>
-                <br>                 
+                
                 <div class="success">
                     <div class="row">
                         <div class="form-group col-xs-12">
                             <button type="submit" class="btn btn-outline-danger" name="buton" value="generar">Generar...</button>
                         </div>
-                        <div class="form-group col-xs-12">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                    Imprimir Cotizacion
-                            </button>
-                        </div>
                     </div>
                 </div>
-
-                                    <!--  ################################################### -->
-                        <div class="container">
-                              <!-- Button to Open the Modal -->                    
-                </div>
-
-                              <!-- The Modal -->
-                              <div class="modal" id="myModal">
-                                <div class="modal-dialog">
-                                  <div class="modal-content">
-                                  
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                      <h4 class="modal-title">Seleccione Un proveedor e imprima la cotización</h4>
-                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-
-                                      <div class="form-group form-inline">
-                                            <div class="form-goup col-xs-8 floating-label-form-group controls">
-                                                {{ render_field(form.Cotización, class='form-control form-control', placeholder="Capture Nombre Solicitante") }}
-                                                <p class="help-block text-danger"></p>
-                                            </div>                               
-                                        </div>
-                                    
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-outline-danger" name="buton" value="imprimir">Imprimir cotización</button>
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                    </div>
-
-                                  </div>
-                                </div>
-                              </div>
-                              
-                        </div>
-                    <!--  #####################################################-->
-
             </form>
                 </div>
 
