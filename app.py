@@ -1,6 +1,5 @@
 import datetime
 import os
-
 import xlrd
 from flask import Flask, session, render_template, url_for, request, flash, redirect
 from werkzeug.utils import secure_filename
@@ -42,12 +41,17 @@ crsf = CSRFProtect()
 @app.before_request
 def before_request():
     if 'username' not in session and request.endpoint in ['home', 'logout', 'crearUser', 'Vehiculow', 'search',
-                                                          'editar', 'resguardante', 'regreso', 'page_not_found',
-                                                          'proveedores', 'provSearch', 'editarprov', 'searchvehiculo']:
+                                                          'editar', 'resguardante', 'proveedores', 'provSearch',
+                                                           'editarprov', 'searchvehiculo', 'editarVehi', 'ticket',
+                                                           'Consulta_ticket', 'comparativo_vehiculos', 'get_fileXls',
+                                                           'ticketvsfactura', 'grafica', 'Solicitud', 'captura_Sol',
+                                                           'upload_file', 'get_fileXml', 'capturaManual', 'filtroServicios',
+                                                           'imprimirCotizaciones']:
         return redirect(url_for('login'))
     elif 'username' in session:
         usr = session['username']
         privi = session['privilegios']
+        lugar = session['ciudad']
         if request.endpoint in ['login']:
             return redirect(url_for('home'))
         elif privi == "0.1.0.0" and request.endpoint in ['crearUser', 'vehiculos', 'tvehiculos']:
@@ -58,6 +62,15 @@ def exceldate(serial):
     seconds = (serial - 25569) * 86400.0
     d = datetime.datetime.utcfromtimestamp(seconds)
     return d.strftime('%Y-%m-%d')
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    if 'username' in session:
+        nombre = (session['username']).upper()
+        return render_template('404.html', nombre=nombre), 404
+    else:
+        return render_template('404.html'), 404
 
 
 @app.errorhandler(400)
@@ -1094,6 +1107,7 @@ def get_fileXml(filename):
     nombre = (session['username']).upper()
     return render_template("ListaXML.HTML", lista=lista1, lista2=sample, form=factura, nombre=nombre)
 
+
 global lista
 lista=[]
 @app.route("/manteniminetos/solicitud/capturaDeServicio/manual", methods=['GET', 'POST'])
@@ -1165,6 +1179,7 @@ def capturaManual():
             else:
                 lista.pop(int(request.form['eliminar']))
     return render_template('capturaManual.html', nombre=nombre, form=form, articulos=lista, boton=(len(lista) if len(lista)>0 else 0))
+
 
 global opcion
 opcion=0
