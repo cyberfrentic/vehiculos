@@ -86,7 +86,7 @@ def home():
         nombre = (session['username']).upper()
         return render_template("home.html", nombre=nombre)
     else:
-        return render_template("home.html")
+        return redirect(url_for('login'))
 
 
 @app.errorhandler(404)
