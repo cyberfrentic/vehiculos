@@ -17,7 +17,10 @@ import flask
 from models import db
 
 
-
+def get_pk(obj): # def necesario para que el QuerySelectField pueda mostrar muchos registros.
+    return str(obj)
+	
+	
 def ciudad():
     return Ciudades.query.order_by('ciudad')
 
@@ -76,7 +79,7 @@ class Create_Form(Form):
                         validators.Email(message='Ingrese un email valido!.'),
                         validators.length(min=4, max=40, message='Ingrese un email valido!.')
                         ])
-    ciudad = QuerySelectField(label="Ciudad", query_factory=ciudad, allow_blank=True)
+    ciudad = QuerySelectField(label="Ciudad", query_factory=ciudad, get_pk=get_pk, allow_blank=True)
     honeypot = HiddenField('', [length_honeypot])
     vehiculos = BooleanField('Vehiculos')
     proveedores = BooleanField('Proveedores')
@@ -103,7 +106,7 @@ class FormVehiculos(Form):
                          [validators.DataRequired(message='La marca es necesaria'),
                           validators.length(min=4, max=15, message='Ingrese una marca valida')
                           ])
-    tipoVehiculo = QuerySelectField(label="Tipo de Vehiculo", query_factory=tipos, allow_blank=True)
+    tipoVehiculo = QuerySelectField(label="Tipo de Vehiculo", query_factory=tipos, get_pk=get_pk, allow_blank=True)
     nSerie = StringField('Núm. Serie',
                         [validators.DataRequired(message='El Número de serie es Obligatorio'),
                          validators.length(min=17, max=20, message='El Numero de serie es un campo obligatorio')
@@ -116,7 +119,7 @@ class FormVehiculos(Form):
                             {validators.DataRequired(
                                 message='El nombre de vehiculo ayuda a identificar el vehiculo más fácil'),
                             })
-    resguardo = QuerySelectField(label='Resguardante', query_factory=resguard, allow_blank=True)
+    resguardo = QuerySelectField(label='Resguardante', query_factory=resguard, get_pk=get_pk, allow_blank=True)
     cSeguros = StringField('Compañía de seguros',
                            [validators.DataRequired(message='Debe de ingresar el nombre de la compañía de seguros'),
                             validators.length(min=4, max=25)])
@@ -228,18 +231,18 @@ class Form_Ticket(Form):
     subtotal = DecimalField('Subtotal',  places=4, rounding=None)
     iva = DecimalField('I. V. A.',  places=4, rounding=None)
     total = DecimalField('Total',  places=4, rounding=None)
-    placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
+    placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas, get_pk=get_pk)
     obser = TextAreaField('Observaciones')
 
 
 class FormConsultaTicket(Form):
-    placas = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket)
+    placas = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket, get_pk=get_pk)
     fechaI= DateField('Fecha inicial', format='%d/%m/%Y', validators=(validators.Optional(),))
     fechaF = DateField('Fecha Final', format='%d/%m/%Y', validators=(validators.Optional(),))
 
 
 class Form_Grafica(Form):
-    placa = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket)
+    placa = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket, get_pk=get_pk)
     anio = SelectField('Año', choices=[('', ''), ('2018', '2018'), ('2019', '2019'), ('2020', '2020'),('2021', '2021'),('2022', '2022')], )
 
 
@@ -248,7 +251,7 @@ class Form_Solicitud(Form):
     fecha = StringField("Fecha: ")
     nOficio = StringField("Núm. Oficio", [
       validators.length(min=5, max=25,message="El campo está limitado a 25 caracteres")])
-    placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
+    placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas, get_pk=get_pk)
     odome = StringField("Odometro:",[
       
       validators.length(min=1,max=9,message="maximo de caracteres 9")])
@@ -312,7 +315,7 @@ class capturaFactura(Form):
                       [validators.DataRequired(message='El RFC es un campo obligatorio'),
                        validators.length(min=14, max=15,
                                          message='El RFC debe contar minimo con 14 y maximo 15 caracteres')])
-  nombre = QuerySelectField(label="Proveedor", query_factory=proveedor, allow_blank=True)
+  nombre = QuerySelectField(label="Proveedor", query_factory=proveedor, allow_blank=True, get_pk=get_pk)
   uuid = StringField("UUiD",
                          [validators.DataRequired(message="El campo nombre es obligatorio"),
                           validators.length(min=4, max=36, message="Ingrese un UUId valido")])
@@ -330,15 +333,15 @@ class capturaFactura(Form):
 
 class filtroServ(Form):
   bProv = BooleanField(label=None)
-  sProv = QuerySelectField(label="Proveedor", query_factory=proveedor, allow_blank=True)
+  sProv = QuerySelectField(label="Proveedor", query_factory=proveedor, allow_blank=True, get_pk=get_pk)
   bFecha = BooleanField(label=None)
   sFechaI = DateField("Fecha Ini", format='%d/%m/%Y', validators=(validators.Optional(),))
   sFechaF = DateField("Fecha Fin", format='%d/%m/%Y', validators=(validators.Optional(),))
   bPlaca = BooleanField(label=None)
-  qPlaca = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas)
+  qPlaca = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas, get_pk=get_pk)
 
 
 class formCotizacion(Form):
   solicitud = StringField("Núm. Solicitud",[
     validators.DataRequired(message="Tiene que capturar el numero de Solicitud")])
-  Cotizacion= QuerySelectField(label='Proveedores', query_factory=QProv, allow_blank=True)
+  Cotizacion= QuerySelectField(label='Proveedores', query_factory=QProv, allow_blank=True, get_pk=get_pk)
