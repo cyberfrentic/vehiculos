@@ -424,7 +424,7 @@ def consultaGeneral(datos, totales, titulo, con):
             bandera+=1
             pdf.cell(col_width-25, th+10, str(bandera), border=1, align='C')
             pdf.cell(col_width+5, th+10, str(row.rfc), border=1, align='C')
-            pdf.cell(col_width+15, th+10, str(row.nombre), border=1, align='C')
+            pdf.cell(col_width+15, th+10, str(row.nombre)[:20], border=1, align='C')
             pdf.cell(col_width-10, th+10, str(row.subtotal), border=1, align='C')
             pdf.cell(col_width-15, th+10, str(row.iva), border=1, align='C')
             pdf.cell(col_width-5, th+10, str(row.total), border=1, align='C')

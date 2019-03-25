@@ -76,7 +76,7 @@
 
                 {% if articulos %}	
                 	<div class="container">
-                		<table class="table-bordered table-hover table-dark table-striped">
+                		<table class="table-bordered table-hover  table-striped">
 						<thead>
 							<tr>
 								<th scope="col">Cantidad</th>
@@ -101,7 +101,7 @@
                 				<th scope="row">
 									{{ item.importe}}
                 				</th>
-                				<th><button type="submit" class="btn btn-outline-primary d-flex align-items-center" id="eliminar" name="eliminar" value="{{item.id}}">Eliminar Articulo</button></th>
+                				<th><button type="submit" class="btn btn-outline-primary d-flex align-items-center" id="eliminar" name="eliminar" value="{{ item.id }}">Eliminar Articulo</button></th>
 							</tr>
 							{%endfor%}
 						</tbody>

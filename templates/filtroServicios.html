@@ -51,7 +51,7 @@ word-wrap: break-word; /* IE 5+ */
             </div>
             <div class="form-goup col-xs-12 floating-label-form-group controls">
             	{{ form.bPlaca }}
-                {{ render_field(form.qPlaca, class='form-control', placeholder="DD/MM/YYYY") }}
+                {{ render_field(form.qPlaca, class='form-control') }}
                 <p class="help-block text-danger"></p>
             </div>
              <div class="form-group mx-sm-3 mb-2 form-inline">
@@ -152,13 +152,15 @@ word-wrap: break-word; /* IE 5+ */
             </tbody>
          </table>
          <div class="limpiar"><!-- fix --></div>
-         <button type="submit" class="btn btn-danger" name="consultar" value="imprimir" data-dismiss="modal">imprimir</button>
+         <button type="submit" class="btn btn-danger" name="consultar" value="imprimir">imprimir</button>
          <br>
     <br>    <br>
     <br>
      </div>
      {% endif%}
 </form>
+
+<!-- SCRIPT para desactivar los textEdit con los check's-->
 <script>
 	function DesactivarFolio() {
     		document.getElementById("sProv").disabled = !document.getElementById("bProv").checked;

@@ -110,6 +110,7 @@ def login():
                 session['username'] = user.username
                 session['privilegios'] = user.privilegios
                 session['ciudad']= user.idCiudad
+                session['listaManual']=[]
                 return redirect(url_for('home'))
             else:
                 error_message = '{} No es un usuario del sistema'.format(usr)
@@ -124,6 +125,7 @@ def logout():
         session.pop('username')
         session.pop('privilegios')
         session.pop('ciudad')
+        session.pop('listaManual')
     return redirect(url_for('home'))
 
 
@@ -197,7 +199,7 @@ def Vehiculow():
                                 vehi.modelo.data,
                                 str(vehi.tipoVehiculo.data),
                                 vehi.nSerie.data,
-                                vehi.nMotor.data,
+                                vehi.numMotor.data,
                                 vehi.tCombus.data,
                                 dict(vehi.odome.choices).get(vehi.odome.data),
                                 km,
@@ -1110,37 +1112,31 @@ def get_fileXml(filename):
     return render_template("ListaXML.HTML", lista=lista1, lista2=sample, form=factura, nombre=nombre)
 
 
-global lista
-lista=[]
+
 @app.route("/manteniminetos/solicitud/capturaDeServicio/manual", methods=['GET', 'POST'])
 def capturaManual():
     nombre = session['username']
     lugar = session['ciudad']
     item={}
-    global lista
+    lista=[]
     form =capturaFactura(request.form)
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST': #and form.validate():
         if 'agregar' in request.form:
+            identificador = len(session['listaManual'])+1
             item = {
+            'id': identificador,
             'cantidad': str(form.cantidad.data),
             'descripcion': form.descripcion.data,
             'pUnit': str(form.pUnit.data),
             'importe': str(form.importe.data),
-            'id': 0,
             }
             lista.append(item)
-            x=len(lista)
-            contador=0
-            if x > 0:
-                for it in lista:
-                    it['id'] = contador
-                    contador+=1
+            session['listaManual']+=lista
         elif 'guardar' in request.form:
             uuid = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
             proveedor = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(rfc=(form.rfc.data.upper())).first()
             if (proveedor==None):
                 flash('El proveedor no existe, tiene que darlo de alta')
-                lista=[]
                 return redirect(url_for("proveedores"))
             if (uuid==None):
                 compras=Compras(
@@ -1158,7 +1154,7 @@ def capturaManual():
                 db.session.add(compras)
                 db.session.commit()
                 id_compra = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
-                for dc in lista:
+                for dc in session['listaManual']:
                     arti = Articulos(
                         compras_id = id_compra.id,
                         cantidad = dc['cantidad'],
@@ -1168,19 +1164,27 @@ def capturaManual():
                     )
                     db.session.add(arti)
                     db.session.commit()
-                    lista=[]
+                    session.pop('listaManual')
+                    session['listaManual']=[]
                 flash('Registro guardado con exito con folio {}'.format(id_compra.id))
                 return redirect(url_for('capturaManual'))
             else:
-                lista=[]
+                session.pop('listaManual')
+                session['listaManual']=[]
                 flash('El registro Existe en la base de datos')
                 return redirect(url_for('capturaManual'))
         else:
-            if len(lista)==1:
-                lista.pop(0)
-            else:
-                lista.pop(int(request.form['eliminar']))
-    return render_template('capturaManual.html', nombre=nombre, form=form, articulos=lista, boton=(len(lista) if len(lista)>0 else 0))
+            if 'eliminar' in request.form:
+                print(request.form['eliminar'])
+                if len(session['listaManual'])==1:
+                    session.pop('listaManual')
+                    session['listaManual']=[]
+                else:
+                    temporal=session['listaManual']
+                    session.pop('listaManual')
+                    temporal.pop(int(request.form['eliminar'])-1)
+                    session['listaManual']=temporal
+    return render_template('capturaManual.html', nombre=nombre, form=form, articulos=session['listaManual'], boton=(len(session['listaManual']) if len(session['listaManual'])>0 else 0))
 
 
 global opcion
@@ -1196,6 +1200,7 @@ def filtroServicios():
     lugar = session['ciudad']
     form = filtroServ(request.form)
     if request.method == 'POST':
+        print(request.form.getlist('consultar'))
         if'imprimir' in request.form.getlist('consultar'):
             if opcion == 1:
                 return consultaGeneral(lista,"0","consulta general por Proveedor",1)
@@ -1280,8 +1285,7 @@ def filtroServicios():
             return render_template('filtroServicios.html', nombre=nombre, form=form, lista=lista, titulo=titulo, tipo="Proveedor")
         elif form.bProv.data:
             query = Compras.query.filter_by(idCiudad=lugar).filter_by(nombre=(str(form.sProv.data))).all()
-            print(query)
-            lista=[]
+            lista=query
             opcion = 1
             titulo="Consulta por Proveedor"
             return render_template('filtroServicios.html', nombre=nombre, form=form, lista=query, titulo=titulo, tipo="Proveedor")
