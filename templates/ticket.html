@@ -32,11 +32,13 @@
     				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     				<div class="row form-control-feedback form-group">
     					<div class="form-goup col-xs-12 floating-label-form-group controls">
-                            {{ render_field(form.plancha, class='form-control', onclick="DesactivarContrato()") }}
+                            {{ render_field(form.plancha, onclick="DesactivarContrato()") }}
                              <p class="help-block text-danger"></p>
     						{{ render_field(form.transaccion, class='form-control', onkeypress="return valida(event)", placeholder="Núm de transaccion") }}
                              <p class="help-block text-danger"></p>
                             {{ render_field(form.fecha, class='form-control', placeholder="dd/mm/aaaa hh:mm:ss") }}
+                             <p class="help-block text-danger"></p>
+                             {{ render_field(form.odometro, class='form-control', onkeypress="return valida(event)", placeholder="Kilometraje actual") }}
                              <p class="help-block text-danger"></p>
                             {{ render_field(form.cantidad, class='form-control', onkeypress="return valida(event)", placeholder="Cant. Litros") }}
                              <p class="help-block text-danger"></p>

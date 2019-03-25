@@ -98,6 +98,9 @@ class FormVehiculos(Form):
                          [validators.DataRequired(message='El Número de inventario es necesario'),
                           validators.length(min=8, max=18, message='ingrese un numero de inventario valido!.')
                           ])
+    numTarCir = StringField('Folio Tarjeta de circulacion',
+                         [validators.DataRequired(message='El Número de Tarjeta de circulacion es necesario'),
+                          ])
     marca = StringField('Marca',
                         [validators.DataRequired(message='La marca del vehiculo es necesario'),
                          validators.length(min=4, max=15, message='Ingrese una marca valida')
@@ -130,6 +133,8 @@ class FormVehiculos(Form):
     placa = StringField('Placa del vehiculo',
                         [validators.DataRequired('La Placa es indispensable para el control vehicular')
                          ])
+    numMotor = StringField('Núm. Motor',
+                        [validators.DataRequired('El Número de motor es requerido')])
 
 
 class Form_resguardos(Form):
@@ -224,6 +229,7 @@ class Form_Ticket(Form):
     plancha = BooleanField('Planchado?')
     transaccion = StringField('Número de Transaccion')
     fecha = DateTimeField('Fecha y hora de Carga', format='%d/%m/%Y %H:%M:%S')
+    odometro = IntegerField('Odometro')
     cantidad = DecimalField('Cantidad de liros',  places=4, rounding=None)
     tipoComb = SelectField('T. Combistible',
                                choices=[('', ''), ('Magna', 'Magna'), ('Premium', 'Premium'), ("Diesel", 'Diesel')],)

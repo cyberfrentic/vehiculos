@@ -192,10 +192,12 @@ def Vehiculow():
             else:
                 km = "00000000"
             vehiculo = Vehiculo(vehi.numInv.data,
+                                vehi.numTarCir.data,
                                 vehi.marca.data,
                                 vehi.modelo.data,
                                 str(vehi.tipoVehiculo.data),
                                 vehi.nSerie.data,
+                                vehi.nMotor.data,
                                 vehi.tCombus.data,
                                 dict(vehi.odome.choices).get(vehi.odome.data),
                                 km,
@@ -1277,13 +1279,12 @@ def filtroServicios():
             titulo="Consulta por Proveedor"
             return render_template('filtroServicios.html', nombre=nombre, form=form, lista=lista, titulo=titulo, tipo="Proveedor")
         elif form.bProv.data:
-            query = Compras.query.filter_by(idCiudad=lugar).filter_by(nombre=(str(form.sProv.data)))
+            query = Compras.query.filter_by(idCiudad=lugar).filter_by(nombre=(str(form.sProv.data))).all()
+            print(query)
             lista=[]
             opcion = 1
-            for x in query:
-                lista.append(x)
             titulo="Consulta por Proveedor"
-            return render_template('filtroServicios.html', nombre=nombre, form=form, lista=lista, titulo=titulo, tipo="Proveedor")
+            return render_template('filtroServicios.html', nombre=nombre, form=form, lista=query, titulo=titulo, tipo="Proveedor")
         elif form.bFecha.data:
             f1 = form.sFechaI.data
             f2 = form.sFechaF.data

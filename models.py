@@ -30,6 +30,7 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password, password)
 
+
 class jefes(db.Model):
     __tablename__ = 'Bosses'
     id = db.Column(db.Integer, primary_key=True)
@@ -54,7 +55,6 @@ class Ciudades(db.Model):
 
     def __repr__(self):
         return '{}'.format(self.ciudad)
-
 
 
 class tipoVehiculos(db.Model):
@@ -99,10 +99,12 @@ class Vehiculo(db.Model):
     __tablename__ = 'carros'
     id = db.Column(db.Integer, primary_key=True)
     numInv = db.Column(db.String(18), unique=True)
+    numTarCir = db.Column(db.String(10), unique=True)
     marca = db.Column(db.String(13))
     modelo = db.Column(db.String(15))
     tipoVehiculo = db.Column(db.String(15))
     nSerie = db.Column(db.String(20))
+    nMotor = db.Column(db.String(20))
     tCombus = db.Column(db.String(10))
     odome = db.Column(db.String(2))
     kmInicio = db.Column(db.String(12))
@@ -172,6 +174,7 @@ class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nuFolio = db.Column(db.Integer, unique=True)
     fecha = db.Column(db.DateTime)
+    odometro = db.Column(db.Integer)
     litros = db.Column(db.Float)
     combustible = db.Column(db.String(7))
     precio = db.Column(db.Float)
@@ -261,6 +264,7 @@ class Solicitud_serv(db.Model):
         self.solicitante = solicitante
         self.observaciones = observaciones
         self.idCiudad = idCiudad
+
 
 class captura_Sol(db.Model):
     __tablename__ = 'captura_Sol'
