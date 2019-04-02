@@ -96,9 +96,31 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
+                <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.frontal, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.lIzquierdo, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.lDerecho, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.factura, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.tarjeta, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
                  <div class="form-group form-inline">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        <button type="submit" class="btn btn-outline-success">Agregar...</button>
+                        <button type="submit" name="boton" class="btn btn-outline-success" value="listo" >Agregar...</button>
                     </div>
                 </div>
                 <br>

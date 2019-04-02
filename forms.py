@@ -9,12 +9,16 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms import DecimalField
 from wtforms import IntegerField
 from wtforms import DateField, DateTimeField
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from flask_uploads import UploadSet, IMAGES
 from wtforms import validators
 from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket, Ciudades, Compras, Model_Proveedor
 from sqlalchemy.sql import distinct
 from wtforms_components import TimeField, read_only
 import flask
 from models import db
+
+images = UploadSet('images', IMAGES)
 
 
 def get_pk(obj): # def necesario para que el QuerySelectField pueda mostrar muchos registros.
@@ -114,6 +118,8 @@ class FormVehiculos(Form):
                         [validators.DataRequired(message='El Número de serie es Obligatorio'),
                          validators.length(min=17, max=20, message='El Numero de serie es un campo obligatorio')
                          ])
+    numMotor = StringField('Núm. Motor',
+                        [validators.DataRequired('El Número de motor es requerido')])
     tCombus = SelectField('T. Combistible',
                                choices=[('', ''), ('Magna', 'Magna'), ('Premium', 'Premium'), ("Diesel", 'Diesel')], )
     odome = SelectField('Odometro', choices=[('', ''), ('s', 'Si'), ('n', 'No')])
@@ -133,8 +139,19 @@ class FormVehiculos(Form):
     placa = StringField('Placa del vehiculo',
                         [validators.DataRequired('La Placa es indispensable para el control vehicular')
                          ])
-    numMotor = StringField('Núm. Motor',
-                        [validators.DataRequired('El Número de motor es requerido')])
+    frontal = FileField('Cargar Imagen Vehiculo Frontal', validators=[FileRequired(), FileAllowed(images, 'Images only!')
+                        ])
+    lIzquierdo = FileField('Cargar Imagen Vehiculo lado Izquiero', validators=[FileRequired(), FileAllowed(images, 'Images only!')
+                        ])
+    lDerecho = FileField('Cargar Imagen Vehiculo lado Derecho', validators=[FileRequired(), FileAllowed(images, 'Images only!')
+                        ])
+    factura = FileField('Cargar imagen de la factura', validators=[FileRequired(), FileAllowed(images, 'Images only!')
+                        ])
+    tarjeta = FileField('Cargar Imagen tarjeta de circulacion', validators=[FileRequired(), FileAllowed(images, 'Images only!')
+                        ])
+
+
+    
 
 
 class Form_resguardos(Form):
@@ -161,6 +178,7 @@ class Form_resguardos(Form):
 
 class ResSearchForm(Form):
     choices = [('', ''),
+               ('td', 'Todos'),
                ('Nombre', 'Nombre'),
                ('Area', 'Area'),
                ('Departamento', 'Departamento')]
@@ -209,6 +227,7 @@ class Form_Proveedor(Form):
 
 class ProvSearchForm(Form):
     choices = [('', ''),
+               ('td', 'Todos'),
                ('rs', 'Razon Social'),
                ('P', 'Propietario'),
                ('rfc', 'R. F. C.')]
@@ -218,6 +237,7 @@ class ProvSearchForm(Form):
 
 class VehiSearchForm(Form):
     choices = [('', ''),
+               ('td', 'Todos'),
                ('ni', 'Núm. Inv.'),
                ('ns', 'Núm. Serie'),
                ('res', 'Resguardante')]

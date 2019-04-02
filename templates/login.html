@@ -65,20 +65,7 @@ span.psw {
     padding-top: 16px;
 }
 
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    padding-top: 60px;
-}
+
 
 /* Modal Content/Box */
 .modal-content {
@@ -120,74 +107,15 @@ span.psw {
     to {transform: scale(1)}
 }
 
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    span.psw {
-       display: block;
-       float: none;
-    }
-    .cancelbtn {
-       width: 100%;
-    }
-}
-  /* Make the image fully responsive */
-  .carousel-inner img {
-      width: 100%;
-      height: 100%;
-  }
+
+  
   </style>
 </head>
 <body>
+<br>
+<br>
 
-<div id="demo" class="carousel slide" data-ride="carousel">
-
-  <!-- Indicators -->
-  <ul class="carousel-indicators">
-    <li data-target="#demo" data-slide-to="0" class="active"></li>
-    <li data-target="#demo" data-slide-to="1"></li>
-    <li data-target="#demo" data-slide-to="2"></li>
-  </ul>
-  
-  <!-- The slideshow -->
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="{{ url_for('static', filename='img/la.jpg') }}" alt="Los Angeles" width="800" height="300">
-      <div class="carousel-caption">
-        <h3>Inicio de Sesion</h3>
-        <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
-      </div>
-    </div>
-    <div class="carousel-item">
-      <img src="{{ url_for('static', filename='img/chicago.jpg') }}" alt="Chicago" width="800" height="300">
-      <div class="carousel-caption">
-        <div class="carousel-caption">
-          <h3>Inicio de Sesion</h3>
-          <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-item">
-      <img src="{{ url_for('static', filename='img/ny.jpg') }}" alt="New York" width="800" height="300">
-      <div class="carousel-caption">
-        <div class="carousel-caption">
-          <h3>Inicio de Sesion</h3>
-          <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Left and right controls -->
-  <a class="carousel-control-prev" href="#demo" data-slide="prev">
-    <span class="carousel-control-prev-icon"></span>
-  </a>
-  <a class="carousel-control-next" href="#demo" data-slide="next">
-    <span class="carousel-control-next-icon"></span>
-  </a>
-</div>
-
-<div id="id01" class="modal">
-  
+<div class="container">
   <form class="modal-content animate" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="imgcontainer">
@@ -216,16 +144,6 @@ span.psw {
 </div>
 
 <script>
-// Get the modal
-var modal = document.getElementById('id01');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
 var txt="Comision de Agua Potable y Alcantarillado - Sistema de Control Vehicular";
 var espera=100;
 var refresco=null;

@@ -346,3 +346,15 @@ class Articulos(db.Model):
         self.descripcion = descripcion
         self.p_u = p_u
         self.importe = importe
+
+class imagenes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    placa = db.Column(db.String(9))
+    ruta = db.Column(db.String(50))
+    data = db.Column(db.LargeBinary())
+
+    def __init__(self, placa, ruta, data):
+        self.placa = placa
+        self.ruta = ruta
+        self.data = data
+        

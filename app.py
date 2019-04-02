@@ -24,7 +24,7 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 ###########################################
-ALLOWED_EXTENSIONS = set(["xml", "xls"])
+ALLOWED_EXTENSIONS = set(["xml", "xls","pdf", "jpg", "png"])
 
 
 def allowed_file(filename):
@@ -294,6 +294,25 @@ def searchvehiculo():
                 else:
                     flash('No existen datos del vehiculo con este Resguardante: {} en la base de datos'.format(
                         form.search.data.upper()))
+            elif opcion == 'Todos':
+                query = Vehiculo.query.filter_by(idCiudad=lugar)  # consulta de todos
+                if query is not None:
+                    for x in query:
+                        lista = {
+                            'numInv': x.numInv,
+                            'resguardo': x.resguardo,
+                            'nSerie': x.nSerie,
+                            'marca': x.marca,
+                            'modelo': x.modelo,
+                            'tipoVehiculo': x.tipoVehiculo,
+                            'tCombus': x.tCombus,
+                            'odome': x.odome,
+                        }
+                        datos.append(lista)
+                    return render_template('searchVehi.html', form=form, nombre=nombre, datos=datos)
+                else:
+                    flash('No existen datos del vehiculo con este Resguardante: {} en la base de datos'.format(
+                        form.search.data.upper()))
     return render_template('searchVehi.html', nombre=nombre, form=form)
 
 
@@ -309,6 +328,7 @@ def editarVehi(numInv):
         x.modelo = form.modelo.data.upper()
         x.tipoVehiculo = str(form.tipoVehiculo.data)
         x.nSerie = form.nSerie.data.upper()
+        x.nMotor = form.numMotor.data.upper()
         x.tCombus = form.tCombus.data.upper()
         x.odome = dict(form.odome.choices).get(form.odome.data)
         x.kmInicio = form.kmInicio.data.upper()
@@ -393,6 +413,20 @@ def search():
                     flash('No existen datos de esta persona {}'.format(sea.nombre.data.upper()))
             elif opcion.upper() == 'departamento'.upper() and select2 > 0:
                 query = Resguardante.query.filter(Resguardante.departamento.contains(sea.search.data.upper())).filter_by(idCiudad=lugar)
+                if query is not None:
+                    for x in query:
+                        data = {'id': x.id,
+                                'nombre': x.nombre,
+                                'area': x.area,
+                                'departamento': x.departamento,
+                                'licencia': x.licencia,
+                                'vigencia': str(x.lVigencia), }
+                        datos.append(data)
+                    render_template('buscarResguar.html', datos=datos, nombre=nombre, form=sea)
+                else:
+                    flash('No existen datos de esta persona {}'.format(sea.nombre.data.upper()))
+            elif opcion.upper() == 'Todos'.upper():
+                query = Resguardante.query.filter_by(idCiudad=lugar)
                 if query is not None:
                     for x in query:
                         data = {'id': x.id,
@@ -530,6 +564,25 @@ def provSearch():
                 else:
                     flash('No existen datos del proveedor con el rfc: {} en la base de datos'.format(
                         form.rfc.data.upper()))
+            elif opcion == 'Todos':
+                query = Model_Proveedor.query.filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
+                if query is not None:
+                    for x in query:
+                        lista = {
+                            'id': x.id,
+                            'razonSocial': x.razonSocial,
+                            'propietario': x.propietario,
+                            'rfc': x.rfc,
+                            'direccion': x.direccion,
+                            'contacto': x.contacto,
+                            'telefono': x.telefono,
+                            'email': x.email,
+                        }
+                        datos.append(lista)
+                    return render_template('searchProv.html', form=form, nombre=nombre, datos=datos)
+                else:
+                    flash('No existen datos del proveedor con el rfc: {} en la base de datos'.format(
+                        form.rfc.data.upper()))
             elif opcion.upper() == '' or search1 == 0:
                 render_template('buscarResguar.html', datos=datos, nombre=nombre, form=form)
                 flash('Debe Elegir una opcion y llenar el campo por el cual se realiza el filtro')
@@ -573,22 +626,30 @@ def ticket():
         elif (len(request.form.getlist('validar'))) == 1:
             tra = 0
             flash('El ticket es un planchado y no cuenta con numero de folio')
+        queryRendi = Ticket.query.filter_by(placa=str(form.placa.data)).filter_by(idCiudad=lugar).order_by(Ticket.fecha).all()
+        if queryRendi != []:
+            flash('El rendimiento es de {} km./lts.'.format((int(form.odometro.data)-int(queryRendi[0].odometro))/int(form.cantidad.data)))
+        else:
+            queryPlec = Vehiculo.query.filter_by(placa=str(form.placa.data)).filter_by(idCiudad=lugar).one()
+            flash('El rendimiento es de {} km./lts.'.format((int(queryRendi[0].odometro)-int(queryPlec[0].odome))/int(form.cantidad.data)))
         ticket = Ticket(
             nuFolio=tra,
             fecha=form.fecha.data,
+            odometro = form.odometro.data,
             litros=form.cantidad.data,
-            combustible=form.tipoComb.data,
+            combustible=str(form.tipoComb.data),
             precio=form.precio.data,
             subtotal=form.subtotal.data,
             iva=form.iva.data,
             total=form.total.data,
-            placa=form.placa.data,
+            placa=str(form.placa.data),
             observaciones=form.obser.data,
-            idciudad=lugar,
+            idCiudad=lugar,
         )
         db.session.add(ticket)
         db.session.commit()
         flash('Ticket Fue Agregado correctamente con numero de folio: {}'.format(str(tra)))
+        return redirect(url_for('ticket'))
     return render_template("ticket.html", form=form, nombre=nombre)
 
 
@@ -1324,6 +1385,33 @@ def imprimirCotizaciones():
             x = cotizacionPdf(data, data2, "Solicitud de Cotizacion", form.solicitud.data)
             return x
     return render_template("imprimircotizacion.html", nombre=nombre, form=form)
+
+
+@app.route("/Combustible/comparativos/rendimientos", methods=["GET","POST"])
+def rendimientos():
+    nombre = session['username']
+    lugar = session['ciudad']
+    form = FormConsultaTicket(request.form)
+    if request.method == 'POST' and form.validate():
+        p = str(form.placas.data)
+        fi = form.fechaI.data
+        ff = form.fechaF.data
+        lista = Ticket.query.filter_by(idCiudad=lugar).filter_by(placa=p).filter(Ticket.fecha.between(fi, ff)).order_by(Ticket.fecha).all()
+        x = len(lista)
+        i=0
+        lista1=[]
+        dato={}
+        for i in range(x):
+            rendimiento = 0 if i==0 else ((lista[i].odometro-lista[i-1].odometro)/lista[i].litros)
+            dato={
+            'fecha': lista[i].fecha,
+            'litros': "{0:.2f}".format(lista[i].litros),
+            'odometro': lista[i].odometro,
+            'rendimiento': "{0:.2f}".format(rendimiento),
+            }
+            lista1.append(dato)
+        return render_template("rendimientos.html", nombre=nombre, form=form, lista=lista1)
+    return render_template("rendimientos.html", nombre=nombre, form=form)
 
 
 if __name__ == '__main__':

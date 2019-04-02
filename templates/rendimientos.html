@@ -1,0 +1,75 @@
+{% extends 'home.html' %}
+{% from "_macro.html" import render_field %}
+{% block content %} 
+    <form method="POST" accept-charset="utf-8">
+    	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    	<div class="container">
+	        <div class="row">
+	        	<div class="form-goup col-xs-12 floating-label-form-group controls">
+	        		{{ render_field(form.placas, class='form-control') }}
+			        <p class="help-block text-danger"></p>
+			        {{ render_field(form.fechaI, class='form-control', placeholder="DD/MM/YYYY") }}
+			        <p class="help-block text-danger"></p>
+			        {{ render_field(form.fechaF, class='form-control', placeholder="DD/MM/YYYY") }}
+			        <p class="help-block text-danger"></p>
+			        <div class="success">
+	                    <div class="row">
+	                        <div class="form-group col-xs-12">
+	                            <button type="submit" class="btn btn-outline-danger" name='buton' value='search'>Generar...</button>
+	                        </div>
+	                    </div>
+	                </div>
+			    </div>
+			    
+	        </div>
+	    </div>
+	     
+	    {%if lista %}
+	    	<div class="container">
+			  <h2>Filterable Table</h2>
+			  <p>Type something in the input field to search the table for first names, last names or emails:</p>  
+			  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+			  <br>
+			  <table class="table table-bordered table-striped">
+			    <thead>
+			      <tr>
+			        <th>Fecha</th>
+			        <th>Litros</th>
+			        <th>km recorridos</th>
+			        <th>rendimiento km/lts</th>
+			      </tr>
+			    </thead>
+			    <tbody id="myTable">
+			      {% for item in lista %}
+			      	<tr>
+				        <td>{{item.fecha}}</td>
+				        <td>{{item.litros}} lts</td>
+				        <td>{{item.odometro}} kms</td>
+				        <td>{{ item.rendimiento}}</td>
+			      	</tr>
+			      {%endfor%}
+			    </tbody>
+			  </table>
+			  
+			  <p>Note that we start the search in tbody, to prevent filtering the table headers.</p>
+			</div>
+			<br>
+			<br>
+			<br>
+			<br>
+    </form>
+
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+    {% endif %}
+{% endblock %}
