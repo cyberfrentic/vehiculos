@@ -10,7 +10,7 @@ from wtforms import DecimalField
 from wtforms import IntegerField
 from wtforms import DateField, DateTimeField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from flask_uploads import UploadSet, IMAGES
+#from flask_uploads import UploadSet, IMAGES
 from wtforms import validators
 from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket, Ciudades, Compras, Model_Proveedor
 from sqlalchemy.sql import distinct
@@ -18,7 +18,7 @@ from wtforms_components import TimeField, read_only
 import flask
 from models import db
 
-images = UploadSet('images', IMAGES)
+#images = UploadSet('images', IMAGES)
 
 
 def get_pk(obj): # def necesario para que el QuerySelectField pueda mostrar muchos registros.
@@ -139,16 +139,11 @@ class FormVehiculos(Form):
     placa = StringField('Placa del vehiculo',
                         [validators.DataRequired('La Placa es indispensable para el control vehicular')
                          ])
-    frontal = FileField('Cargar Imagen Vehiculo Frontal', validators=[FileRequired(), FileAllowed(images, 'Images only!')
-                        ])
-    lIzquierdo = FileField('Cargar Imagen Vehiculo lado Izquiero', validators=[FileRequired(), FileAllowed(images, 'Images only!')
-                        ])
-    lDerecho = FileField('Cargar Imagen Vehiculo lado Derecho', validators=[FileRequired(), FileAllowed(images, 'Images only!')
-                        ])
-    factura = FileField('Cargar imagen de la factura', validators=[FileRequired(), FileAllowed(images, 'Images only!')
-                        ])
-    tarjeta = FileField('Cargar Imagen tarjeta de circulacion', validators=[FileRequired(), FileAllowed(images, 'Images only!')
-                        ])
+    frontal = FileField('Imagen Vehiculo Frontal')
+    izq = FileField('Imagen Vehiculo lado Izquiero')
+    der = FileField('Imagen Vehiculo lado Derecho')
+    factura = FileField('imagen de la factura')
+    tarjeta = FileField('Imagen tarjeta de circulacion')
 
 
     

@@ -347,11 +347,12 @@ class Articulos(db.Model):
         self.p_u = p_u
         self.importe = importe
 
-class imagenes(db.Model):
+class Imagen(db.Model):
+    __tablename__ = "imagenes"
     id = db.Column(db.Integer, primary_key=True)
     placa = db.Column(db.String(9))
-    ruta = db.Column(db.String(50))
-    data = db.Column(db.LargeBinary())
+    ruta = db.Column(db.String(150))
+    data = db.Column(db.LargeBinary(length=(2**32)-1))
 
     def __init__(self, placa, ruta, data):
         self.placa = placa

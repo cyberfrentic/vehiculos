@@ -24,7 +24,7 @@
     <br>
      <div class="container">
         <div class="row">
-            <form method="POST" name="Autos">
+            <form method="POST" name="Autos" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                  <div class="form-group form-inline">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
@@ -98,23 +98,25 @@
                 </div>
                 <div class="form-group form-inline">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.frontal, class='form-control') }}
+                        {{ render_field(form.frontal, class='btn btn-outline-success btn-large') }}
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.lIzquierdo, class='form-control') }}
+                        {{ render_field(form.izq, class='btn btn-outline-success btn-large') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                     <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.der, class='btn btn-outline-success btn-large') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.tarjeta, class='btn btn-outline-success btn-large') }}
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.lDerecho, class='form-control') }}
-                        <p class="help-block text-danger"></p>
-                    </div>
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.factura, class='form-control') }}
-                        <p class="help-block text-danger"></p>
-                    </div>
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.tarjeta, class='form-control') }}
+                        {{ render_field(form.factura, class='btn btn-outline-success btn-large') }}
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>

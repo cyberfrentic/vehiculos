@@ -5,7 +5,7 @@ from flask import Flask, session, render_template, url_for, request, flash, redi
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import text, distinct, desc
 from config import DevelopmentConfig
-from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades
+from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades, Imagen
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
@@ -18,6 +18,9 @@ import time
 from werkzeug.datastructures import MultiDict
 from xml.dom import minidom
 import collections as co
+
+from base64 import b64encode
+from sqlalchemy_imageattach.context import store_context
 
 ###########################################
 import pymysql
@@ -180,11 +183,17 @@ def crearUser():
     return render_template('crear.html', form=crear, nombre=nombre)
 
 
+def read_file(filename):
+    with open(filename, 'rb') as f:
+        photo = f.read()
+    return photo
+
+
 @app.route('/vehiculo/captura', methods=['GET', 'POST'])
 def Vehiculow():
     vehi = FormVehiculos(request.form)
     lugar = session['ciudad']
-    if request.method == 'POST' and vehi.validate():
+    if request.method == 'POST': #and vehi.validate():
         km = ""
         numInv = vehi.numInv.data
         existe = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
@@ -209,9 +218,42 @@ def Vehiculow():
                                 vehi.nPoliza.data,
                                 vehi.placa.data,
                                 lugar)
-            
             db.session.add(vehiculo)
             db.session.commit()
+            ############### agregando imagenes ###############
+            if not "file" in request.files:
+                flash("No File part in the form.")
+            f = [request.files["frontal"],
+                request.files["izq"],
+                request.files["der"],
+                request.files["tarjeta"],
+                request.files["factura"],]
+            for x in f:
+                if x.filename =="":
+                    flash("No file selected.")
+                if x and allowed_file(x.filename):
+                    filename = secure_filename(x.filename)
+                    nombre, extension = filename.split('.')
+                    if extension == 'pdf':
+                        x.save(os.path.join(app.config["UPLOAD_FOLDER"] + '\\pdf', filename))
+                        _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\pdf', filename)
+                        _path = 'uploads/pdf/'+ filename
+                        flash("Archivo pdf guardado exitosamente")
+                    elif extension == 'jpg':
+                        x.save(os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename))
+                        _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename)
+                        _path = 'uploads/img/'+ filename
+                        flash("Archivo jpg guardado exitosamente")
+                    elif extension == 'png':
+                        x.save(os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename))
+                        _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename)
+                        _path = 'uploads/img/'+ filename
+                        flash("Archivo png guardado exitosamente")
+                    data = read_file(_path2)
+                    img = Imagen(vehi.placa.data, _path, data)
+                    db.session.add(img)
+                    db.session.commit()
+            ##################################################
             succes_message = 'Vehiculo registrado en la base de datos'
             flash(succes_message)
             return redirect(url_for("Vehiculow"))
@@ -232,87 +274,60 @@ def searchvehiculo():
             opcion = dict(form.select1.choices).get(form.select1.data)
             search1 = len(form.search.data)
             if opcion == 'Núm. Inv.' and search1 > 0:
-                query = Vehiculo.query.filter(
-                    Vehiculo.numInv.contains(
-                        str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
+                query = Vehiculo.query.filter(Vehiculo.numInv.contains(str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
-                    for x in query:
-                        lista = {
-                            'numInv': x.numInv,
-                            'resguardo': x.resguardo,
-                            'nSerie': x.nSerie,
-                            'marca': x.marca,
-                            'modelo': x.modelo,
-                            'tipoVehiculo': x.tipoVehiculo,
-                            'tCombus': x.tCombus,
-                            'odome': x.odome,
-                        }
-                        datos.append(lista)
-                    return render_template('searchVehi.html', form=form, nombre=nombre, datos=datos)
+                    placa2 = query.placa
+                    queryImg = Imagen.query.filter(Imagen.placa==placa2).all()
+                    return render_template('searchVehi.html', form=form, nombre=nombre, datos=query, fotos=queryImg )
                 else:
                     flash('No existen datos del vehiculo con num. inventario {} en la base de datos'.format(
                         form.search.data.upper()))
             elif opcion == 'Núm. Serie' and search1 > 0:
                 query = Vehiculo.query.filter(
                     Vehiculo.nSerie.contains(
-                        str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
+                        str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
-                    for x in query:
-                        lista = {
-                            'numInv': x.numInv,
-                            'resguardo': x.resguardo,
-                            'nSerie': x.nSerie,
-                            'marca': x.marca,
-                            'modelo': x.modelo,
-                            'tipoVehiculo': x.tipoVehiculo,
-                            'tCombus': x.tCombus,
-                            'odome': x.odome,
-                        }
-                        datos.append(lista)
-                    return render_template('searchVehi.html', form=form, nombre=nombre, datos=datos)
+                    placa2 = query.placa
+                    queryImg = Imagen.query.filter(Imagen.placa==placa2).all()
+                    return render_template('searchVehi.html', form=form, nombre=nombre, datos2=query, fotos=queryImg )
                 else:
                     flash('No existen datos del vehiculo con Núm. de serie: {} no existen en la base de datos'.format(
                         form.search.data.upper()))
             elif opcion == 'Resguardante' and search1 > 0:
                 query = Vehiculo.query.filter(
                     Vehiculo.resguardo.contains(
-                        str(form.search.data.upper()))).filter_by(idCiudad=lugar)  # consulta de nombre se incluye en el nombre completo
+                        str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
-                    for x in query:
-                        lista = {
-                            'numInv': x.numInv,
-                            'resguardo': x.resguardo,
-                            'nSerie': x.nSerie,
-                            'marca': x.marca,
-                            'modelo': x.modelo,
-                            'tipoVehiculo': x.tipoVehiculo,
-                            'tCombus': x.tCombus,
-                            'odome': x.odome,
-                        }
-                        datos.append(lista)
-                    return render_template('searchVehi.html', form=form, nombre=nombre, datos=datos)
+                    placa2 = query.placa
+                    queryImg = Imagen.query.filter(Imagen.placa==placa2).all()
+                    return render_template('searchVehi.html', form=form, nombre=nombre, datos3=query, fotos=queryImg )
                 else:
                     flash('No existen datos del vehiculo con este Resguardante: {} en la base de datos'.format(
                         form.search.data.upper()))
             elif opcion == 'Todos':
-                query = Vehiculo.query.filter_by(idCiudad=lugar)  # consulta de todos
+                diccionario = dict
+                dic2 = dict
+                lista=[]
+                query = Vehiculo.query.filter_by(idCiudad=lugar).all()  # consulta de todos
                 if query is not None:
-                    for x in query:
-                        lista = {
-                            'numInv': x.numInv,
-                            'resguardo': x.resguardo,
-                            'nSerie': x.nSerie,
-                            'marca': x.marca,
-                            'modelo': x.modelo,
-                            'tipoVehiculo': x.tipoVehiculo,
-                            'tCombus': x.tCombus,
-                            'odome': x.odome,
-                        }
-                        datos.append(lista)
-                    return render_template('searchVehi.html', form=form, nombre=nombre, datos=datos)
+                    for item in query:
+                        placa2 = item.placa
+                        queryImg = Imagen.query.filter(Imagen.placa==placa2).all()
+                        diccionario = {
+                                        'placa': placa2,
+                                        'derecho' : queryImg[0].ruta,
+                                        'izquierdo': queryImg[1].ruta,
+                                        'frontal' : queryImg[2].ruta,
+                                        'tarjeta' : queryImg[3].ruta,
+                                        'factura' : queryImg[4].ruta,
+                                    }
+                        
+                        lista.append(diccionario)
+                        diccionario.pop
+                    print(lista)
+                    return render_template('searchVehi.html', form=form, nombre=nombre, datos4=query, fotos=lista )
                 else:
-                    flash('No existen datos del vehiculo con este Resguardante: {} en la base de datos'.format(
-                        form.search.data.upper()))
+                    flash('Si estás viendo este mensaje algo salio realmente muy mal')
     return render_template('searchVehi.html', nombre=nombre, form=form)
 
 
