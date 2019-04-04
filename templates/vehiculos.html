@@ -96,30 +96,38 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
-                <div class="form-group form-inline">
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.frontal, class='btn btn-outline-success btn-large') }}
-                        <p class="help-block text-danger"></p>
+                {% if fotos %}
+                    <div class="container">
+                        {% for item in fotos %}
+                            <img class="img-thumbnail img-fluid" src="{{url_for('static', filename=item.ruta)}}" width="100" height="50">
+                        {% endfor%}
                     </div>
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.izq, class='btn btn-outline-success btn-large') }}
-                        <p class="help-block text-danger"></p>
+                {% else %}
+                    <div class="form-group form-inline">
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.frontal, class='btn btn-outline-success btn-large') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.izq, class='btn btn-outline-success btn-large') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                         <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.der, class='btn btn-outline-success btn-large') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
                     </div>
-                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.der, class='btn btn-outline-success btn-large') }}
-                        <p class="help-block text-danger"></p>
+                    <div class="form-group form-inline">
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.tarjeta, class='btn btn-outline-success btn-large') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.factura, class='btn btn-outline-success btn-large') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group form-inline">
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.tarjeta, class='btn btn-outline-success btn-large') }}
-                        <p class="help-block text-danger"></p>
-                    </div>
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.factura, class='btn btn-outline-success btn-large') }}
-                        <p class="help-block text-danger"></p>
-                    </div>
-                </div>
+                {% endif %}
                  <div class="form-group form-inline">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         <button type="submit" name="boton" class="btn btn-outline-success" value="listo" >Agregar...</button>

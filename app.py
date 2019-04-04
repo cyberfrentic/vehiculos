@@ -260,7 +260,8 @@ def Vehiculow():
         else:
             flash("El Num de Inventario que identifica al vehiculo, Ya existe en la base de datos!.")
     nombre = (session['username']).upper()
-    return render_template('vehiculos.html', form=vehi, nombre=nombre)
+    fotos=[]
+    return render_template('vehiculos.html', form=vehi, nombre=nombre, fotos=fotos)
 
 
 @app.route('/vehiculo/searchvehiculo', methods=['GET', 'POST'])
@@ -324,7 +325,6 @@ def searchvehiculo():
                         
                         lista.append(diccionario)
                         diccionario.pop
-                    print(lista)
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos4=query, fotos=lista )
                 else:
                     flash('Si estás viendo este mensaje algo salio realmente muy mal')
@@ -337,6 +337,7 @@ def editarVehi(numInv):
     lugar = session['ciudad']
     x = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
     form = FormVehiculos(formdata=request.form, obj=x)
+    queryImg = Imagen.query.filter(Imagen.placa==x.placa).all()
     if request.method == 'POST' and form.validate():
         x.numInv = form.numInv.data.upper()
         x.marca = form.marca.data.upper()
@@ -355,7 +356,7 @@ def editarVehi(numInv):
         db.session.commit()
         flash('Registro modificado con exito')
         return redirect(url_for('searchvehiculo'))
-    return render_template('vehiculos.html', nombre=nombre, form=form)
+    return render_template('vehiculos.html', nombre=nombre, form=form, fotos=queryImg)
 
 
 @app.route('/resguardante', methods=["GET", "POST"])
@@ -1251,7 +1252,6 @@ def capturaManual():
                 return redirect(url_for('capturaManual'))
         else:
             if 'eliminar' in request.form:
-                print(request.form['eliminar'])
                 if len(session['listaManual'])==1:
                     session.pop('listaManual')
                     session['listaManual']=[]
@@ -1276,7 +1276,6 @@ def filtroServicios():
     lugar = session['ciudad']
     form = filtroServ(request.form)
     if request.method == 'POST':
-        print(request.form.getlist('consultar'))
         if'imprimir' in request.form.getlist('consultar'):
             if opcion == 1:
                 return consultaGeneral(lista,"0","consulta general por Proveedor",1)
@@ -1293,7 +1292,6 @@ def filtroServicios():
                     totales.append(item)
                 return consultaGeneral(lista,totales,titulo,2)
             elif opcion == 4:
-                print(f1,f2,nom)
                 total = db.session.query(func.sum(Compras.total).label("Total"),Compras.nombre).filter(Compras.fecha.between(str(f1),str(f2))).filter(Compras.nombre==nom)
 
                 totales=[]

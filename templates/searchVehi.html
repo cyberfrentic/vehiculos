@@ -73,7 +73,7 @@
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
     Ver Expediente Fotografico
   </button></td>
-            <td><a type="submit" href="/itemVehi/datos.numInv"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+            <td><a type="submit" href="/itemVehi/{{datos.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
         </tr>
 
     </tbody>
@@ -214,7 +214,7 @@
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
     Ver Expediente Fotografico
   </button></td>
-            <td><a type="submit" href="/itemVehi/datos2.numInv"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+            <td><a type="submit" href="/itemVehi/{{datos2.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
         </tr>
 
     </tbody>
@@ -355,7 +355,7 @@
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
     Ver Expediente Fotografico
   </button></td>
-            <td><a type="submit" href="/itemVehi/datos3.numInv"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+            <td><a type="submit" href="/itemVehi/{{datos3.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
         </tr>
 
     </tbody>
@@ -494,7 +494,7 @@
             <td>{{item.tCombus}}</td>
             <td>{{item.odome}}</td>
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal{{item.placa}}">Ver Expediente Fotografico</button></td>
-            <td><a type="submit" href="/itemVehi/item.numInv"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+            <td><a type="submit" href="/itemVehi/{{item.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
         </tr>
       {% endfor %}
     </tbody>
