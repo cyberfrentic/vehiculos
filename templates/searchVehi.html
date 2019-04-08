@@ -40,122 +40,122 @@
 {% if datos %}
 </div>
     </div>
-    <div class="container mt-3">
+      <div class="container mt-3">
 
-  <p>Teclea las iniciales o el nombre y filtra lo que necesites (Núm. Inv, Responsable, Serie) </p>
-  <input class="form-control" id="myInput" type="text" placeholder="Search..">
-  <br>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Núm. Inv.</th>
-        <th>Resguardante</th>
-        <th>Serie</th>
-        <th>Marca</th>
-        <th>Modelo</th>
-        <th>Tipo</th>
-        <th>Combus.</th>
-        <th>Odome.</th>
-        <th>imagen</th>
-      </tr>
-    </thead>
-    <tbody id="myTable">
-      
-        <tr>
-            <td>{{datos.numInv}}</td>
-            <td>{{datos.resguardo}}</td>
-            <td>{{datos.nSerie}}</td>
-            <td>{{datos.marca}}</td>
-            <td>{{datos.modelo}}</td>
-            <td>{{datos.tipoVehiculo}}</td>
-            <td>{{datos.tCombus}}</td>
-            <td>{{datos.odome}}</td>
-            <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    Ver Expediente Fotografico
-  </button></td>
-            <td><a type="submit" href="/itemVehi/{{datos.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
-        </tr>
+        <p>Teclea las iniciales o el nombre y filtra lo que necesites (Núm. Inv, Responsable, Serie) </p>
+        <input class="form-control" id="myInput" type="text" placeholder="Search..">
+        <br>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Núm. Inv.</th>
+              <th>Resguardante</th>
+              <th>Serie</th>
+              <th>Marca</th>
+              <th>Modelo</th>
+              <th>Tipo</th>
+              <th>Combus.</th>
+              <th>Odome.</th>
+              <th>imagen</th>
+            </tr>
+          </thead>
+          <tbody id="myTable">
+            
+              <tr>
+                  <td>{{datos.numInv}}</td>
+                  <td>{{datos.resguardo}}</td>
+                  <td>{{datos.nSerie}}</td>
+                  <td>{{datos.marca}}</td>
+                  <td>{{datos.modelo}}</td>
+                  <td>{{datos.tipoVehiculo}}</td>
+                  <td>{{datos.tCombus}}</td>
+                  <td>{{datos.odome}}</td>
+                  <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+          Ver Expediente Fotografico
+        </button></td>
+                  <td><a type="submit" href="/itemVehi/{{datos.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+              </tr>
 
-    </tbody>
-  </table>
-  
-
-  <!-- aqui inicia el modal -->
-<div class="container">
-     <!-- The Modal -->
-  <div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Expediente del vehiculo {{fotos[0].placa}} </h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
+          </tbody>
+        </table>
         
-        <!-- Modal body -->
-        <div class="modal-body">
-          
-          <div class="container">
-            <div class="col-md-12">
-              <div id="carousel-1" class="carousel slide" data-ride="carousel">
-                <!-- indicadores -->
-                <ol class="carousel-indicators">
-                  <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
-                  <li data-target="#carousel-1" data-slide-to="1"></li>
-                  <li data-target="#carousel-1" data-slide-to="2"></li>
-                  <li data-target="#carousel-1" data-slide-to="3"></li>
-                  <li data-target="#carousel-1" data-slide-to="4"></li>
-                </ol>
-                <!-- contenedor de los slide -->
-                <div class="carousel-inner" role="listbox">
-                  <div class="carousel-item active">
-                    <img class="img-responsive" src="{{url_for('static', filename=fotos[0].ruta)}}" width="400" height="200">
-                    <div class="carousel-caption">
-                      <h3>placas</h3>
-                      <p>{{fotos[0].placa}}</p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img class="img-responsive" src="{{url_for('static', filename=fotos[1].ruta)}}" width="400" height="200">
-                    <div class="carousel-caption">
-                      <h3>placas</h3>
-                      <p>{{fotos[1].placa}}</p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img class="img-responsive" src="{{url_for('static', filename=fotos[2].ruta)}}" width="400" height="200">
-                    <div class="carousel-caption">
-                      <h3>placas</h3>
-                      <p>{{fotos[2].placa}}</p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img class="img-responsive" src="{{url_for('static', filename=fotos[3].ruta)}}" width="400" height="200">
-                    <div class="carousel-caption">
-                      <h3>placas</h3>
-                      <p>{{fotos[3].placa}}</p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img class="img-responsive" src="{{url_for('static', filename=fotos[4].ruta)}}" width="400" height="200">
-                    <div class="carousel-caption">
-                      <h3>placas</h3>
-                      <p>{{fotos[4].placa}}</p>
-                    </div>
-                  </div>
-                </div>
-                <!-- controles -->
-                <a href="#carousel-1"  class="carousel-control-prev" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hiddend="true"></span>
-                  <span class="sr-only">Anterior</span>
-                </a>
-                 <a href="#carousel-1"  class="carousel-control-next" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hiddend="true"></span>
-                  <span class="sr-only">Siguiente</span>
-                </a>
+
+        <!-- aqui inicia el modal -->
+      <div class="container">
+           <!-- The Modal -->
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Expediente del vehiculo {{fotos[0].placa}} </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
-            </div>
+              
+              <!-- Modal body -->
+              <div class="modal-body">
+                
+                <div class="container">
+                  <div class="col-md-12">
+                    <div id="carousel-1" class="carousel slide" data-ride="carousel">
+                      <!-- indicadores -->
+                      <ol class="carousel-indicators">
+                        <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-1" data-slide-to="1"></li>
+                        <li data-target="#carousel-1" data-slide-to="2"></li>
+                        <li data-target="#carousel-1" data-slide-to="3"></li>
+                        <li data-target="#carousel-1" data-slide-to="4"></li>
+                      </ol>
+                      <!-- contenedor de los slide -->
+                      <div class="carousel-inner" role="listbox">
+                        <div class="carousel-item active">
+                          <img class="img-responsive" src="{{url_for('static', filename=fotos[0].ruta)}}" width="400" height="200">
+                          <div class="carousel-caption">
+                            <h3>placas</h3>
+                            <p>{{fotos[0].placa}}</p>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img class="img-responsive" src="{{url_for('static', filename=fotos[1].ruta)}}" width="400" height="200">
+                          <div class="carousel-caption">
+                            <h3>placas</h3>
+                            <p>{{fotos[1].placa}}</p>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img class="img-responsive" src="{{url_for('static', filename=fotos[2].ruta)}}" width="400" height="200">
+                          <div class="carousel-caption">
+                            <h3>placas</h3>
+                            <p>{{fotos[2].placa}}</p>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img class="img-responsive" src="{{url_for('static', filename=fotos[3].ruta)}}" width="400" height="200">
+                          <div class="carousel-caption">
+                            <h3>placas</h3>
+                            <p>{{fotos[3].placa}}</p>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img class="img-responsive" src="{{url_for('static', filename=fotos[4].ruta)}}" width="400" height="200">
+                          <div class="carousel-caption">
+                            <h3>placas</h3>
+                            <p>{{fotos[4].placa}}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- controles -->
+                      <a href="#carousel-1"  class="carousel-control-prev" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hiddend="true"></span>
+                        <span class="sr-only">Anterior</span>
+                      </a>
+                       <a href="#carousel-1"  class="carousel-control-next" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hiddend="true"></span>
+                        <span class="sr-only">Siguiente</span>
+                      </a>
+                    </div>
+                  </div>
           </div>
 
         </div>

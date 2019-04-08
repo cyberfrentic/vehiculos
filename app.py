@@ -208,11 +208,11 @@ def Vehiculow():
                                 vehi.modelo.data,
                                 str(vehi.tipoVehiculo.data),
                                 vehi.nSerie.data,
-                                vehi.numMotor.data,
+                                vehi.nMotor.data,
                                 vehi.tCombus.data,
                                 dict(vehi.odome.choices).get(vehi.odome.data),
                                 km,
-                                vehi.nVehiculo.data,
+                                vehi.nVehi.data,
                                 str(vehi.resguardo.data),
                                 vehi.cSeguros.data,
                                 vehi.nPoliza.data,
@@ -336,7 +336,8 @@ def editarVehi(numInv):
     nombre = session["username"].upper()
     lugar = session['ciudad']
     x = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
-    form = FormVehiculos(formdata=request.form, obj=x)
+    form = FormVehiculos(formdata=None, obj=x)
+    print(x.tipoVehiculo)
     queryImg = Imagen.query.filter(Imagen.placa==x.placa).all()
     if request.method == 'POST' and form.validate():
         x.numInv = form.numInv.data.upper()
@@ -344,12 +345,13 @@ def editarVehi(numInv):
         x.modelo = form.modelo.data.upper()
         x.tipoVehiculo = str(form.tipoVehiculo.data)
         x.nSerie = form.nSerie.data.upper()
-        x.nMotor = form.numMotor.data.upper()
+        x.nMotor = form.nMotor.data.upper()
         x.tCombus = form.tCombus.data.upper()
         x.odome = dict(form.odome.choices).get(form.odome.data)
         x.kmInicio = form.kmInicio.data.upper()
-        x.nVehi = form.nVehiculo.data.upper()
+        x.nVehi = form.nVehi.data.upper()
         x.resguardo = str(form.resguardo.data)
+        print(str(form.resguardo.data))
         x.cSeguros = form.cSeguros.data.upper()
         x.nPoliza = form.nPoliza.data.upper()
         x.placa = form.placa.data.upper()

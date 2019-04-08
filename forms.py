@@ -118,13 +118,13 @@ class FormVehiculos(Form):
                         [validators.DataRequired(message='El Número de serie es Obligatorio'),
                          validators.length(min=17, max=20, message='El Numero de serie es un campo obligatorio')
                          ])
-    numMotor = StringField('Núm. Motor',
+    nMotor = StringField('Núm. Motor',
                         [validators.DataRequired('El Número de motor es requerido')])
     tCombus = SelectField('T. Combistible',
                                choices=[('', ''), ('Magna', 'Magna'), ('Premium', 'Premium'), ("Diesel", 'Diesel')], )
-    odome = SelectField('Odometro', choices=[('', ''), ('s', 'Si'), ('n', 'No')])
+    odome = SelectField('Odometro', choices=[('', ''), ('Si', 'Si'), ('No', 'No')])
     kmInicio = StringField('Km Inicial')
-    nVehiculo = StringField('Nombre del Vehiculo',
+    nVehi = StringField('Nombre del Vehiculo',
                             {validators.DataRequired(
                                 message='El nombre de vehiculo ayuda a identificar el vehiculo más fácil'),
                             })
