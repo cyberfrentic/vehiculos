@@ -129,7 +129,10 @@ class FormVehiculos(Form):
                             {validators.DataRequired(
                                 message='El nombre de vehiculo ayuda a identificar el vehiculo más fácil'),
                             })
-    resguardo = QuerySelectField(label='Resguardante', query_factory=resguard, get_pk=get_pk, allow_blank=True, get_label="nombreCompleto")
+    resguardo = QuerySelectField(label='Resguardante', query_factory=resguard,
+                                  get_pk=get_pk, allow_blank=True, get_label="nombreCompleto")
+    resguardo2 = StringField('Resguardante')
+    resguardoAnte = StringField('Resguardante Anterior')
     cSeguros = StringField('Compañía de seguros',
                            [validators.DataRequired(message='Debe de ingresar el nombre de la compañía de seguros'),
                             validators.length(min=4, max=25)])

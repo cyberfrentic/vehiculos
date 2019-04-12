@@ -335,30 +335,39 @@ def searchvehiculo():
 def editarVehi(numInv):
     nombre = session["username"].upper()
     lugar = session['ciudad']
+    preciono=False
     x = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
-    form = FormVehiculos(obj=x)
-    print(x.resguardo)
+    form = FormVehiculos(request.form, obj=x)
+    form.resguardoAnte.data = x.resguardoAnte
+    form.resguardo2.data = x.resguardo
     queryImg = Imagen.query.filter(Imagen.placa==x.placa).all()
-    if request.method == 'POST' and form.validate():
-        x.numInv = form.numInv.data.upper()
-        x.marca = form.marca.data.upper()
-        x.modelo = form.modelo.data.upper()
-        x.tipoVehiculo = str(form.tipoVehiculo.data)
-        x.nSerie = form.nSerie.data.upper()
-        x.nMotor = form.nMotor.data.upper()
-        x.tCombus = form.tCombus.data
-        x.odome = dict(form.odome.choices).get(form.odome.data)
-        x.kmInicio = form.kmInicio.data.upper()
-        x.nVehi = form.nVehi.data.upper()
-        x.resguardo = str(form.resguardo.data)
-        print(str(form.resguardo.data))
-        x.cSeguros = form.cSeguros.data.upper()
-        x.nPoliza = form.nPoliza.data.upper()
-        x.placa = form.placa.data.upper()
-        db.session.commit()
-        flash('Registro modificado con exito')
-        return redirect(url_for('searchvehiculo'))
-    return render_template('vehiculos.html', nombre=nombre, form=form, fotos=queryImg)
+    if request.method == 'POST':
+        print(request.form['boton'])
+        if "editar" in request.form['boton']:
+            preciono=True
+        elif "listo" in request.form['boton'] and form.validate():
+            x.numInv = form.numInv.data.upper()
+            x.marca = form.marca.data.upper()
+            x.modelo = form.modelo.data.upper()
+            x.tipoVehiculo = str(form.tipoVehiculo.data)
+            x.nSerie = form.nSerie.data.upper()
+            x.nMotor = form.nMotor.data.upper()
+            x.tCombus = form.tCombus.data
+            x.odome = dict(form.odome.choices).get(form.odome.data)
+            x.kmInicio = form.kmInicio.data.upper()
+            x.nVehi = form.nVehi.data.upper()
+            if form.resguardo.data == None:
+                x.resguardo = x.resguardo
+            else:
+                x.resguardoAnte = x.resguardo
+                x.resguardo = str(form.resguardo.data)
+            x.cSeguros = form.cSeguros.data.upper()
+            x.nPoliza = form.nPoliza.data.upper()
+            x.placa = form.placa.data.upper()
+            db.session.commit()
+            flash('Registro modificado con exito')
+            return redirect(url_for('searchvehiculo'))
+    return render_template('vehiculos.html', nombre=nombre, form=form, edit=True,fotos=queryImg, preciono=preciono)
 
 
 @app.route('/resguardante', methods=["GET", "POST"])

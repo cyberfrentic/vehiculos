@@ -77,10 +77,36 @@
                         {{ render_field(form.nVehi, class='form-control') }}
                         <p class="help-block text-danger"></p>
                     </div>
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.resguardo, class='form-control') }}
-                        <p class="help-block text-danger"></p>
-                    </div>
+                    
+                    {% if edit %}
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.resguardoAnte, class='form-control') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        {% if preciono %}
+                            <div class="form-goup col-xs-12 floating-label-form-group controls">
+                                {{ render_field(form.resguardo, class='form-control') }}
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        {% else %}
+                            <div class="form-goup col-xs-12 floating-label-form-group controls">
+                                {{ render_field(form.resguardo2, class='form-control') }}
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        {% endif %}
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            <div class="form-goup col-xs-12 floating-label-form-group controls">
+                                <button type="submit" name="boton" class="btn btn-outline-success" value="editar" >Editar</button>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.resguardo, class='form-control') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    {% endif %}
+                        
+
                 </div>
                 <div class="form-group form-inline">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">

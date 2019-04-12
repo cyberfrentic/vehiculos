@@ -110,6 +110,7 @@ class Vehiculo(db.Model):
     kmInicio = db.Column(db.String(12))
     nVehi = db.Column(db.String(25))
     resguardo = db.Column(db.String(35))
+    resguardoAnte = db.Column(db.String(35))
     cSeguros = db.Column(db.String(35))
     nPoliza = db.Column(db.String(19))
     placa = db.Column(db.String(10), unique=True)
