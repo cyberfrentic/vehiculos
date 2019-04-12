@@ -57,8 +57,8 @@ def Query_placa_Ticket():
   lugar = flask.session.get('ciudad')
   return Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa')
 
-def tipos():
-    return tipoVehiculos.query.order_by('tipo')
+# def tipos():
+#     return tipoVehiculos.query.order_by('tipo')
 
 
 def resguard():
@@ -113,7 +113,8 @@ class FormVehiculos(Form):
                          [validators.DataRequired(message='La marca es necesaria'),
                           validators.length(min=4, max=15, message='Ingrese una marca valida')
                           ])
-    tipoVehiculo = QuerySelectField(label="Tipo de Vehiculo", query_factory=tipos, get_pk=get_pk, allow_blank=True)
+    tipoVehiculo = SelectField('T. Vehiculo',
+                               choices=[('', ''), ('camioneta', 'camioneta'), ('Estaquitas', 'Estaquitas'), ("Automovil", 'Automovil'), ("Pipa", 'Pipa'), ("coche", 'coche')], )
     nSerie = StringField('Núm. Serie',
                         [validators.DataRequired(message='El Número de serie es Obligatorio'),
                          validators.length(min=17, max=20, message='El Numero de serie es un campo obligatorio')
@@ -128,7 +129,7 @@ class FormVehiculos(Form):
                             {validators.DataRequired(
                                 message='El nombre de vehiculo ayuda a identificar el vehiculo más fácil'),
                             })
-    resguardo = QuerySelectField(label='Resguardante', query_factory=resguard, get_pk=get_pk, allow_blank=True)
+    resguardo = QuerySelectField(label='Resguardante', query_factory=resguard, get_pk=get_pk, allow_blank=True, get_label="nombreCompleto")
     cSeguros = StringField('Compañía de seguros',
                            [validators.DataRequired(message='Debe de ingresar el nombre de la compañía de seguros'),
                             validators.length(min=4, max=25)])

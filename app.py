@@ -336,8 +336,8 @@ def editarVehi(numInv):
     nombre = session["username"].upper()
     lugar = session['ciudad']
     x = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
-    form = FormVehiculos(formdata=None, obj=x)
-    print(x.tipoVehiculo)
+    form = FormVehiculos(obj=x)
+    print(x.resguardo)
     queryImg = Imagen.query.filter(Imagen.placa==x.placa).all()
     if request.method == 'POST' and form.validate():
         x.numInv = form.numInv.data.upper()
@@ -346,7 +346,7 @@ def editarVehi(numInv):
         x.tipoVehiculo = str(form.tipoVehiculo.data)
         x.nSerie = form.nSerie.data.upper()
         x.nMotor = form.nMotor.data.upper()
-        x.tCombus = form.tCombus.data.upper()
+        x.tCombus = form.tCombus.data
         x.odome = dict(form.odome.choices).get(form.odome.data)
         x.kmInicio = form.kmInicio.data.upper()
         x.nVehi = form.nVehi.data.upper()
