@@ -85,10 +85,10 @@ class Create_Form(Form):
                         ])
     ciudad = QuerySelectField(label="Ciudad", query_factory=ciudad, get_pk=get_pk, allow_blank=True)
     honeypot = HiddenField('', [length_honeypot])
-    vehiculos = BooleanField('Vehiculos')
-    proveedores = BooleanField('Proveedores')
-    tipo_vehiculos = BooleanField('Tipos de Vehiculos')
-    crear = BooleanField('Crear Usuario')
+    vehiculos = BooleanField('Inventarios')
+    proveedores = BooleanField('Combustibles')
+    tipo_vehiculos = BooleanField('Mantenimientos')
+    crear = BooleanField('Administrador')
 
     def validate_username(form, field):
         username = field.data

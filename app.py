@@ -48,9 +48,26 @@ def before_request():
         usr = session['username']
         privi = session['privilegios']
         lugar = session['ciudad']
-        if request.endpoint in ['login']:
+        print(privi)
+        if "1.0.0.0" in privi and request.endpoint in ['crearUser','editarVehi', 'ticket',
+                                                           'Consulta_ticket', 'comparativo_vehiculos', 'get_fileXls',
+                                                           'ticketvsfactura', 'grafica', 'Solicitud', 'captura_Sol',
+                                                           'upload_file', 'get_fileXml', 'capturaManual', 'filtroServicios',
+                                                           'imprimirCotizaciones']:
             return redirect(url_for('home'))
-        elif privi == "0.1.0.0" and request.endpoint in ['crearUser', 'vehiculos', 'tvehiculos']:
+        elif "0.1.0.0" in privi and request.endpoint in [ 'crearUser', 'Vehiculow', 'search',
+                                                          'editar', 'resguardante', 'proveedores', 'provSearch',
+                                                           'editarprov', 'searchvehiculo', 'editarVehi', 
+                                                           'get_fileXls', 'Solicitud', 'captura_Sol',
+                                                           'upload_file', 'get_fileXml', 'capturaManual', 'filtroServicios',
+                                                           'imprimirCotizaciones']:
+            return redirect(url_for('home'))
+        elif "0.0.1.0" in privi and request.endpoint in ['crearUser', 'Vehiculow', 'search',
+                                                          'editar', 'resguardante', 'proveedores', 'provSearch',
+                                                           'editarprov', 'searchvehiculo', 'editarVehi', 'ticket',
+                                                           'Consulta_ticket', 'comparativo_vehiculos', 'get_fileXls',
+                                                           'ticketvsfactura', 'grafica',
+                                                           'get_fileXml']: 
             return redirect(url_for('home'))
 
 
