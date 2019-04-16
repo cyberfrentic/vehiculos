@@ -102,6 +102,10 @@ class FormVehiculos(Form):
                          [validators.DataRequired(message='El Número de inventario es necesario'),
                           validators.length(min=8, max=18, message='ingrese un numero de inventario valido!.')
                           ])
+    numSicopa = StringField('Núm. Sicopa',
+                         [validators.DataRequired(message='El Número de inventario es necesario'),
+                          validators.length(min=8, max=18, message='ingrese un numero de inventario valido!.')
+                          ])
     numTarCir = StringField('Folio Tarjeta de circulacion',
                          [validators.DataRequired(message='El Número de Tarjeta de circulacion es necesario'),
                           ])
@@ -113,6 +117,14 @@ class FormVehiculos(Form):
                          [validators.DataRequired(message='La marca es necesaria'),
                           validators.length(min=4, max=15, message='Ingrese una marca valida')
                           ])
+    color = StringField('Color',
+                        [validators.DataRequired(message='La marca del vehiculo es necesario'),
+                         validators.length(min=4, max=15, message='Ingrese un color')
+                         ])
+    anio = SelectField('Año',
+                               choices=[('', ''),('1995','1995'), ('1996','1996'), ('1997','1997'), ('1998','1998'), ('1999','1999'), ('2000','2000'), ('2001','2001'), ('2002','2002'), ('2003','2003'),
+                               ('2004','2004'), ('2005','2006'), ('2007','2007'), ('2008','2009'), ('2010','2010'), ('2011','2011'), ('2012','2012'), ('2013','2013'), ('2014','2014'), ('2015','2015'),
+                               ('2016','2016'), ('2017','2018'), ('2019','2019'), ('2020','2020'), ('2021','2021'), ('2022','2022'), ('2023','2023'), ('2024','2024')], )
     tipoVehiculo = SelectField('T. Vehiculo',
                                choices=[('', ''), ('camioneta', 'camioneta'), ('Estaquitas', 'Estaquitas'), ("Automovil", 'Automovil'), ("Pipa", 'Pipa'), ("coche", 'coche')], )
     nSerie = StringField('Núm. Serie',
@@ -120,6 +132,8 @@ class FormVehiculos(Form):
                          validators.length(min=17, max=20, message='El Numero de serie es un campo obligatorio')
                          ])
     nMotor = StringField('Núm. Motor',
+                        [validators.DataRequired('El Número de motor es requerido')])
+    costo = StringField('Costo $',
                         [validators.DataRequired('El Número de motor es requerido')])
     tCombus = SelectField('T. Combistible',
                                choices=[('', ''), ('Magna', 'Magna'), ('Premium', 'Premium'), ("Diesel", 'Diesel')], )

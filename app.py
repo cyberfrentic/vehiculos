@@ -18,13 +18,8 @@ import time
 from werkzeug.datastructures import MultiDict
 from xml.dom import minidom
 import collections as co
-
-from base64 import b64encode
-from sqlalchemy_imageattach.context import store_context
-
 ###########################################
 import pymysql
-
 pymysql.install_as_MySQLdb()
 ###########################################
 ALLOWED_EXTENSIONS = set(["xml", "xls","pdf", "jpg", "png"])
@@ -32,8 +27,6 @@ ALLOWED_EXTENSIONS = set(["xml", "xls","pdf", "jpg", "png"])
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 ###########################################
 
 app = Flask(__name__)
@@ -203,12 +196,16 @@ def Vehiculow():
             else:
                 km = "00000000"
             vehiculo = Vehiculo(vehi.numInv.data,
+                                vehi.numSicopa.data,
                                 vehi.numTarCir.data,
                                 vehi.marca.data,
                                 vehi.modelo.data,
+                                vehi.color.data,
+                                vehi.anio.data,
                                 str(vehi.tipoVehiculo.data),
                                 vehi.nSerie.data,
                                 vehi.nMotor.data,
+                                vehi.costo.data,
                                 vehi.tCombus.data,
                                 dict(vehi.odome.choices).get(vehi.odome.data),
                                 km,

@@ -99,12 +99,16 @@ class Vehiculo(db.Model):
     __tablename__ = 'carros'
     id = db.Column(db.Integer, primary_key=True)
     numInv = db.Column(db.String(18), unique=True)
+    numSicopa = db.Column(db.String(18), unique=True)#
     numTarCir = db.Column(db.String(10), unique=True)
     marca = db.Column(db.String(13))
     modelo = db.Column(db.String(15))
+    color = db.Column(db.String(15))#
+    anio = db.Column(db.String(4))#
     tipoVehiculo = db.Column(db.String(15))
     nSerie = db.Column(db.String(20))
     nMotor = db.Column(db.String(20))
+    costo = db.Column(db.Float)#
     tCombus = db.Column(db.String(10))
     odome = db.Column(db.String(2))
     kmInicio = db.Column(db.String(12))
