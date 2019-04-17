@@ -48,7 +48,6 @@ def before_request():
         usr = session['username']
         privi = session['privilegios']
         lugar = session['ciudad']
-        print(privi)
         if "1.0.0.0.0" in privi and request.endpoint in ['crearUser','editarVehi', 'ticket',
                                                            'Consulta_ticket', 'comparativo_vehiculos', 'get_fileXls',
                                                            'ticketvsfactura', 'grafica', 'Solicitud', 'captura_Sol',
@@ -210,6 +209,9 @@ def read_file(filename):
 def Vehiculow():
     vehi = FormVehiculos(request.form)
     lugar = session['ciudad']
+    if lugar==12:
+        flash("Disculpe usted no puede agregar ningún vehículo")
+        return redirect(url_for("home"))
     if request.method == 'POST': #and vehi.validate():
         km = ""
         numInv = vehi.numInv.data
@@ -249,7 +251,8 @@ def Vehiculow():
                 'izq': request.files["izq"],
                 'der': request.files["der"],
                 'tar': request.files["tarjeta"],
-                'fac': request.files["factura"],}
+                'fac': request.files["factura"],
+                }
             for titulo, x in f:
                 if x.filename =="":
                     flash("No file selected.")
@@ -364,7 +367,9 @@ def editarVehi(numInv):
     form.resguardo2.data = x.resguardo
     queryImg = Imagen.query.filter(Imagen.placa==x.placa).all()
     if request.method == 'POST':
-        print(request.form['boton'])
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         if "editar" in request.form['boton']:
             preciono=True
         elif "listo" in request.form['boton'] and form.validate():
@@ -398,6 +403,9 @@ def resguardante():
     lugar = session['ciudad']
     resg = Form_resguardos(request.form)
     if request.method == 'POST' and resg.validate():
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         nombreCompleto = (resg.nombre.data + ' ' + resg.apellidoPat.data + ' ' + resg.apellidoMat.data).upper()
         result = Resguardante.query.filter_by(nombreCompleto=nombreCompleto).filter_by(idCiudad=lugar).first()
         if result is None:
@@ -501,6 +509,9 @@ def editar(id):
     x = Resguardante.query.filter_by(id=id).filter_by(idCiudad=lugar).first()
     form = Form_resguardos(formdata=request.form, obj=x)
     if request.method == 'POST' and form.validate():
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         x.nombre = form.nombre.data.upper()
         x.apellidoPat = form.apellidoPat.data.upper()
         x.apellidoMat = form.apellidoMat.data.upper()
@@ -520,6 +531,9 @@ def proveedores():
     lugar = session['ciudad']
     form = Form_Proveedor(request.form)
     if request.method == 'POST' and form.validate():
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         x = Model_Proveedor.query.filter_by(rfc=form.rfc.data.upper()).filter_by(idCiudad=lugar).first()
         if x is None:
             prov = Model_Proveedor(form.razonSocial.data.upper(),
@@ -645,6 +659,9 @@ def editarprov(id):
     x = Model_Proveedor.query.filter_by(id=id).filter_by(idCiudad=lugar).first()
     form = Form_Proveedor(formdata=request.form, obj=x)
     if request.method == 'POST' and form.validate():
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         x.razonSocial = form.razonSocial.data.upper()
         x.propietario = form.propietario.data.upper()
         x.direccion = form.direccion.data.upper()
@@ -666,6 +683,9 @@ def ticket():
     lugar = session['ciudad']
     form = Form_Ticket(request.form)
     if request.method == 'POST' and form.validate():
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         if (len(request.form.getlist('plancha'))) < 1:
             tra = request.form["transaccion"]
             query1 = Ticket.query.filter_by(nuFolio=tra).filter_by(idCiudad=lugar).first()
@@ -859,6 +879,9 @@ def get_fileXls(filename):
     lista2 = []
     fact = sheet.cell(2, 0).value
     if fact:
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         try:
             uuid = Combustible.query.filter_by(factura=fact).first()
             if uuid == None:
@@ -1011,6 +1034,9 @@ def Solicitud():
                 nu=x+1
         form = Form_Solicitud(formdata=MultiDict({'fecha':(str(datetime.datetime.now().strftime('%m/%d/%Y'))), 'nServicio':str(nu)})) ## inicializar un tetfield con valores como fecha y el siguietne id
     elif request.method == 'POST':
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         if form.validate():
             servicio=Solicitud_serv(
                 nOficio=form.nOficio.data.upper(),
@@ -1046,6 +1072,9 @@ def capturar_sol():
     form = Form_CapSol(request.form)
     x=""
     if request.method == 'POST' and form.validate():
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         c1 = form.cotizacion1.data
         c2 = form.cotizacion2.data
         c3 = form.cotizacion3.data
@@ -1203,6 +1232,9 @@ def get_fileXml(filename):
             idCiudad = lugar,
             )
     if (request.method == 'POST') and (factura.validate()):
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         db.session.add(compras)
         db.session.commit()
         id_compra = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = atributos['UUiD']).first()
@@ -1231,6 +1263,9 @@ def capturaManual():
     lista=[]
     form =capturaFactura(request.form)
     if request.method == 'POST': #and form.validate():
+        if lugar==12:
+            flash("Disculpe usted no puede agregar ningún vehículo")
+            return redirect(url_for("home"))
         if 'agregar' in request.form:
             identificador = len(session['listaManual'])+1
             item = {
