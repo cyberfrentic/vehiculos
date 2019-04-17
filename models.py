@@ -121,17 +121,21 @@ class Vehiculo(db.Model):
     idCiudad=db.Column(db.Integer)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
 
-    def __init__(self, numInv, numTarCir, marca, modelo, tipoVehiculo, nSerie, nMotor, tCombus, odome, kmInicio, nVehi, resguardo,
+    def __init__(self, numInv, numSicopa, numTarCir, marca, modelo, color, anio, tipoVehiculo, nSerie, nMotor, costo, tCombus, odome, kmInicio, nVehi, resguardo,
                  cSeguros, nPoliza, placa, idCiudad):
         self.numInv = numInv
+        self.numSicopa = numSicopa
         self.numTarCir = numTarCir
         self.marca = marca
         self.modelo = modelo
+        self.color = color
+        self.anio = anio
         self.tipoVehiculo = tipoVehiculo
         self.nSerie = nSerie
         self.tipoVehiculo = tipoVehiculo
         self.nSerie = nSerie
         self.nMotor = nMotor
+        self.costo = costo
         self.tCombus = tCombus
         self.odome = odome
         self.kmInicio = kmInicio
@@ -360,8 +364,9 @@ class Imagen(db.Model):
     ruta = db.Column(db.String(150))
     data = db.Column(db.LargeBinary(length=(2**32)-1))
 
-    def __init__(self, placa, ruta, data):
+    def __init__(self, placa, parte, ruta, data):
         self.placa = placa
+        self.parte = parte
         self.ruta = ruta
         self.data = data
         

@@ -256,7 +256,7 @@ def Vehiculow():
                 'fac': request.files["factura"],
                 'pol': request.files['poliza']
                 }
-            for titulo, x in f:
+            for titulo, x in f.items():
                 if x.filename =="":
                     flash("No file selected.")
                 if x and allowed_file(x.filename):
@@ -306,7 +306,8 @@ def searchvehiculo():
                 query = Vehiculo.query.filter(Vehiculo.numInv.contains(str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     placa2 = query.placa
-                    queryImg = Imagen.query.filter(Imagen.placa==placa2).all()
+                    queryImg = Imagen.query.filter(Imagen.placa==placa2).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+                    print(queryImg)
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos=query, fotos=queryImg )
                 else:
                     flash('No existen datos del vehiculo con num. inventario {} en la base de datos'.format(
@@ -317,7 +318,7 @@ def searchvehiculo():
                         str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     placa2 = query.placa
-                    queryImg = Imagen.query.filter(Imagen.placa==placa2).all()
+                    queryImg = Imagen.query.filter(Imagen.placa==placa2).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos2=query, fotos=queryImg )
                 else:
                     flash('No existen datos del vehiculo con Núm. de serie: {} no existen en la base de datos'.format(
@@ -328,7 +329,7 @@ def searchvehiculo():
                         str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
                 if query is not None:
                     placa2 = query.placa
-                    queryImg = Imagen.query.filter(Imagen.placa==placa2).all()
+                    queryImg = Imagen.query.filter(Imagen.placa==placa2).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos3=query, fotos=queryImg )
                 else:
                     flash('No existen datos del vehiculo con este Resguardante: {} en la base de datos'.format(
@@ -341,7 +342,7 @@ def searchvehiculo():
                 if query is not None:
                     for item in query:
                         placa2 = item.placa
-                        queryImg = Imagen.query.filter(Imagen.placa==placa2).all()
+                        queryImg = Imagen.query.filter(Imagen.placa==placa2).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
                         diccionario = {
                                         'placa': placa2,
                                         'derecho' : queryImg[0].ruta,
@@ -368,7 +369,9 @@ def editarVehi(numInv):
     form = FormVehiculos(request.form, obj=x)
     form.resguardoAnte.data = x.resguardoAnte
     form.resguardo2.data = x.resguardo
-    queryImg = Imagen.query.filter(Imagen.placa==x.placa).all()
+    queryImg = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+    queryDoc = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fro").filter(Imagen.parte!="der").filter(Imagen.parte!="izq").filter(Imagen.parte!="tras").filter(Imagen.parte!="inte").all()
+    print(queryDoc)
     if request.method == 'POST':
         if lugar==12:
             flash(("Disculpe usted no puede realizar ningún cambio"))
@@ -397,7 +400,7 @@ def editarVehi(numInv):
             db.session.commit()
             flash('Registro modificado con exito')
             return redirect(url_for('searchvehiculo'))
-    return render_template('vehiculos.html', nombre=nombre, form=form, edit=True,fotos=queryImg, preciono=preciono)
+    return render_template('vehiculos.html', nombre=nombre, form=form, edit=True, fotos=queryImg, doc=queryDoc, preciono=preciono)
 
 
 @app.route('/resguardante', methods=["GET", "POST"])
