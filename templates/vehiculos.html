@@ -171,6 +171,7 @@
                     </div>
                 {% else %}
                     <div class="container-fluid">
+                        <div class="col-sm-12" style="background-color:#ff6600;"> <center><p style="color: white;">Imagenes 5Mb Max</p></center></div>
                         <div class="row">
                             <div class="col-sm-4" >
                                 {{ render_field(form.frontal, class='btn btn-outline-success btn-large') }}
@@ -183,6 +184,12 @@
                             <div class="col-sm-4" >{{ render_field(form.der, class='btn btn-outline-success btn-large') }}
                                 <p class="help-block text-danger"></p>
                             </div>
+                            <div class="col-sm-4" >{{ render_field(form.tras, class='btn btn-outline-success btn-large') }}
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="col-sm-4" >{{ render_field(form.inte, class='btn btn-outline-success btn-large') }}
+                                <p class="help-block text-danger"></p>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4" >
@@ -191,6 +198,10 @@
                             </div>
                             <div class="col-sm-4">
                                 {{ render_field(form.factura, class='btn btn-outline-success btn-large') }}
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="col-sm-4">
+                                {{ render_field(form.poliza, class='btn btn-outline-success btn-large') }}
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>

@@ -162,8 +162,11 @@ class FormVehiculos(Form):
     frontal = FileField('Imagen Vehiculo Frontal')
     izq = FileField('Imagen Vehiculo lado Izquiero')
     der = FileField('Imagen Vehiculo lado Derecho')
+    tras = FileField('Imagen Vehiculo lado trasero')
+    inte = FileField('Imagen Vehiculo interior')
     factura = FileField('imagen de la factura')
     tarjeta = FileField('Imagen tarjeta de circulacion')
+    poliza = FileField('Imagen Poliza de seguro')
 
 
     

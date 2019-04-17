@@ -250,8 +250,11 @@ def Vehiculow():
             	'fro': request.files["frontal"],
                 'izq': request.files["izq"],
                 'der': request.files["der"],
+                'tras': request.files['tras'],
+                'inte': request.files['inte'],
                 'tar': request.files["tarjeta"],
                 'fac': request.files["factura"],
+                'pol': request.files['poliza']
                 }
             for titulo, x in f:
                 if x.filename =="":
