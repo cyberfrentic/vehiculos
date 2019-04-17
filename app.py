@@ -49,26 +49,28 @@ def before_request():
         privi = session['privilegios']
         lugar = session['ciudad']
         print(privi)
-        if "1.0.0.0" in privi and request.endpoint in ['crearUser','editarVehi', 'ticket',
+        if "1.0.0.0.0" in privi and request.endpoint in ['crearUser','editarVehi', 'ticket',
                                                            'Consulta_ticket', 'comparativo_vehiculos', 'get_fileXls',
                                                            'ticketvsfactura', 'grafica', 'Solicitud', 'captura_Sol',
                                                            'upload_file', 'get_fileXml', 'capturaManual', 'filtroServicios',
                                                            'imprimirCotizaciones']:
             return redirect(url_for('home'))
-        elif "0.1.0.0" in privi and request.endpoint in [ 'crearUser', 'Vehiculow', 'search',
+        elif "0.1.0.0.0" in privi and request.endpoint in [ 'crearUser', 'Vehiculow', 'search',
                                                           'editar', 'resguardante', 'proveedores', 'provSearch',
                                                            'editarprov', 'searchvehiculo', 'editarVehi', 
                                                            'get_fileXls', 'Solicitud', 'captura_Sol',
                                                            'upload_file', 'get_fileXml', 'capturaManual', 'filtroServicios',
                                                            'imprimirCotizaciones']:
             return redirect(url_for('home'))
-        elif "0.0.1.0" in privi and request.endpoint in ['crearUser', 'Vehiculow', 'search',
+        elif "0.0.1.0.0" in privi and request.endpoint in ['crearUser', 'Vehiculow', 'search',
                                                           'editar', 'resguardante', 'proveedores', 'provSearch',
                                                            'editarprov', 'searchvehiculo', 'editarVehi', 'ticket',
                                                            'Consulta_ticket', 'comparativo_vehiculos', 'get_fileXls',
                                                            'ticketvsfactura', 'grafica',
                                                            'get_fileXml']: 
             return redirect(url_for('home'))
+        elif "1.1.1.0.1" in privi and request.endpoint in ['crearUser']:
+        	return redirect(url_for('home'))
 
 
 def exceldate(serial):
@@ -154,7 +156,8 @@ def crearUser():
             option2 = crear.proveedores.data
             option3 = crear.tipo_vehiculos.data
             option4 = crear.crear.data
-            if option1 == True or option2 == True or option3 == True:
+            option5 = crear.organismo.data
+            if option1 or option2 or option3 or option4 or option5:
                 if option1:
                     pri += "1."
                 elif not option1:
@@ -168,8 +171,12 @@ def crearUser():
                 elif not option3:
                     pri += "0."
                 if option4:
-                    pri += "1"
+                    pri += "1."
                 elif not option4:
+                    pri += "0."
+                if option5:
+                    pri += "1"
+                elif not option5:
                     pri += "0"
                 ciu = Ciudades.query.filter_by(ciudad=str(crear.ciudad.data)).first()
                 user = User(crear.username.data,
@@ -236,13 +243,14 @@ def Vehiculow():
             db.session.commit()
             ############### agregando imagenes ###############
             if not "file" in request.files:
-                flash("No File part in the form.")
-            f = [request.files["frontal"],
-                request.files["izq"],
-                request.files["der"],
-                request.files["tarjeta"],
-                request.files["factura"],]
-            for x in f:
+                flash("No subió ninguna imagen en el formulario")
+            f = {
+            	'fro': request.files["frontal"],
+                'izq': request.files["izq"],
+                'der': request.files["der"],
+                'tar': request.files["tarjeta"],
+                'fac': request.files["factura"],}
+            for titulo, x in f:
                 if x.filename =="":
                     flash("No file selected.")
                 if x and allowed_file(x.filename):
@@ -264,7 +272,7 @@ def Vehiculow():
                         _path = 'uploads/img/'+ filename
                         flash("Archivo png guardado exitosamente")
                     data = read_file(_path2)
-                    img = Imagen(vehi.placa.data, _path, data)
+                    img = Imagen(vehi.placa.data, titulo, _path, data)
                     db.session.add(img)
                     db.session.commit()
             ##################################################

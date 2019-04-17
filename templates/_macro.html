@@ -14,3 +14,16 @@
     {% endif %}
 
 {% endmacro %}
+
+{% macro render_checkboxes(field) %}
+    <dd>{{ field(**kwargs)|safe }} {{ field.label}}</dd>
+    {% if field.errors %}
+        <ul>
+            {% for error in field.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}

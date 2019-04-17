@@ -1,5 +1,6 @@
 {% extends 'home.html' %}
 {% from "_macro.html" import render_field %}
+{% from "_macro.html" import render_checkboxes %}
 
 <br>
 <br>
@@ -46,10 +47,11 @@
                 <div class="row form-control-feedback">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         <div class="checkbox">
-                            {{ form.vehiculos() }} {{form.vehiculos.label}} <br>
-                            {{ form.proveedores() }} {{form.proveedores.label}} <br>
-                            {{ form.tipo_vehiculos}} {{form.tipo_vehiculos.label}} <br>
-                            {{ form.crear }} {{ form.crear.label }}
+                            {{ render_checkboxes(form.vehiculos)}}
+                            {{ render_checkboxes(form.proveedores) }}
+                            {{ render_checkboxes(form.tipo_vehiculos) }}
+                            {{ render_checkboxes(form.crear) }}
+                            {{ render_checkboxes(form.organismo) }}
                         </div>
                     </div>
                 </div>
@@ -68,4 +70,32 @@
     <br>
     <br>
     <br>
+    <script>
+        var elemento = document.getElementById("crear");
+        var organismo = document.getElementById("organismo")
+        elemento.onclick = function(){
+            var checado = document.getElementById("crear").checked;
+            if (checado){
+                document.getElementById('vehiculos').checked=false;
+                document.getElementById('proveedores').checked=false;
+                document.getElementById('tipo_vehiculos').checked=false;
+                document.getElementById('organismo').checked=false;
+            }
+        }
+        organismo.onclick = function(){
+            var checado = document.getElementById("organismo").checked;
+            if (checado){
+                document.getElementById('vehiculos').checked=!false;
+                document.getElementById('proveedores').checked=!false;
+                document.getElementById('tipo_vehiculos').checked=!false;
+                document.getElementById("crear").checked=false;
+            }
+            else{
+                document.getElementById('vehiculos').checked = false;
+                document.getElementById('proveedores').checked = false;
+                document.getElementById('tipo_vehiculos').checked = false;
+            }
+        }
+        
+    </script>
 {% endblock %}

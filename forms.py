@@ -88,7 +88,9 @@ class Create_Form(Form):
     vehiculos = BooleanField('Inventarios')
     proveedores = BooleanField('Combustibles')
     tipo_vehiculos = BooleanField('Mantenimientos')
-    crear = BooleanField('Administrador')
+    crear = BooleanField('Administrador - Control Total')
+    organismo = BooleanField('Organismo')
+
 
     def validate_username(form, field):
         username = field.data

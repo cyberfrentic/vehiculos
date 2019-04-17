@@ -1,5 +1,6 @@
 {% extends 'home.html' %}
 {% from "_macro.html" import render_field %}
+{% from "_macro.html" import render_checkboxes %}
 	{% block content %}
 	<script>
 	 	
@@ -32,7 +33,7 @@
     				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     				<div class="row form-control-feedback form-group">
     					<div class="form-goup col-xs-12 floating-label-form-group controls">
-                            {{ render_field(form.plancha, onclick="DesactivarContrato()") }}
+                            {{ render_checkboxes(form.plancha, onclick="DesactivarContrato()") }}
                              <p class="help-block text-danger"></p>
     						{{ render_field(form.transaccion, class='form-control', onkeypress="return valida(event)", placeholder="Núm de transaccion") }}
                              <p class="help-block text-danger"></p>

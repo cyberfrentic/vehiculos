@@ -356,6 +356,7 @@ class Imagen(db.Model):
     __tablename__ = "imagenes"
     id = db.Column(db.Integer, primary_key=True)
     placa = db.Column(db.String(9))
+    parte = db.Column(db.String(4))
     ruta = db.Column(db.String(150))
     data = db.Column(db.LargeBinary(length=(2**32)-1))
 
