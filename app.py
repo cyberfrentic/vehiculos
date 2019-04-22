@@ -307,7 +307,6 @@ def searchvehiculo():
                 if query is not None:
                     placa2 = query.placa
                     queryImg = Imagen.query.filter(Imagen.placa==placa2).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
-                    print(queryImg)
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos=query, fotos=queryImg )
                 else:
                     flash('No existen datos del vehiculo con num. inventario {} en la base de datos'.format(
@@ -371,7 +370,6 @@ def editarVehi(numInv):
     form.resguardo2.data = x.resguardo
     queryImg = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
     queryDoc = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fro").filter(Imagen.parte!="der").filter(Imagen.parte!="izq").filter(Imagen.parte!="tras").filter(Imagen.parte!="inte").all()
-    print(queryDoc)
     if request.method == 'POST':
         if lugar==12:
             flash(("Disculpe usted no puede realizar ningún cambio"))
