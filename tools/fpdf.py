@@ -25,7 +25,7 @@ class PDF(FPDF):
         # Line break
         self.ln(20)
 
-    # Page footer
+
     def footer(self):
         # Position at 1.5 cm from bottom
         self.set_y(-25)
