@@ -2,6 +2,9 @@ from fpdf import FPDF
 import os, time
 from datetime import datetime
 from flask import make_response
+from models import db
+import flask
+from models import Ciudades
 
 
 class PDF(FPDF):
@@ -10,9 +13,9 @@ class PDF(FPDF):
         imagenes = os.path.abspath("static/img/")
         # Logo  con esta ruta se dirige al server y no a la maquina cliente
         if tamaño:
-            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 200)
+            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 350, 50)
         else:
-            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 270)
+            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 270, 50)
         # Arial bold 15
         self.set_font('Arial', 'B', 8)
         self.ln(15)
@@ -21,7 +24,7 @@ class PDF(FPDF):
         # Title
         self.cell(0, 10, Titulo, 0, 0, 'C')
         self.ln(5)
-        self.cell(0, 10, ('Felipe Carrillo Puerto Quintana Roo a '+ fecha_actual()).upper(), 0, 0, 'C')
+        self.cell(0, 10, (Ciudad + ' ' + fecha_actual()).upper(), 0, 0, 'C')
         # Line break
         self.ln(20)
 
@@ -35,7 +38,7 @@ class PDF(FPDF):
         self.cell(0, 10, 'Comision de Agua Potable y Alcantarillado', 0, 0, 'C')
         self.ln(3)
         self.set_font('Arial', 'I', 8)
-        self.cell(0, 10, 'Calle 65 % 66 y 68 Col. Centro. C. P. 77200. Felipe Carrillo Puerto, Quintana Roo, Mexico.',
+        self.cell(0, 10, 'Calle 65 % 66 y 68 Col. Centro. C. P. 77200. '+ Ciudad +', Quintana Roo, Mexico.',
                   0, 0, 'C')
         self.ln(3)
         self.cell(0, 10, 'Tel.: (983) 83-02-46 Ext', 0, 0, 'C')
@@ -107,6 +110,13 @@ def letras():
     return (dias[dia] + ' dias del mes de ' + meses[mes] + ' de ' + anios[anio]).upper()
 
 
+# consulta para pedir datos de las tablas directamente
+def ciudad():
+  lugar = flask.session.get('ciudad')
+  ci = Ciudades.query.filter_by(id=lugar).first()
+  return  str(ci.ciudad)
+
+
 def SetMoneda(num, simbolo="US$", n_decimales=2):
     """Convierte el numero en un string en formato moneda
     SetMoneda(45924.457, 'RD$', 2) --> 'RD$ 45,924.46'     
@@ -174,6 +184,8 @@ def tabla(datos, totales, titulo):
     Titulo=titulo
     global tamaño
     tamaño = False
+    global Ciudad
+    Ciudad = ciudad()
     # Instantiation of inherited class
     pdf = PDF("P", 'mm', 'Letter')
     pdf.alias_nb_pages()
@@ -241,6 +253,8 @@ def sol(datos, ve):
     Titulo=str(datos['titulo'])
     global tamaño
     tamaño = False
+    global Ciudad
+    Ciudad = ciudad()
     # Instantiation of inherited class
     pdf = PDF("P", 'mm', 'Letter')
     pdf.alias_nb_pages()
@@ -304,6 +318,8 @@ def orden(datos):
     Titulo = datos['titulo'].upper()
     global tamaño
     tamaño = True
+    global Ciudad
+    Ciudad = ciudad()
     # Instantiation of inherited class
     pdf = PDF("P", 'mm', 'Letter')
     pdf.alias_nb_pages()
@@ -374,6 +390,8 @@ def consultaGeneral(datos, totales, titulo, con):
     Titulo=titulo
     global tamaño
     tamaño = False
+    global Ciudad
+    Ciudad = ciudad()
     # Instantiation of inherited class
     pdf = PDF("L", 'mm', 'LETTER')
     pdf.alias_nb_pages()
@@ -484,6 +502,8 @@ def cotizacionPdf(datos, datos2, titulo, numero=0):
     Titulo=titulo
     global tamaño
     tamaño = True
+    global Ciudad
+    Ciudad = ciudad()
     # Instantiation of inherited class
     pdf = PDF("P", 'mm', 'LETTER')
     pdf.alias_nb_pages()
@@ -623,6 +643,88 @@ def cotizacionPdf(datos, datos2, titulo, numero=0):
 
     pdf.cell((col_width/2+5)*2,7,"",0,0,'C',False)
     pdf.cell(50,7,"Nombre y Firma",'T',0,'C',False)
+
+    #########################################
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
+    return response
+
+
+def reporteVehiculos(datos, titulo):
+    global Titulo
+    Titulo=titulo
+    global tamaño
+    tamaño = True
+    global Ciudad
+    Ciudad = ciudad()
+    # Instantiation of inherited class
+    pdf = PDF("L", 'mm', 'Legal')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_fill_color(255, 0, 0)
+    pdf.set_fill_color(62, 255, 175)
+    pdf.set_text_color(64)
+    pdf.set_draw_color(0, 0, 0)
+    pdf.set_line_width(.3)
+    pdf.set_font('', 'B')
+    # cabecera de la tabla
+    # Remember to always put one of these at least once.
+    pdf.set_font('Times', '', 10.0)
+
+    # Effective page width, or just epw
+    epw = pdf.w - 2 * pdf.l_margin
+
+    # Set column width to 1/4 of effective page width to distribute content 
+    # evenly across table and page
+    col_width = epw / 18
+    data = ('Núm.', 'Núm Inv.', 'Núm. Sicopa', 'Núm TC', 'Marca', 'Modelo', 'Color', 'Año', 'Tipo', 'Núm Serie', 'Núm. Motor', 'Costo', 'Combustible', 'Odometro', 'Resguardo', 'Seguro', 'Poliza', 'Placa')
+
+    # Document title centered, 'B'old, 14 pt
+    pdf.set_font('Times', 'B', 14.0)
+    # pdf.cell(epw, 0.0, 'Demographic data', align='C')
+    pdf.set_font('Times', '', 8.0)
+    pdf.ln(0.5)
+
+    # Text height is the same as current font size
+    th = pdf.font_size
+    for item in data:
+        if item == 'Año':
+            pdf.cell(col_width-10, th, str(item), border=1)
+        elif item == 'Núm.':
+            pdf.cell(col_width-10, th, str(item), border=1)
+        elif item == 'Núm Serie':
+            pdf.cell(col_width+5, th, str(item), border=1)
+        elif item =='Resguardo':
+            pdf.cell(col_width+10, th, str(item), border=1)
+        else:
+            pdf.cell(col_width, th, str(item), border=1)
+    pdf.ln()
+
+    if datos:
+        n = 0
+        pdf.set_font('Times', '', 6.0)
+        for item in datos:
+            n+=1
+            pdf.cell(col_width-10, th, str(n), border=1,align='C')
+            pdf.cell(col_width, th, str(item.numInv), border=1,align='C')
+            pdf.cell(col_width, th, str(item.numSicopa), border=1,align='C')
+            pdf.cell(col_width, th, str(item.numTarCir), border=1,align='C')
+            pdf.cell(col_width, th, str(item.marca), border=1,align='C')
+            pdf.cell(col_width, th, str(item.modelo), border=1,align='C')
+            pdf.cell(col_width, th, str(item.color), border=1,align='C')
+            pdf.cell(col_width-10, th, str(item.anio), border=1,align='C')
+            pdf.cell(col_width, th, str(item.tipoVehiculo), border=1,align='C')
+            pdf.cell(col_width+5, th, str(item.nSerie), border=1,align='C')
+            pdf.cell(col_width, th, str(item.nMotor), border=1,align='C')
+            pdf.cell(col_width, th, str(item.costo), border=1,align='C')
+            pdf.cell(col_width, th, str(item.tCombus), border=1,align='C')
+            pdf.cell(col_width, th, str(item.kmInicio), border=1,align='C')
+            pdf.cell(col_width+10, th, str(item.resguardo), border=1,align='C')
+            pdf.cell(col_width, th, str(item.cSeguros), border=1,align='C')
+            pdf.cell(col_width, th, str(item.nPoliza), border=1,align='C')
+            pdf.cell(col_width, th, str(item.placa), border=1,align='C')
+
 
     #########################################
     response = make_response(pdf.output(dest='S').encode('latin-1'))

@@ -10,7 +10,7 @@ from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
     filtroServ, formCotizacion
-from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf
+from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
@@ -299,8 +299,8 @@ def searchvehiculo():
     lugar = session['ciudad']
     form = VehiSearchForm(request.form)
     if request.method == 'POST' and form.validate():
+        opcion = dict(form.select1.choices).get(form.select1.data)
         if 'search' in request.form['buton']:
-            opcion = dict(form.select1.choices).get(form.select1.data)
             search1 = len(form.search.data)
             if opcion == 'Núm. Inv.' and search1 > 0:
                 query = Vehiculo.query.filter(Vehiculo.numInv.contains(str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
@@ -356,6 +356,12 @@ def searchvehiculo():
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos4=query, fotos=lista )
                 else:
                     flash('Si estás viendo este mensaje algo salio realmente muy mal')
+        elif 'printer' in request.form['buton']:
+            if opcion == 'Todos':
+                titulo = "Reporte de vehiculos"
+                query = Vehiculo.query.filter_by(idCiudad=lugar).all()
+                x = reporteVehiculos(query, titulo)
+                return x
     return render_template('searchVehi.html', nombre=nombre, form=form)
 
 
