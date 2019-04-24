@@ -15,7 +15,7 @@ class PDF(FPDF):
         if tamaño:
             self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 350, 50)
         else:
-            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 270, 50)
+            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 200, 30)
         # Arial bold 15
         self.set_font('Arial', 'B', 8)
         self.ln(15)
@@ -26,7 +26,10 @@ class PDF(FPDF):
         self.ln(5)
         self.cell(0, 10, (Ciudad + ' ' + fecha_actual()).upper(), 0, 0, 'C')
         # Line break
-        self.ln(20)
+        if tamaño:
+            self.ln(20)
+        else:
+            self.ln(10)
 
 
     def footer(self):
@@ -662,8 +665,8 @@ def reporteVehiculos(datos, titulo):
     pdf = PDF("L", 'mm', 'Legal')
     pdf.alias_nb_pages()
     pdf.add_page()
-    pdf.set_fill_color(255, 0, 0)
-    pdf.set_fill_color(62, 255, 175)
+    #pdf.set_fill_color(255, 0, 0)
+    #pdf.set_fill_color(62, 255, 175)
     pdf.set_text_color(64)
     pdf.set_draw_color(0, 0, 0)
     pdf.set_line_width(.3)
@@ -688,17 +691,18 @@ def reporteVehiculos(datos, titulo):
 
     # Text height is the same as current font size
     th = pdf.font_size
+    pdf.set_fill_color(162, 165, 165)
     for item in data:
         if item == 'Año':
-            pdf.cell(col_width-10, th, str(item), border=1)
+            pdf.cell(col_width-10, th, str(item), border=1,align='C', fill=True)
         elif item == 'Núm.':
-            pdf.cell(col_width-10, th, str(item), border=1)
+            pdf.cell(col_width-10, th, str(item), border=1,align='C', fill=True)
         elif item == 'Núm Serie':
-            pdf.cell(col_width+5, th, str(item), border=1)
+            pdf.cell(col_width+5, th, str(item), border=1,align='C', fill=True)
         elif item =='Resguardo':
-            pdf.cell(col_width+10, th, str(item), border=1)
+            pdf.cell(col_width+10, th, str(item), border=1,align='C', fill=True)
         else:
-            pdf.cell(col_width, th, str(item), border=1)
+            pdf.cell(col_width, th, str(item), border=1,align='C', fill=True)
     pdf.ln()
 
     if datos:
@@ -724,6 +728,145 @@ def reporteVehiculos(datos, titulo):
             pdf.cell(col_width, th, str(item.cSeguros), border=1,align='C')
             pdf.cell(col_width, th, str(item.nPoliza), border=1,align='C')
             pdf.cell(col_width, th, str(item.placa), border=1,align='C')
+
+
+    #########################################
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
+    return response
+
+
+def reporteVehiculosOne(datos, titulo, rutas):
+    global Titulo
+    Titulo=titulo
+    global tamaño
+    tamaño = False
+    global Ciudad
+    Ciudad = ciudad()
+    # Instantiation of inherited class
+    pdf = PDF("P", 'mm', 'Letter')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    #pdf.set_fill_color(255, 0, 0)
+    pdf.set_text_color(64)
+    pdf.set_draw_color(0, 0, 0)
+    pdf.set_line_width(.3)
+    pdf.set_font('', 'B')
+    # cabecera de la tabla
+    # Remember to always put one of these at least once.
+    pdf.set_font('Times', '', 14.0)
+
+    # inicio del cuerpo
+    pdf.set_fill_color(162, 165, 165)
+    pdf.cell(200,7,"Datos Generales del vehiculo",1,0,'C',True)
+    pdf.ln(10)
+    pdf.set_font('Times', '', 12.0)
+    pdf.set_fill_color(179, 182, 183)
+    pdf.cell(35,7,"Núm. Inventario",1,0,'C',True)
+    pdf.cell(35,7,"Núm. Sicopa",1,0,'C',True)
+    pdf.cell(33,7,"Tar. Circ.",1,0,'C',True)
+    pdf.cell(33,7,"Marca",1,0,'C',True)
+    pdf.cell(33,7,"Modelo",1,0,'C',True)
+    pdf.cell(31,7,"Color",1,0,'C',True)
+    pdf.ln()
+    pdf.set_font('Times', '', 10.0)
+    pdf.cell(35,7,datos.numInv,1,0,'C')
+    pdf.cell(35,7,datos.numSicopa,1,0,'C')
+    pdf.cell(33,7,datos.numTarCir,1,0,'C')
+    pdf.cell(33,7,datos.marca,1,0,'C')
+    pdf.cell(33,7,datos.modelo,1,0,'C')
+    pdf.cell(31,7,datos.color,1,0,'C')
+    pdf.ln(10)
+    pdf.set_font('Times', '', 12.0)
+    pdf.cell(15,7,"Año",1,0,'C',True)
+    pdf.cell(35,7,"Tipo de Vehículo",1,0,'C',True)
+    pdf.cell(53,7,"Núm. de Serie",1,0,'C',True)
+    pdf.cell(33,7,"Núm. de Motor",1,0,'C',True)
+    pdf.cell(33,7,"Costo",1,0,'C',True)
+    pdf.cell(31,7,"Combustible",1,0,'C',True)
+    pdf.ln()
+    pdf.set_font('Times', '', 10.0)
+    pdf.cell(15,7,datos.anio,1,0,'C')
+    pdf.cell(35,7,datos.tipoVehiculo,1,0,'C')
+    pdf.cell(53,7,datos.nSerie,1,0,'C')
+    pdf.cell(33,7,datos.nMotor,1,0,'C')
+    pdf.cell(33,7,str(datos.costo),1,0,'C')
+    pdf.cell(31,7,datos.tCombus,1,0,'C')
+    pdf.ln(10)
+
+    pdf.set_font('Times', '', 12.0)
+    pdf.set_fill_color(179, 182, 183)
+    if datos.odome=="Si":
+        pdf.cell(15,7," ",0,0,'C')
+        pdf.cell(35,7,"Odometro",1,0,'C',True)
+        pdf.cell(35,7,"Km. Inicial",1,0,'C',True)
+    else:
+        pdf.cell(33,7," ",0,0,'C')
+        pdf.cell(35,7,"Odometro",1,0,'C',True)    
+    pdf.cell(35,7,"Aseguradora",1,0,'C',True)
+    pdf.cell(33,7,"Núm. Poliza",1,0,'C',True)
+    pdf.cell(33,7,"Placa",1,0,'C',True)
+    pdf.ln()
+
+    pdf.set_font('Times', '', 10.0)
+    if datos.odome=="Si":
+        pdf.cell(15,7," ",0,0,'C')
+        pdf.cell(35,7,datos.odome,1,0,'C')
+        pdf.cell(35,7,datos.kmInicio,1,0,'C')
+    else:
+        pdf.cell(33,7," ",0,0,'C')
+        pdf.cell(35,7,datos.odome,1,0,'C')
+    pdf.cell(35,7,datos.cSeguros,1,0,'C')
+    pdf.cell(33,7,datos.nPoliza,1,0,'C')
+    pdf.cell(33,7,datos.placa,1,0,'C')
+    pdf.ln(10)
+
+    pdf.set_font('Times', '', 12.0)
+    pdf.cell(40,7,"Resguardante Ant.",1,0,'C',True)
+    pdf.set_font('Times', '', 10.0)
+    if datos.resguardoAnte == None:
+        pdf.cell(160,7,"Sin resguardo anterior",1,0,'C')
+    else:
+        pdf.cell(160,7,datos.resguardoAnte,1,0,'C')
+    pdf.ln(10)
+    pdf.set_font('Times', '', 12.0)
+    pdf.cell(40,7,"Resguardante Actual",1,0,'C',True)
+    pdf.set_font('Times', '', 10.0)
+    pdf.cell(160,7,datos.resguardo,1,0,'C')
+    pdf.ln(10)
+
+    imagenes = os.path.abspath("static")
+
+    pdf.cell(18,7," ",0,0,'C')
+
+    pdf.cell(50,7,"Imagen Lado Derecho",1,0,'C',True)
+    pdf.image(os.path.join(imagenes, rutas['derecho']), 28, 130, 50, 50)
+
+    pdf.cell(5,7," ",0,0,'C')
+
+    pdf.cell(50,7,"Imagen Lado Izquierdo",1,0,'C',True)
+    pdf.image(os.path.join(imagenes, rutas['izquierdo']), 83, 130, 50, 50)
+
+    pdf.cell(5,7," ",0,0,'C')
+
+    pdf.cell(50,7,"Imagen Frontal",1,0,'C',True)
+    pdf.image(os.path.join(imagenes, rutas['frontal']), 138, 130, 50, 50)
+
+    pdf.ln(65)
+
+    pdf.cell(43,7," ",0,0,'C')
+
+    pdf.cell(50,7,"Imagen trasera",1,0,'C',True)
+    pdf.image(os.path.join(imagenes, rutas['trasera']), 53, 195, 50, 50)
+
+    pdf.cell(5,7," ",0,0,'C')
+
+    pdf.cell(50,7,"Imagen del Interior",1,0,'C',True)
+    pdf.image(os.path.join(imagenes, rutas['interna']), 108, 195, 50, 50)
+
+   
+
 
 
     #########################################

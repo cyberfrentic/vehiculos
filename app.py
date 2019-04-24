@@ -10,7 +10,7 @@ from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
     filtroServ, formCotizacion
-from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos
+from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne
 from tools.tool import ToExcel
 from sqlalchemy.sql import func
 from pygal.style import Style
@@ -348,7 +348,6 @@ def searchvehiculo():
                                         'tarjeta' : queryImg[3].ruta,
                                         'factura' : queryImg[4].ruta,
                                     }
-                        
                         lista.append(diccionario)
                         diccionario.pop
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos4=query, fotos=lista )
@@ -359,6 +358,49 @@ def searchvehiculo():
                 titulo = "Reporte de vehiculos"
                 query = Vehiculo.query.filter_by(idCiudad=lugar).all()
                 x = reporteVehiculos(query, titulo)
+                return x
+            elif opcion == 'Núm. Inv.':
+                titulo = "Reporte de vehiculos"
+                query = Vehiculo.query.filter(Vehiculo.numInv.contains(str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
+                queryImg = Imagen.query.filter(Imagen.placa==query.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+                diccionario = {
+                        'derecho' : queryImg[0].ruta,
+                        'izquierdo': queryImg[1].ruta,
+                        'frontal' : queryImg[2].ruta,
+                        'trasera' : queryImg[3].ruta,
+                        'interna' : queryImg[4].ruta,
+                        }
+                x = reporteVehiculosOne(query, titulo, diccionario)
+                return x
+            elif opcion == 'Núm. Serie':
+                titulo = "Reporte de vehiculos"
+                query = Vehiculo.query.filter(
+                    Vehiculo.nSerie.contains(
+                        str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
+                queryImg = Imagen.query.filter(Imagen.placa==query.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+                diccionario = {
+                        'derecho' : queryImg[0].ruta,
+                        'izquierdo': queryImg[1].ruta,
+                        'frontal' : queryImg[2].ruta,
+                        'trasera' : queryImg[3].ruta,
+                        'interna' : queryImg[4].ruta,
+                        }
+                x = reporteVehiculosOne(query, titulo, diccionario)
+                return x
+            elif opcion == 'Resguardante':
+                titulo = "Reporte de vehiculos"
+                query = Vehiculo.query.filter(
+                    Vehiculo.resguardo.contains(
+                        str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
+                queryImg = Imagen.query.filter(Imagen.placa==query.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+                diccionario = {
+                        'derecho' : queryImg[0].ruta,
+                        'izquierdo': queryImg[1].ruta,
+                        'frontal' : queryImg[2].ruta,
+                        'trasera' : queryImg[3].ruta,
+                        'interna' : queryImg[4].ruta,
+                        }
+                x = reporteVehiculosOne(query, titulo, diccionario)
                 return x
         elif 'excell' in request.form['buton']:
             if opcion == 'Todos':
