@@ -1,6 +1,6 @@
 import datetime
 import os
-import xlrd, xlwt
+import xlrd
 from flask import Flask, session, render_template, url_for, request, flash, redirect, make_response, send_from_directory
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import text, distinct, desc
@@ -11,6 +11,7 @@ from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Fo
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
     filtroServ, formCotizacion
 from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos
+from tools.tool import ToExcel
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
@@ -34,50 +35,6 @@ def allowed_file(filename):
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
 crsf = CSRFProtect()
-
-
-def ToExcel(query_sets):
-    libro = xlwt.Workbook()
-    hoja1 = libro.add_sheet("Hoja1")
-
-    cols = ["A", "B", "C", "D", "E"]
-    data = ['Núm.', 'Núm Inv.', 'Núm. Sicopa', 'Núm TC', 'Marca', 'Modelo', 'Color', 'Año', 'Tipo', 'Núm Serie', 'Núm. Motor', 'Costo', 'Combustible', 'Odometro', 'Resguardo', 'Seguro', 'Poliza', 'Placa']
-
-    fila = hoja1.row(1)
-    for index, col in enumerate(data):
-        valor = (col)
-        fila.write(index, valor)
-    num=1
-    index=0
-    for item in query_sets:
-        index+=1
-        fila = hoja1.row(num+1)
-        fila.write(0, str(index))
-        fila.write(1, item.numInv)
-        fila.write(2, item.numSicopa)
-        fila.write(3, item.numTarCir)
-        fila.write(4, item.marca)
-        fila.write(5, item.modelo)
-        fila.write(6, item.color)
-        fila.write(7, item.anio)
-        fila.write(8, item.tipoVehiculo)
-        fila.write(9, item.nSerie)
-        fila.write(10, item.nMotor)
-        fila.write(11, item.costo)
-        fila.write(12, item.tCombus)
-        fila.write(13, item.kmInicio)
-        fila.write(14, item.resguardo)
-        fila.write(15, item.cSeguros)
-        fila.write(16, item.nPoliza)
-        fila.write(17, item.placa)
-        num+=1
-    file_name="ListaVehiculos.xls"
-    hojas = os.path.join(os.path.abspath("static/excell/"), file_name)
-    libro.save(hojas)
-    print(file_name)
-    return file_name
-
-
 
 
 @app.before_request
@@ -117,11 +74,6 @@ def before_request():
         elif "1.1.1.0.1" in privi and request.endpoint in ['crearUser']:
         	return redirect(url_for('home'))
 
-
-def exceldate(serial):
-    seconds = (serial - 25569) * 86400.0
-    d = datetime.datetime.utcfromtimestamp(seconds)
-    return d.strftime('%Y-%m-%d')
 
 
 @app.errorhandler(404)
