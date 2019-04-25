@@ -870,7 +870,7 @@ def reporteVehiculosOne(datos, titulo, rutas):
 
 
     #########################################
-    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response = make_response(pdf.output(dest='S').encode('latin-1'),200)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
+    response.headers['Content-Disposition'] = 'attachment; filename=%s.pdf' % 'reporte'
     return response
