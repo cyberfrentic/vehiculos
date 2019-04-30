@@ -751,11 +751,12 @@ def ticket():
             tra = 0
             flash('El ticket es un planchado y no cuenta con numero de folio')
         queryRendi = Ticket.query.filter_by(placa=str(form.placa.data)).filter_by(idCiudad=lugar).order_by(Ticket.fecha).all()
+        print(queryRendi)
         if queryRendi != []:
             flash('El rendimiento es de {} km./lts.'.format((int(form.odometro.data)-int(queryRendi[0].odometro))/int(form.cantidad.data)))
         else:
             queryPlec = Vehiculo.query.filter_by(placa=str(form.placa.data)).filter_by(idCiudad=lugar).one()
-            flash('El rendimiento es de {} km./lts.'.format((int(queryRendi[0].odometro)-int(queryPlec[0].odome))/int(form.cantidad.data)))
+            flash('El rendimiento es de {} km./lts.'.format((int(queryPlec.kmInicio)-int(queryPlec.kmInicio))/int(form.cantidad.data)))
         ticket = Ticket(
             nuFolio=tra,
             fecha=form.fecha.data,
