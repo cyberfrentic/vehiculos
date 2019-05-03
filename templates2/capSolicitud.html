@@ -61,27 +61,18 @@
     };
     window.onload = inicio;
 </script>
-
-
-    <div class="w3-card-4 w3-center" style="width:31%; margin:auto auto;">
-    <header class="w3-container w3-deep-orange w3-center">
-      <h1>Captura de solicitudes</h1>
-    </header>
-    <div class="w3-container w3-center">
-        <div class="row" style="width: auto; margin: auto auto;">
+    <div class="container">
+        <div class="row">
             <form name="form1" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <br>
-                <!--div class="row form-control-feedback"-->
-                <div class="form-group form-inline">    
-                    <div class="form-group col-xs-12 floating-label-form-group controls">
-                        <div >
+                <div class="row form-control-feedback">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        <div class="checkbox">
                             {{ render_field(form.numSol, class='form-control', onkeypress="return valida(event)") }}                            
                         </div>
                     </div>
-
                 </div>
-
                 <div class="row form-control-feedback">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         <div class="checkbox">
@@ -89,7 +80,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group form-inline">                	
                 	<div class="row form-control-feedback">
                 	    <div class="form-goup col-xs-12 floating-label-form-group controls">
@@ -165,10 +155,6 @@
             </form>
 
         </div>
-    </div>
-    <footer class="w3-container w3-deep-orange">
-      <h5>Mantenimientos/solicitud/captura</h5>
-    </footer>
     </div>
     <br>
     <br>

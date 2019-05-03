@@ -47,7 +47,7 @@
   <br>
   <table class="table table-bordered">
     <thead>
-      <tr class="table-primary">
+      <tr>
         <th>Núm.</th>
         <th>Razon Social </th>
         <th>Propietario</th>
@@ -56,12 +56,11 @@
         <th>Contacto</th>
         <th>Telefono</th>
         <th>Email</th>
-         <th>Editar</th>
       </tr>
     </thead>
     <tbody id="myTable">
       {% for item in datos %}
-        <tr class="table-success">
+        <tr>
             <td>{{item['id']}}</td>
             <td>{{item['razonSocial']}}</td>
             <td>{{item['propietario']}}</td>

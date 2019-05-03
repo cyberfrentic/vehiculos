@@ -3,11 +3,8 @@
 {% block content %}
 {% from "_macro.html" import render_field %}
 	<br>
-	<div class="w3-card-4 w3-center" style="width:70%; margin:auto auto;">
-    <header class="w3-container w3-deep-orange w3-center">
-      <h1>Captura de servicio</h1>
-    </header>
-    <div class="w3-container w3-center">
+	<br>
+	<div class="container">
 		<div class="row align-items-start align-self-center">
 			<form  method="POST" name="articulos">
 				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -47,7 +44,7 @@
 				<br>
 					<table>
 						<thead>
-							<tr class="table-primary">
+							<tr>
 								<th>Cantidad</th>
 								<th>Descripcion</th>
 								<th>Precio Unitario</th>
@@ -56,7 +53,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr class="table-success">
+							<tr>
 								<td >
 									{{(form.cantidad) }}
                 				</td>
@@ -81,7 +78,7 @@
                 	<div class="container">
                 		<table class="table-bordered table-hover  table-striped">
 						<thead>
-							<tr class="table-primary">
+							<tr>
 								<th scope="col">Cantidad</th>
 								<th>Descripcion</th>
 								<th>Precio Unitario</th>
@@ -91,7 +88,7 @@
 						</thead>
 						<tbody>
 							{% for item in articulos %}
-							<tr class="table-success">
+							<tr>
 								<th scope="row">
 									{{ item.cantidad}}
                 				</th>
@@ -117,10 +114,6 @@
 		<br>
 		<br>
 	</div>
-	<footer class="w3-container w3-deep-orange">
-      <h5>Mantenimientos/solicitud/captura de servicio/manual</h5>
-    </footer>
-    </div>
 	<br>
 	<br>
 	<script>

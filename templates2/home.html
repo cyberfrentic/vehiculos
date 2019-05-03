@@ -10,7 +10,7 @@
   	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-reboot.min.css') }}" media="screen">
   	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" media="screen">
   	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" media="screen">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   
     <style>
 
       .dropdown-submenu {
@@ -101,18 +101,6 @@
               </div>
               <div class="dropdown-divider"></div>
               <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
-                <a class="dropdown-item dropdown-toggle" href="">
-                  <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/temporizador.svg')}}" width="16" height="16">
-                  Proveedores
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
-                  <a class="dropdown-item" href="/proveedores"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/agregar-usuario.svg')}}" width="16" height="16">Captura</a>
-                  <a class="dropdown-item" href="/searchprov"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/apoyo-tecnico.svg')}}" width="16" height="16">Consulta</a>
-                </div>
-              </div>
-              <div class="dropdown-divider"></div>
-
-              <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
                 <a class="dropdown-item dropdown-toggle" href="#">
                   <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/trabajo-en-equipo.svg')}}" width="16" height="16">
                   Resguardante
@@ -165,6 +153,17 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041; ">
               <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
+                <a class="dropdown-item dropdown-toggle" href="">
+                  <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/temporizador.svg')}}" width="16" height="16">
+                  Proveedores
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
+                  <a class="dropdown-item" href="/proveedores"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/agregar-usuario.svg')}}" width="16" height="16">Captura</a>
+                  <a class="dropdown-item" href="/searchprov"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/apoyo-tecnico.svg')}}" width="16" height="16">Consulta</a>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
                 <a class="dropdown-item dropdown-toggle" href="#">
                   <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/pedido-online.svg')}}" width="16" height="16">
                   Solicitud
@@ -193,7 +192,7 @@
                     </div>
                   </div>
                 </div>
-
+                <div class="dropdown-divider"></div>
                 <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
                   <a class="dropdown-item dropdown-toggle" href="#">
                     <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/crecimiento.svg')}}" width="16" height="16">

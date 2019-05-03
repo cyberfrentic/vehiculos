@@ -1,0 +1,118 @@
+{% extends 'home.html' %}
+{% block content %}
+<div class="container">
+    <h4 class="mt-5"></h4>
+    <div class="table-responsive">
+    <table class="table table-hover">
+    	<caption>Datos de Factura</caption>
+    	<tbody>
+    	<tr class="success">
+    		<th><strong>Fecha</strong></th>
+    		<th><strong>Total</strong></th>
+            <th><strong>SubTotal</strong></th>
+    		<th><strong>I. V. A.</strong></th>
+    		<th><strong>R. F. C.</strong></th>
+    		<th><strong>Nombre</strong></th>
+    		<th><strong>UUID</strong></th>
+    	</tr>
+    	{% for item in lista %}
+    	
+    	<tr>
+    		<td class="info">
+    			{{ item['fecha'] }}
+    		</td>
+    		<td class="info">
+    			{{ item['total'] }}
+    		</td>
+    		<td class="info">
+    			{{ item['subTotal'] }}
+    		</td>
+    		<td class="info">
+    			{{ item['IVA'] }}
+    		</td>
+    		<td class="info">
+    			{{ item['rfc'] }}
+    		</td>
+    		<td class="info">
+    			{{ item['nombre'] }}
+    		</td>
+    		<td class="info">
+    			{{ item['UUiD'] }}
+    		</td>
+    	</tr>
+    	
+    {% endfor %}
+    </tbody>
+    </table>
+    </div>
+   
+    
+    <div class="table-responsive">
+    	<table class="table table-hover">
+    		<caption>Lista articulos de la factura</caption>
+    		<tbody>
+    			<tr>
+    				<td class="success"><strong>Cantidad</strong></td>
+    				<th class="success"><strong>Descripcion</strong></th>
+    				<th class="success"><strong>valor unitario</strong></th>
+    				<th class="success"><strong>importe</strong></th>
+    			</tr>
+    				{% for item in lista2 %}
+    				<tr>
+    					
+    						<td class="info">
+    							{{ item['cantidad'] }}
+    						</td>
+    						<td class="info">
+    							{{ item['descripcion'] }}
+    						</td>
+    						<td class="info">
+    							{{ item['valor'] }}
+    						</td>
+    						<td class="info">
+    							{{ item['importe'] }}
+    						</td>
+    						
+    					
+    				</tr>
+    				{% endfor %}
+
+    		</tbody>
+    		
+    	</table>
+    </div>
+
+{% from "_macro.html" import render_field %}
+<br>
+    <br>
+    <form name="sentMessage" id="contactForm" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="row form-control-feedback">
+                <div class="form-goup col-xs-12 floating-label-form-group controls">
+                    {{ render_field(form.placas, class='form-control') }}
+                    <p class="help-block text-danger"></p>
+                </div>
+        </div>
+        <div class="row form-control-feedback">
+                <div class="form-goup col-xs-12 floating-label-form-group controls">
+                    {{ render_field(form.observaciones, class='form-control') }}
+                    <p class="help-block text-danger"></p>
+                </div>
+        </div>
+        <br>
+        <!--{{ form.honeypot }}-->
+        <div class="success">
+            <div class="row">
+                <div class="form-group col-xs-12">
+                    <button type="submit" class="btn btn-default">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+    
+{% endblock %}

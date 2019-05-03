@@ -27,58 +27,84 @@
 		}
 	</script>
 	<body>
-		<div class="container">
-			<div class="row-fluid">
-				<form  name="form1" class="form-horizontal" method="POST" accept-charset="utf-8">
-    				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    				<div class="row form-control-feedback form-group">
-    					<div class="form-goup col-xs-12 floating-label-form-group controls">
-                            {{ render_checkboxes(form.plancha, onclick="DesactivarContrato()") }}
-                             <p class="help-block text-danger"></p>
-    						{{ render_field(form.transaccion, class='form-control', onkeypress="return valida(event)", placeholder="Núm de transaccion") }}
-                             <p class="help-block text-danger"></p>
-                            {{ render_field(form.fecha, class='form-control', placeholder="dd/mm/aaaa hh:mm:ss") }}
-                             <p class="help-block text-danger"></p>
-                             {{ render_field(form.odometro, class='form-control', onkeypress="return valida(event)", placeholder="Kilometraje actual") }}
-                             <p class="help-block text-danger"></p>
-                            {{ render_field(form.cantidad, class='form-control', onkeypress="return valida(event)", placeholder="Cant. Litros") }}
-                             <p class="help-block text-danger"></p>
-                            {{ render_field(form.tipoComb, class='form-control') }}
-                             <p class="help-block text-danger"></p>
-                            {{ render_field(form.precio, class='form-control', placeholder="Precio por Litro") }}
-                             <p class="help-block text-danger"></p>
+        <div class="w3-card-4 w3-center" style="width:45%; margin:auto auto;">
+          <header class="w3-container w3-deep-orange w3-center">
+            <h1>Captura de Tickets</h1>
+          </header>  
+        		<div class="container">
+        			<div class="row-fluid" style="width: auto; margin: auto auto;">
+        				<form  name="form1"  method="POST" accept-charset="utf-8">
+            				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            				<div class="row form-control-feedback form-group">
+                            <!--div class="form-group form-inline"-->
+                                <div class="form-group col-xs-12 floating-label-form-group controls">
+                                    {{ render_checkboxes(form.plancha, onclick="DesactivarContrato()") }}
+                                     <p class="help-block text-danger"></p>
+                                </div>
+                                
+                                
+                                <div class="form-group col-xs-12 floating-label-form-group controls">     
+            						{{ render_field(form.transaccion, class='form-control', onkeypress="return valida(event)", placeholder="Núm de transaccion") }}
+                                     <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group col-xs-12 floating-label-form-group controls">          
+                                    {{ render_field(form.fecha, class='form-control', placeholder="dd/mm/aaaa hh:mm:ss") }}
+                                     <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group col-xs-12 floating-label-form-group controls">          
+                                     {{ render_field(form.odometro, class='form-control', onkeypress="return valida(event)", placeholder="Kilometraje actual") }}
+                                     <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group col-xs-12 floating-label-form-group controls">          
+                                    {{ render_field(form.cantidad, class='form-control', onkeypress="return valida(event)", placeholder="Cant. Litros") }}
+                                     <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group col-xs-12 floating-label-form-group controls">          
+                                    {{ render_field(form.tipoComb, class='form-control') }}
+                                     <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group col-xs-12 floating-label-form-group controls">          
+                                    {{ render_field(form.precio, class='form-control', placeholder="Precio por Litro") }}
+                                     <p class="help-block text-danger"></p>
+            					</div>
 
-    					</div>
-    				</div>
-
-                    <div class="row form-control-feedback form-group">
-    					<div class="form-goup col-xs-12 floating-label-form-group controls">
-    						{{ render_field(form.subtotal, class='form-control', placeholder="Subtotal del Ticket") }}
-                             <p class="help-block text-danger"></p>
-                            {{ render_field(form.iva, class='form-control', placeholder="IVA del Ticket") }}
-                             <p class="help-block text-danger"></p>
-                            {{ render_field(form.total, class='form-control', placeholder="Total del Ticket") }}
-                             <p class="help-block text-danger"></p>
-    					</div>
-    				</div>
-                    <div class="row form-control-feedback form-group">
-    					<div class="form-goup col-xs-12 floating-label-form-group controls">
-    						{{ render_field(form.placa, class='form-control') }}
-                             <p class="help-block text-danger"></p>
-                            {{ render_field(form.obser, class='form-control', placeholder="Escriba sus observaciones") }}
-                             <p class="help-block text-danger"></p>
-    					</div>
-    				</div>
-                    <div class="success">
-                    <div class="row">
-                        <div class="form-group col-xs-12">
-                            <button type="submit" class="btn btn-outline-danger">Guardar...</button>
+            					<div class="form-group col-xs-12 floating-label-form-group controls">
+            						{{ render_field(form.subtotal, class='form-control', placeholder="Subtotal del Ticket") }}
+                                     <p class="help-block text-danger"></p>
+                                </div>     
+                                <div class="form-group col-xs-12 floating-label-form-group controls">               
+                                    {{ render_field(form.iva, class='form-control', placeholder="IVA del Ticket") }}
+                                     <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group col-xs-12 floating-label-form-group controls">               
+                                    {{ render_field(form.total, class='form-control', placeholder="Total del Ticket") }}
+                                     <p class="help-block text-danger"></p>
+            					</div>
+                            
+            					<div class="form-group col-xs-12 floating-label-form-group controls">
+            						{{ render_field(form.placa, class='form-control') }}
+                                     <p class="help-block text-danger"></p>
+                                </div>     
+                                    {{ render_field(form.obser, class='form-control', placeholder="Escriba sus observaciones") }}
+                                     <p class="help-block text-danger"></p>
+            					</div>
+            				</div>
+                            <div class="success">
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <button type="submit" class="btn btn-outline-danger">Guardar...</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-    			</form>
-			</div>
-		</div>
+            			</form>
+        			</div>
+                    <footer class="w3-container w3-deep-orange">
+                        Combustible/Tickets/captura
+                    </footer>   
+        		</div>
+
+        </div> 
+
     <br><br>
         <br>
         <br>

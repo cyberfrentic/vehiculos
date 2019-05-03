@@ -48,7 +48,7 @@
                 <div class="container mt-3" id="muestra">
                     <table class="table table-bordered">
                         <thead>
-                            <tr class="table-primary">
+                            <tr>
                                 <th>Núm Folio</th>
                                 <th>Fecha</th>
                                 <th>Placas</th>
@@ -59,7 +59,7 @@
                         </thead>
                             <tbody id="myTable">
                                 {% for item in lista %}
-                                    <tr class="table-success">
+                                    <tr>
                                         <td>{{item['nuFolio']}}</td>
                                         <td>{{item['fecha']}}</td>
                                         <td>{{item['placa']}}</td>

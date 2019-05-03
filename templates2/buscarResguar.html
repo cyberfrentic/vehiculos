@@ -42,35 +42,31 @@
     </div>
     <div class="container mt-3">
   <h4>Puedes filtrar la tabla</h4>
-  <p>Teclea las iniciales o el nombre y filtra lo que necesites (Razon Social, Propietario y RFC) </p>
+  <p>Teclea las iniciales o el nombre y filtra lo que necesites (Nombre, Area, Departamento) </p>  
   <input class="form-control" id="myInput" type="text" placeholder="Search..">
   <br>
   <table class="table table-bordered">
     <thead>
-      <tr class="table-primary">
+      <tr>
         <th>Núm.</th>
-        <th>Razon Social </th>
-        <th>Propietario</th>
-        <th>R. F. C.</th>
-        <th>Dirección</th>
-        <th>Contacto</th>
-        <th>Telefono</th>
-        <th>Email</th>
-         <th>Editar</th>
+        <th>Nombre</th>
+        <th>Area</th>
+        <th>Departamento</th>
+        <th>Licencia</th>
+        <th>Vigencia</th>
+        <th>Editar</th>
       </tr>
     </thead>
     <tbody id="myTable">
       {% for item in datos %}
-        <tr class="table-success">
+        <tr>
             <td>{{item['id']}}</td>
-            <td>{{item['razonSocial']}}</td>
-            <td>{{item['propietario']}}</td>
-            <td>{{item['rfc']}}</td>
-            <td>{{item['direccion']}}</td>
-            <td>{{item['contacto']}}</td>
-            <td>{{item['telefono']}}</td>
-            <td>{{item['email']}}</td>
-            <td><a type="submit" href="/prov/{{item['id']}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+            <td>{{item['nombre']}}</td>
+            <td>{{item['area']}}</td>
+            <td>{{item['departamento']}}</td>
+            <td>{{item['licencia']}}</td>
+            <td>{{item['vigencia']}}</td>
+            <td><a type="submit" href="/item/{{item['id']}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
         </tr>
       {%endfor%}
     </tbody>

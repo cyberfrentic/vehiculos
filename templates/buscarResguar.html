@@ -47,7 +47,7 @@
   <br>
   <table class="table table-bordered">
     <thead>
-      <tr>
+      <tr class="table-primary">
         <th>Núm.</th>
         <th>Nombre</th>
         <th>Area</th>
@@ -59,7 +59,7 @@
     </thead>
     <tbody id="myTable">
       {% for item in datos %}
-        <tr>
+        <tr class="table-success">
             <td>{{item['id']}}</td>
             <td>{{item['nombre']}}</td>
             <td>{{item['area']}}</td>

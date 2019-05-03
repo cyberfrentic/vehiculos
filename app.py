@@ -36,7 +36,12 @@ app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
 crsf = CSRFProtect()
 
+def exceldate(serial):
+    seconds = (serial - 25569) * 86400.0
+    d = datetime.datetime.utcfromtimestamp(seconds)
+    return d.strftime('%Y-%m-%d')
 
+    
 @app.before_request
 def before_request():
     if 'username' not in session and request.endpoint in ['home', 'logout', 'crearUser', 'Vehiculow', 'search',

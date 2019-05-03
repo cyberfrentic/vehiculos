@@ -3,12 +3,8 @@
 
 {% block content %}
     <br>
-    <div class="w3-card-4 w3-center" style="width:35%; margin:auto auto;">
-    <header class="w3-container w3-deep-orange w3-center">
-      <h1>Generar Solicitud</h1>
-    </header>
-    <div class="w3-container w3-center">
-        <div class="row" style="width: auto; margin: auto auto;">
+    <div class="container">
+        <div class="row">
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 				<div class="form-group form-inline">
@@ -44,7 +40,7 @@
                 <div class="form-group form-inline">
                     <div class="form-goup col-xs-8 floating-label-form-group controls">
                        {{ render_field(form.solicitante, class='form-control form-control', placeholder="Capture Nombre Solicitante") }}
-                        <p class="help-block text-danger" style="width:20%;"></p>
+                        <p class="help-block text-danger"></p>
                     </div>
                 </div>
                 
@@ -57,11 +53,8 @@
                 </div>
             </form>
                 </div>
+
         </div>
-    <footer class="w3-container w3-deep-orange">
-      <h5>Mantenimientos/solicitud/generar solicitud</h5>
-    </footer>    
-    </div>
     </div>
     <br>
     <br>

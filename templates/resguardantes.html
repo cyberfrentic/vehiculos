@@ -8,8 +8,12 @@
 
 {% block content %}
     <br>
-    <div class="container">
-        <div class="row">
+    <div class="w3-card-4 w3-center" style="width:45%; margin:auto auto;">
+    <header class="w3-container w3-deep-orange w3-center">
+      <h1>Captura de resguardantes</h1>
+    </header>
+    <div class="w3-container w3-center">
+        <div class="row" style="width: auto; margin: auto auto;">
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div class="form-group form-inline">
@@ -48,7 +52,6 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
-                   <br>
                 <div class="success">
                     <div class="row">
                         <div class="form-group col-xs-12">
@@ -59,6 +62,10 @@
 <br>
             </form>
         </div>
+    </div>
+    <footer class="w3-container w3-deep-orange">
+      <h5>Catálogos/resguardantes/captura</h5>
+    </footer>
     </div>
     <br>
     <br>

@@ -26,13 +26,16 @@ word-wrap: break-word; /* IE 5+ */
   text-overflow: ellipsis;
 }
 </style>
-<div class="container">
-	<div class="row">
+
+<div class="w3-card-4 w3-center" style="width:45%; margin:auto auto;">
+    <header class="w3-container w3-deep-orange w3-center">
+      <h1>Reporte general de facturas</h1>
+    </header>
+<div class="w3-container w3-center">
+	<div class="row" style="width: auto; margin: auto auto;">
 		<br>
 		<br>
-		<div class="container justify-content-md-center" style="background:#27ecf5;">
-			<h2 class="text-center" style="color: #1903fc;">Consulta General</h2>
-		</div class="col-sm-12 col-s-4">
+		<br>
         <form class="form-horizontal" method="POST" name="consulta">
 			<div>
 				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -60,106 +63,131 @@ word-wrap: break-word; /* IE 5+ */
             	</div>
             	<button type="reset" class="btn btn-outline-warning d-flex align-items-center" id="agregar" name="agregar" value="limpiar">Limpiar campos</button>
             </div>
-    {% if lista or lista2 or lista3 or lista4 or lista5 %}
-        <div class="table-responsive table-responsive-sm">
-         <table class="table table-bordered table-striped table-hover">
-            <caption>Consulta por Proveedor</caption>
-            <thead>
-                <tr class="table-success">
-                    <th>#</th>
-                    <th>UUiD</th>
-                    <th>RFC</th>
-                    <th>Nombre</th>
-                    <th>Subtotal</th>
-                    <th>IVA</th>
-                    <th>Total</th>
-                    <th>Fecha</th>
-                    <th>Placa</th>
-                    <th>Observaciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in lista%}
-                <tr class="table-info">
-                    <td>{{item.id}}</td>
-                    <td>{{item.UUiD}}</td>
-                    <td>{{item.rfc}}</td>
-                    <td>{{item.nombre}}</td>
-                    <td>{{item.subtotal}}</td>
-                    <td>{{item.iva}}</td>
-                    <td>{{item.total}}</td>
-                    <td>{{item.fecha}}</td>
-                    <td>{{item.placas}}</td>
-                    <td >{{item.observaciones}}</td>
-                </tr>
-                {% endfor %}
-                {% for item in lista2%}
-                <tr class="table-info">
-                    <td>{{item.id}}</td>
-                    <td>{{item.UUiD}}</td>
-                    <td>{{item.rfc}}</td>
-                    <td>{{item.nombre}}</td>
-                    <td>{{item.subtotal}}</td>
-                    <td>{{item.iva}}</td>
-                    <td>{{item.total}}</td>
-                    <td>{{item.fecha}}</td>
-                    <td>{{item.placas}}</td>
-                    <td>{{item.observaciones}}</td>
-                </tr>
-                {% endfor %}
-                {% for item in lista3%}
-                <tr class="table-info">
-                    <td>{{item.id}}</td>
-                    <td>{{item.UUiD}}</td>
-                    <td>{{item.rfc}}</td>
-                    <td>{{item.nombre}}</td>
-                    <td>{{item.subtotal}}</td>
-                    <td>{{item.iva}}</td>
-                    <td>{{item.total}}</td>
-                    <td>{{item.fecha}}</td>
-                    <td>{{item.placas}}</td>
-                    <td>{{item.observaciones}}</td>
-                </tr>
-                {% endfor %}
-                {% for item in lista4%}
-                <tr class="table-info">
-                    <td>{{item.id}}</td>
-                    <td>{{item.UUiD}}</td>
-                    <td>{{item.rfc}}</td>
-                    <td>{{item.nombre}}</td>
-                    <td>{{item.subtotal}}</td>
-                    <td>{{item.iva}}</td>
-                    <td>{{item.total}}</td>
-                    <td>{{item.fecha}}</td>
-                    <td>{{item.placas}}</td>
-                    <td>{{item.observaciones}}</td>
-                </tr>
-                {% endfor %}
-                {% for item in lista5%}
-                <tr class="table-info">
-                    <td>{{item.id}}</td>
-                    <td>{{item.UUiD}}</td>
-                    <td>{{item.rfc}}</td>
-                    <td>{{item.nombre}}</td>
-                    <td>{{item.subtotal}}</td>
-                    <td>{{item.iva}}</td>
-                    <td>{{item.total}}</td>
-                    <td>{{item.fecha}}</td>
-                    <td>{{item.placas}}</td>
-                    <td>{{item.observaciones}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-         </table>
-         <div class="limpiar"><!-- fix --></div>
-         <button type="submit" class="btn btn-danger" name="consultar" value="imprimir">imprimir</button>
-         <br>
-    <br>    <br>
-    <br>
-     </div>
-     {% endif%}
-</form>
+    
 
+
+</div>   
+
+
+
+
+
+</div>  
+<footer class="w3-container w3-deep-orange">
+      <h5>Mantenimientos/solicitud/reportes/reporte general de facturas</h5>
+    </footer>
+</div>   
+{% if lista or lista2 or lista3 or lista4 or lista5 %}   
+ 
+
+
+
+
+    <div class="w3-card-4 w3-center" style="width:90%; margin:auto auto;">
+    <header class="w3-container w3-blue w3-center">
+       <h2>Datos consultados</h2>
+    </header> 
+              <div class="w3-container">
+                  <div class="table-responsive table-responsive-sm">
+                     <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>#</th>
+                                <th>UUiD</th>
+                                <th>RFC</th>
+                                <th>Nombre</th>
+                                <th>Subtotal</th>
+                                <th>IVA</th>
+                                <th>Total</th>
+                                <th>Fecha</th>
+                                <th>Placa</th>
+                                <th>Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in lista%}
+                            <tr class="table-success">
+                                <td>{{item.id}}</td>
+                                <td>{{item.UUiD}}</td>
+                                <td>{{item.rfc}}</td>
+                                <td>{{item.nombre}}</td>
+                                <td>{{item.subtotal}}</td>
+                                <td>{{item.iva}}</td>
+                                <td>{{item.total}}</td>
+                                <td>{{item.fecha}}</td>
+                                <td>{{item.placas}}</td>
+                                <td >{{item.observaciones}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% for item in lista2%}
+                            <tr class="table-success">
+                                <td>{{item.id}}</td>
+                                <td>{{item.UUiD}}</td>
+                                <td>{{item.rfc}}</td>
+                                <td>{{item.nombre}}</td>
+                                <td>{{item.subtotal}}</td>
+                                <td>{{item.iva}}</td>
+                                <td>{{item.total}}</td>
+                                <td>{{item.fecha}}</td>
+                                <td>{{item.placas}}</td>
+                                <td>{{item.observaciones}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% for item in lista3%}
+                            <tr class="table-success">
+                                <td>{{item.id}}</td>
+                                <td>{{item.UUiD}}</td>
+                                <td>{{item.rfc}}</td>
+                                <td>{{item.nombre}}</td>
+                                <td>{{item.subtotal}}</td>
+                                <td>{{item.iva}}</td>
+                                <td>{{item.total}}</td>
+                                <td>{{item.fecha}}</td>
+                                <td>{{item.placas}}</td>
+                                <td>{{item.observaciones}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% for item in lista4%}
+                            <tr class="table-success">
+                                <td>{{item.id}}</td>
+                                <td>{{item.UUiD}}</td>
+                                <td>{{item.rfc}}</td>
+                                <td>{{item.nombre}}</td>
+                                <td>{{item.subtotal}}</td>
+                                <td>{{item.iva}}</td>
+                                <td>{{item.total}}</td>
+                                <td>{{item.fecha}}</td>
+                                <td>{{item.placas}}</td>
+                                <td>{{item.observaciones}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% for item in lista5%}
+                            <tr class="table-success">
+                                <td>{{item.id}}</td>
+                                <td>{{item.UUiD}}</td>
+                                <td>{{item.rfc}}</td>
+                                <td>{{item.nombre}}</td>
+                                <td>{{item.subtotal}}</td>
+                                <td>{{item.iva}}</td>
+                                <td>{{item.total}}</td>
+                                <td>{{item.fecha}}</td>
+                                <td>{{item.placas}}</td>
+                                <td>{{item.observaciones}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                     </table>
+                   </div>  
+                     <div class="limpiar"><!-- fix --></div>
+                     <button type="submit" class="btn btn-danger" name="consultar" value="imprimir">Imprimir</button>
+                     <br><br>
+              </div>
+    <br><br><br>
+    </div>
+
+
+     {% endif%}
+    </form>     
 <!-- SCRIPT para desactivar los textEdit con los check's-->
 <script>
 	function DesactivarFolio() {

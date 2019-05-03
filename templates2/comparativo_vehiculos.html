@@ -1,0 +1,19 @@
+{% extends 'home.html' %}
+{% from "_macro.html" import render_field %}
+ {% block content %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1 class="font-italic">Upload File</h1>
+    <form method="POST" enctype="multipart/form-data">
+    	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="file" name="file" class="btn btn-outline-success btn-large">
+        <button class="btn btn-outline-warning btn-large" type="submit">
+            <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/la-computacion-en-nube.svg')}}" width="16" height="16">
+            Subir
+        </button>
+    </form>
+    <br>
+    <br>
+{% endblock %}

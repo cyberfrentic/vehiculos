@@ -8,55 +8,43 @@
 
 {% block content %}
     <br>
-    <div class="w3-card-4 w3-center" style="width:45%; margin:auto auto;">
-    <header class="w3-container w3-deep-orange w3-center">
-      <h1>Captura de proveedores</h1>
-    </header>
-    <div class="w3-container w3-center">
-        <div class="row" style="width: auto; margin: auto auto;">
+    <div class="container">
+        <div class="row">
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div class="form-group form-inline">
                         <div class="form-goup col-xs-12 floating-label-form-group controls">
-                            {{ render_field(form.razonSocial, class='form-control') }}
+                            {{ render_field(form.nombre, class='form-control') }}
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="form-goup col-xs-12 floating-label-form-group controls">
-                            {{ render_field(form.propietario, class='form-control') }}
+                            {{ render_field(form.apellidoPat, class='form-control') }}
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="form-goup col-xs-12 floating-label-form-group controls">
-                            {{ render_field(form.direccion, class='form-control') }}
+                            {{ render_field(form.apellidoMat, class='form-control') }}
                             <p class="help-block text-danger"></p>
                         </div>
                 </div>
                 <div class="form-group form-inline">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.rfc, class='form-control') }}
+                        {{ render_field(form.area, class='form-control') }}
                         <p class="help-block text-danger"></p>
                     </div>
                 
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.municipio, class='form-control') }}
+                        {{ render_field(form.departamento, class='form-control') }}
                         <p class="help-block text-danger"></p>
                     </div>
                 
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.estado, class='form-control') }}
+                        {{ render_field(form.licencia, class='form-control') }}
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
                 <div class="form-group form-inline">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.contacto, class='form-control') }}
-                        <p class="help-block text-danger"></p>
-                    </div>
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.email, class='form-control') }}
-                        <p class="help-block text-danger"></p>
-                    </div>
-                    <div class="form-goup col-xs-12 floating-label-form-group controls">
-                        {{ render_field(form.telefono, class='form-control') }}
+                        {{ render_field(form.lVigencia, class='form-control') }}
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
@@ -71,10 +59,6 @@
 <br>
             </form>
         </div>
-    </div>
-    <footer class="w3-container w3-deep-orange">
-      <h5>Catálogos/proveedores/captura</h5>
-    </footer>
     </div>
     <br>
     <br>

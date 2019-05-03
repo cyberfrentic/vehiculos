@@ -8,12 +8,8 @@
 
 {% block content %}
     <br>
-    <div class="w3-card-4 w3-center" style="width:45%; margin:auto auto;">
-    <header class="w3-container w3-deep-orange w3-center">
-      <h1>Captura de proveedores</h1>
-    </header>
-    <div class="w3-container w3-center">
-        <div class="row" style="width: auto; margin: auto auto;">
+    <div class="container">
+        <div class="row">
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div class="form-group form-inline">
@@ -71,10 +67,6 @@
 <br>
             </form>
         </div>
-    </div>
-    <footer class="w3-container w3-deep-orange">
-      <h5>Catálogos/proveedores/captura</h5>
-    </footer>
     </div>
     <br>
     <br>

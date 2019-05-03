@@ -9,15 +9,11 @@
 
 {% block content %}
     <br>
-    <div class="w3-card-4 w3-center" style="width:17%; margin:auto auto;">
-    <header class="w3-container w3-deep-orange w3-center">
-      <h1>Crear usuarios</h1>
-    </header>
-    <div class="w3-container">
-        <div class="row" style="width: auto; margin: auto auto;">
+    <div class="container">
+        <div class="row">
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                 <div class="row form-group form-inline">
+                 <div class="row form-control-feedback">
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         {{ render_field(form.username, class='form-control') }}
                         <p class="help-block text-danger"></p>
@@ -49,7 +45,7 @@
                 </div>
                 <br>
                 <div class="row form-control-feedback">
-                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
                         <div class="checkbox">
                             {{ render_checkboxes(form.vehiculos)}}
                             {{ render_checkboxes(form.proveedores) }}
@@ -70,10 +66,6 @@
                 {{form.honeypot}}
             </form>
         </div>
-    </div>
-    <footer class="w3-container w3-deep-orange">
-      <h5>Crear usuarios</h5>
-    </footer>
     </div>
     <br>
     <br>
