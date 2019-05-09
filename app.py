@@ -36,12 +36,13 @@ app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
 crsf = CSRFProtect()
 
+
 def exceldate(serial):
     seconds = (serial - 25569) * 86400.0
     d = datetime.datetime.utcfromtimestamp(seconds)
     return d.strftime('%Y-%m-%d')
 
-    
+
 @app.before_request
 def before_request():
     if 'username' not in session and request.endpoint in ['home', 'logout', 'crearUser', 'Vehiculow', 'search',
@@ -94,7 +95,7 @@ def page_not_found(e):
 def regreso(e):
     nombre = (session['username']).upper()
     x = request.endpoint
-    return ('fallo la pagina'),400#render_template(x + '.html', nombre=nombre), 400
+    return ('fallo la pagina'+str(x)),400
 
 
 @app.route('/home')
@@ -347,11 +348,11 @@ def searchvehiculo():
                         queryImg = Imagen.query.filter(Imagen.placa==placa2).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
                         diccionario = {
                                         'placa': placa2,
-                                        'derecho' : queryImg[0].ruta,
-                                        'izquierdo': queryImg[1].ruta,
-                                        'frontal' : queryImg[2].ruta,
-                                        'tarjeta' : queryImg[3].ruta,
-                                        'factura' : queryImg[4].ruta,
+                                        'derecho' : queryImg[0].ruta if len(queryImg)==1 else "derecho",
+                                        'izquierdo': queryImg[1].ruta if len(queryImg)==2 else "izquierdo",
+                                        'frontal' : queryImg[2].ruta if len(queryImg)==3 else "frontal",
+                                        'tarjeta' : queryImg[3].ruta if len(queryImg)==4 else "tarjeta",
+                                        'factura' : queryImg[4].ruta if len(queryImg)==5 else "factura",
                                     }
                         lista.append(diccionario)
                         diccionario.pop
@@ -417,6 +418,8 @@ def searchvehiculo():
 
 @app.route("/itemVehi/<numInv>", methods=['GET', 'POST'])
 def editarVehi(numInv):
+    lista=[]
+    lista2=['fro', 'izq', 'der', 'tras', 'inte','tar','fac','pol']
     nombre = session["username"].upper()
     lugar = session['ciudad']
     preciono=False
@@ -426,6 +429,29 @@ def editarVehi(numInv):
     form.resguardo2.data = x.resguardo
     queryImg = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
     queryDoc = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fro").filter(Imagen.parte!="der").filter(Imagen.parte!="izq").filter(Imagen.parte!="tras").filter(Imagen.parte!="inte").all()
+    for item in queryImg:
+        if "fro" in item.parte:
+            lista.append(item.parte)
+        elif "izq" in item.parte:
+            lista.append(item.parte)
+        elif "der" in item.parte:
+            lista.append(item.parte)
+        elif "tras" in item.parte:
+            lista.append(item.parte)
+        elif "inte" in item.parte:
+            lista.append(item.parte)
+    
+    for item in queryDoc:
+        if "tar" in item.parte:
+            lista.append(item.parte)
+        elif "fac" in item.parte:
+            lista.append(item.parte)
+        elif "pol" in item.parte:
+            lista.append(item.parte)
+
+    comparacion = [item for item in lista2 if item not in lista]
+    print(comparacion)
+
     if request.method == 'POST':
         if lugar==12:
             flash(("Disculpe usted no puede realizar ningún cambio"))
@@ -454,7 +480,7 @@ def editarVehi(numInv):
             db.session.commit()
             flash('Registro modificado con exito')
             return redirect(url_for('searchvehiculo'))
-    return render_template('vehiculos.html', nombre=nombre, form=form, edit=True, fotos=queryImg, doc=queryDoc, preciono=preciono)
+    return render_template('vehiculos.html', nombre=nombre, form=form, edit=True, fotos=queryImg, doc=queryDoc, preciono=preciono, lista=comparacion)
 
 
 @app.route('/resguardante', methods=["GET", "POST"])

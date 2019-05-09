@@ -50,7 +50,6 @@
                     </div>
                 </div>
                 <div class="form-group form-inline">
-                    
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         {{ render_field(form.color, class='form-control') }}
                         <p class="help-block text-danger"></p>
@@ -63,7 +62,7 @@
                         {{ render_field(form.tipoVehiculo, class='form-control') }}
                         <p class="help-block text-danger"></p>
                     </div>
-                     <div class="form-goup col-xs-12 floating-label-form-group controls">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
                         {{ render_field(form.nSerie, class='form-control') }}
                         <p class="help-block text-danger"></p>
                     </div>
@@ -77,7 +76,6 @@
                     </div>
                 </div>
                 <div class="form-group form-inline">
-                   
                     <div class="form-goup col-xs-12 floating-label-form-group controls">
                         {{ render_field(form.tCombus, class='form-control') }}
                         <p class="help-block text-danger"></p>
@@ -137,38 +135,76 @@
                     </div>
                 </div>
                 {% if fotos %}
-                <div class="col-sm-12" style="background-color:#ff6600;"> <center><p style="color: white;">Datos Generales</p></center></div>
+                    <div class="col-sm-12" style="background-color:#ff6600;">
+                        <center>
+                            <p style="color: white;">
+                                Datos Generales
+                            </p>
+                        </center>
+                    </div>
                     <div class="container">
                         <center>
-                        {% for item in fotos %}
-                            <button type="button" name="boton" class="btn btn-outline-success" data-toggle="modal" data-target="#myModal{{item.id}}">
-                                <img class="img-fluid" src="{{url_for('static', filename=item.ruta)}}" width="100" height="50">
-                            </button>
-                            <div class="modal fade" id="myModal{{item.id}}">
-                                <div class="modal-dialog">
-                                  <div class="modal-content">
-                                  
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                      <h4 class="modal-title">imagen del vehiculo {{item.placa}}</h4>
-                                      <button type="button" class="close" data-dismiss="modal">×</button>
+                            {% for item in fotos %}
+                                <button type="button" name="boton" class="btn btn-outline-success" data-toggle="modal" data-target="#myModal{{item.id}}">
+                                    <img class="img-fluid" src="{{url_for('static', filename=item.ruta)}}" width="100" height="50">
+                                </button>
+                                <div class="modal fade" id="myModal{{item.id}}">
+                                    <div class="modal-dialog">
+                                      <div class="modal-content">
+                                      
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">imagen del vehiculo {{item.placa}}</h4>
+                                          <button type="button" class="close" data-dismiss="modal">×</button>
+                                        </div>
+                                        
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                          <img class="img-fluid" src="{{url_for('static', filename=item.ruta)}}" width="400" height="600">
+                                        </div>
+                                        
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                        </div>
+                                        
+                                      </div>
                                     </div>
-                                    
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                      <img class="img-fluid" src="{{url_for('static', filename=item.ruta)}}" width="400" height="600">
+                                </div>        
+                            {% endfor %}
+                            {% for item2 in lista %}
+                                <div class="row">
+                                    {% if item2 == "fro" %}
+                                        <div class="col-sm-4" >
+                                            {{ render_field(form.frontal, class='btn btn-outline-info btn-large') }}
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    {% endif %}
+                                    {% if item2 == "izq"%}
+                                    <div class="col-sm-4" >
+                                        {{ render_field(form.izq, class='btn btn-outline-info btn-large') }}
+                                        <p class="help-block text-danger"></p>
                                     </div>
-                                    
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                    </div>
-                                    
-                                  </div>
+                                    {% endif %}
+                                    {% if item2 == "der"%}
+                                        <div class="col-sm-4" >{{ render_field(form.der, class='btn btn-outline-info btn-large') }}
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    {% endif %}
+                                    {% if item2 == "inte" %}
+                                        <div class="col-sm-4" >{{ render_field(form.tras, class='btn btn-outline-info btn-large') }}
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    {% endif %}
+                                    {% if item2 == "tras"%}
+                                        <div class="col-sm-4" >{{ render_field(form.inte, class='btn btn-outline-info btn-large') }}
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    {% endif %}
                                 </div>
-                              </div>
-                        {% endfor%}
+                            {% endfor %}
                         </center>
+                        <br>
                     </div>
                     
                 {% else %}
@@ -227,9 +263,31 @@
                                     {% elif dc.parte == "pol" %}
                                         Poliza
                                     {%endif%}
-                                    
                                 </button>
                             </a>
+                        {% endfor %}
+
+                        {% for item2 in lista %}
+                            <div class="row">
+                                {% if item2 == 'tar' %}
+                                    <div class="col-sm-4" >
+                                        {{ render_field(form.tarjeta, class='btn btn-outline-primary btn-large') }}
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                {% endif %}
+                                {% if item2 == 'fac' %}
+                                    <div class="col-sm-4">
+                                        {{ render_field(form.factura, class='btn btn-outline-primary btn-large') }}
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                {% endif %}
+                                {% if item2 == 'pol' %}
+                                    <div class="col-sm-4">
+                                        {{ render_field(form.poliza, class='btn btn-outline-primary btn-large') }}
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                {% endif %}
+                            </div>
                         {% endfor %}
                         </center>
                     </div>
