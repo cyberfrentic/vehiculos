@@ -95,7 +95,7 @@ def page_not_found(e):
 def regreso(e):
     nombre = (session['username']).upper()
     x = request.endpoint
-    return ('fallo la pagina'+str(x)),400
+    return ('fallo la pagina'+str(x), e),400
 
 
 @app.route('/home')
@@ -457,7 +457,7 @@ def editarVehi(numInv):
             return redirect(url_for("home"))
         if "editar" in request.form['boton']:
             preciono=True
-        elif "listo" in request.form['boton'] and form.validate():
+        elif "listo" in request.form['boton']: #and form.validate():
             x.numInv = form.numInv.data.upper()
             x.marca = form.marca.data.upper()
             x.modelo = form.modelo.data.upper()
@@ -477,6 +477,54 @@ def editarVehi(numInv):
             x.nPoliza = form.nPoliza.data.upper()
             x.placa = form.placa.data.upper()
             db.session.commit()
+            ############## actulización de fotos#############
+            ###### Aqui la solucion de ImmutableMultiDict ######
+            photos={}
+            y=request.files
+            for titulo, j in y.items():
+                if titulo =="factura":
+                    titulo = "fac"
+                    photos[titulo]=j
+                if titulo =="frontal":
+                    titulo ="fro"
+                    photos[titulo]=j
+                elif titulo == "poliza":
+                    titulo="pol"
+                    photos[titulo]=j
+                elif titulo =="tarjeta":
+                    titulo='tar'
+                    photos[titulo]=j
+                else:
+                    photos[titulo]=j
+            print(photos)
+            ######################################################
+            for titulo, x in photos.items():
+                if x and allowed_file(x.filename):
+                    filename = secure_filename(x.filename)
+                    nombre, extension = filename.split('.')
+                    if extension == 'pdf':
+                        x.save(os.path.join(app.config["UPLOAD_FOLDER"] + '\\pdf', filename))
+                        _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\pdf', filename)
+                        _path = 'uploads/pdf/'+ filename
+                        flash("Archivo pdf guardado exitosamente")
+                    elif extension == 'jpg':
+                        x.save(os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename))
+                        _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename)
+                        _path = 'uploads/img/'+ filename
+                        flash("Archivo jpg guardado exitosamente")
+                    elif extension == 'png':
+                        x.save(os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename))
+                        _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename)
+                        _path = 'uploads/img/'+ filename
+                        flash("Archivo png guardado exitosamente")
+                    data = read_file(_path2)
+                    img = Imagen(form.placa.data, titulo, _path, data)
+                    db.session.add(img)
+                    db.session.commit()
+            ##################################################
+
+                
+            
             flash('Registro modificado con exito')
             return redirect(url_for('searchvehiculo'))
     return render_template('vehiculos.html', nombre=nombre, form=form, edit=True, fotos=queryImg, doc=queryDoc, preciono=preciono, lista=comparacion)
