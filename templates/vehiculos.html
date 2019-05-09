@@ -254,7 +254,7 @@
                     <div class="container">
                         <center>
                         {% for dc in doc %}
-                            <a href="{{url_for('static', filename=dc.ruta)}}" >
+                            <a href="{{url_for('static', filename=dc.ruta)}}" target="_blank">
                                 <button type="button" name="boton" class="btn btn-outline-success" >
                                     {% if dc.parte == "fac" %}
                                         Factura

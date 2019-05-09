@@ -450,7 +450,6 @@ def editarVehi(numInv):
             lista.append(item.parte)
 
     comparacion = [item for item in lista2 if item not in lista]
-    print(comparacion)
 
     if request.method == 'POST':
         if lugar==12:
