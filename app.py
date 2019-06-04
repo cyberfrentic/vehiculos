@@ -1,7 +1,7 @@
 import datetime
 import os
 import xlrd
-from flask import Flask, session, render_template, url_for, request, flash, redirect, make_response, send_from_directory
+from flask import Flask, session, render_template, url_for, request, flash, redirect, make_response, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import text, distinct, desc
 from config import DevelopmentConfig
@@ -9,7 +9,7 @@ from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Co
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
-    filtroServ, formCotizacion
+    filtroServ, formCotizacion, formBitacora
 from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne
 from tools.tool import ToExcel
 from sqlalchemy.sql import func
@@ -1627,6 +1627,50 @@ def rendimientos():
             lista1.append(dato)
         return render_template("rendimientos.html", nombre=nombre, form=form, lista=lista1)
     return render_template("rendimientos.html", nombre=nombre, form=form)
+
+
+
+@app.route("/catalogo/bitacora/captura", methods=["GET","POST"])
+def bitacora():
+    nombre = session['username']
+    lugar =session['ciudad']
+    form = formBitacora(request.form)
+    form.select2.choices = [(select2.id, select2.placa) for select2 in Vehiculo.query.all()]
+    if request.method == 'POST' and form.validate():
+        pass
+    return render_template("bitacora.html", nombre=nombre, form=form)
+
+
+#este metodo es necesario para enviar datos a los selectField desde python como un json
+@app.route("/catalogo/bitacora/captura/data/<busqueda>")
+def seek(busqueda):
+    data = Vehiculo.query.all()
+    if "placa" in busqueda:
+        vehiArray = []
+        for vehi in data:
+            veObj = {}
+            veObj['id'] = vehi.id
+            veObj['placa'] = vehi.placa
+            vehiArray.append(veObj)
+        return jsonify({'datos':vehiArray})
+    elif "res" in busqueda:
+        vehiArray = []
+        for vehi in data:
+            veObj = {}
+            veObj['id'] = vehi.id
+            veObj['placa'] = vehi.resguardo
+            vehiArray.append(veObj)
+        return jsonify({'datos':vehiArray})
+    elif "ni" in busqueda:
+        vehiArray = []
+        for vehi in data:
+            veObj = {}
+            veObj['id'] = vehi.id
+            veObj['placa'] = vehi.numInv
+            vehiArray.append(veObj)
+        return jsonify({'datos':vehiArray})
+    return "nada"
+
 
 
 if __name__ == '__main__':

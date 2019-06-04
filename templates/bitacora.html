@@ -1,0 +1,41 @@
+{% extends 'home.html' %}
+{% from "_macro.html" import render_field %}
+{% block content %}
+	<br>
+	<br>
+	 <div class="container">
+        <div class="row">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group form-inline">
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.select1, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-goup col-xs-12 floating-label-form-group controls">
+                        {{ render_field(form.select2, class='form-control') }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                        
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+    	let select1_select = document.getElementById('select1');
+    	let select2_select = document.getElementById('select2');
+
+    	select1_select.onchange = function(){
+    		opcion = select1_select.value;
+    		fetch('/catalogo/bitacora/captura/data/' + opcion ).then(function(response){
+    			response.json().then(function(data) {
+    				let optionHTML=""; 
+    				for (let opt of data.datos){
+    					optionHTML += '<option value="' + opt.id + '">' + opt.placa +'</option>';
+    				}
+    				select2_select.innerHTML = optionHTML;
+    			});
+    		});
+    	}
+    </script>    
+{% endblock %}

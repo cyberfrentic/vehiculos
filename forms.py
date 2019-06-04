@@ -389,3 +389,9 @@ class formCotizacion(Form):
   solicitud = StringField("Núm. Solicitud",[
     validators.DataRequired(message="Tiene que capturar el numero de Solicitud")])
   Cotizacion= QuerySelectField(label='Proveedores', query_factory=QProv, allow_blank=True, get_pk=get_pk)
+
+
+class formBitacora(Form):
+  choices = [('', ''), ('td', 'Todos'), ('ni', 'Núm. Inv.'), ('placa', 'Placa'), ('res', 'Resguardante')]
+  select1 = SelectField('Buscar por', choices=choices, )
+  select2 = SelectField('Opciones', choices=[])
