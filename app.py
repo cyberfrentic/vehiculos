@@ -1635,13 +1635,23 @@ def bitacora():
     nombre = session['username']
     lugar =session['ciudad']
     form = formBitacora(request.form)
-    form.select2.choices = [(select2.id, select2.placa) for select2 in Vehiculo.query.all()]
-    if request.method == 'POST' and form.validate():
-        pass
-    return render_template("bitacora.html", nombre=nombre, form=form)
+    tabla = False
+    nuin = False
+    depto = False
+    if request.method == 'POST':
+        if "buscar" in request.form['buscar']:
+            if 'td' in form.select1.data:
+                tabla = Vehiculo.query.all()
+            elif 'ni' in form.select1.data:
+                if len(form.select2.data)>0:
+                    nuin = Vehiculo.query.filter_by(id=form.select2.data).one()
+                    depto = Resguardante.query.filter_by(nombreCompleto=nuin.resguardo).one()
+                else:
+                    flash("No eligio ninguna opcion")
+    return render_template("bitacora.html", nombre=nombre, form=form, tabla=tabla, nuin=nuin, depto=depto)
 
 
-#este metodo es necesario para enviar datos a los selectField desde python como un json
+#este metodo es necesario para enviar datos a los selectField desde python como un json de los selectField de bitacora
 @app.route("/catalogo/bitacora/captura/data/<busqueda>")
 def seek(busqueda):
     data = Vehiculo.query.all()
@@ -1668,6 +1678,12 @@ def seek(busqueda):
             veObj['id'] = vehi.id
             veObj['placa'] = vehi.numInv
             vehiArray.append(veObj)
+        return jsonify({'datos':vehiArray})
+    elif "td" in busqueda:
+        vehiArray = []
+        return jsonify({'datos':vehiArray})
+    elif "na" in busqueda:
+        vehiArray = []
         return jsonify({'datos':vehiArray})
     return "nada"
 

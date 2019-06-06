@@ -1,9 +1,18 @@
 {% extends 'home.html' %}
 {% from "_macro.html" import render_field %}
 {% block content %}
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
 	<br>
 	<br>
-	 <div class="container">
+	<div class="container">
         <div class="row">
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -16,11 +25,132 @@
                         {{ render_field(form.select2, class='form-control') }}
                         <p class="help-block text-danger"></p>
                     </div>
-                        
+                    <div class="form-inline form-group align-items-center">
+						<button type="submit" class="btn btn-outline-danger" id="buscar" name="buscar" value="buscar">Buscar</button>
+					</div>    
                 </div>
             </form>
         </div>
     </div>
+    {% if nuin %}
+    	<form method="POST" accept-charset="utf-8">
+	    	<div class="container">
+	    		<div class="card">
+				  <div class="card-header bg-info text-white">
+					  	<center>
+					  		<h5>Datos Generales del Vehículo con placas {{nuin.placa}}</h5>
+					  	</center>
+				  </div>
+				  <div class="card-body">
+				  	<table class="table table-bordered table-hover">
+					    <thead class="bg-success">
+					      <tr>
+					        <th>Marca</th>
+					        <th>Modelo</th>
+					        <th>Tarjeta o Arillo</th>
+					        <th>Fecha</th>
+					        <th>Departamento</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					      <tr class="bg-primary">
+					        <td>{{nuin.marca}}</td>
+					        <td>{{nuin.modelo}}</td>
+					        <td>{{nuin.tarjeta}}</td>
+					        <td> 05/06/2019</td>
+					        <td>{{depto.departamento}}</td>
+					      </tr>
+					    </tbody>
+					</table>
+					<table class="table table-bordered table-hover">
+					    <thead class="bg-success">
+					    	<tr class="bg-success">
+					        	<th rowspan="2"><center>Fecha de Carga</center></th>
+							</tr>
+							<tr>
+						        <th colspan="3"><center>Kilometraje</center></th>
+						        <th rowspan="">Litros</th>
+						    	<th rowspan="">Importe</th>
+						    </tr>
+						    <tr>
+						    	<th></th>
+						    	<th>Km Inicial</th>
+						        <th>Km Final</th>
+						        <th>Recorrido</th>
+						        <th></th>
+						        <th></th>
+						    </tr>
+					    </thead>
+					    <tbody>
+					      <tr class="bg-primary">
+					        <td>06/06/2019</td>
+					        <td>{{nuin.odome}}</td>
+					        <td><input type="text" name="kmfinal" class="control-form"></td>
+					        <td> 00000 </td>
+					        <td><input type="text" name="kmfinal" class="control-form"></td>
+					        <td><input type="text" name="kmfinal" class="control-form"></td>
+					      </tr>
+					    </tbody>
+					</table>
+				  </div>
+				  <div class="card-footer"><div class="form-inline form-group align-items-center">
+						<button type="submit" class="btn btn-outline-danger" id="guardar" name="guardar" value="guardar">Guardar</button>
+					</div></div>
+				</div>
+				<br>
+				<br>
+				<br>
+			</div>
+		</form>
+    {% endif %}
+    {% if tabla %}
+    	<div class="container">
+	        <div class="row">
+	            <form method="POST">
+	                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+	                <div class="container mt-3">
+					  <h2>Tabla con filtro</h2>
+					  <p>escribe el argumento a buscar puede ser placa, núm inv, resguardante </p>  
+					  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+					  <br>
+					  <table class="table table-bordered table-hover">
+					    <thead>
+					      <tr>
+					        <th>placa</th>
+					        <th>num inv</th>
+					        <th>resguardante</th>
+					      </tr>
+					    </thead>
+					    <tbody id="myTable">
+					    	{%for item in tabla %}
+					    		<tr>
+					        		<td>{{ item.placa }}</td>
+					        		<td>{{ item.numInv }}</td>
+					        		<td>{{ item.resguardo }}</td>
+					      		</tr>
+					      	{% endfor %}
+					    </tbody>
+					  </table>
+					  
+					  <p>Note that we start the search in tbody, to prevent filtering the table headers.</p>
+					</div>
+	            </form>
+	        </div>
+	        <br>
+	        <br>
+	        <br>
+	<script>
+		$(document).ready(function(){
+		  $("#myInput").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#myTable tr").filter(function() {
+		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});
+	</script>
+    	</div>
+    {% endif %}
     <script>
     	let select1_select = document.getElementById('select1');
     	let select2_select = document.getElementById('select2');
@@ -38,4 +168,5 @@
     		});
     	}
     </script>    
+    
 {% endblock %}

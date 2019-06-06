@@ -392,6 +392,6 @@ class formCotizacion(Form):
 
 
 class formBitacora(Form):
-  choices = [('', ''), ('td', 'Todos'), ('ni', 'Núm. Inv.'), ('placa', 'Placa'), ('res', 'Resguardante')]
+  choices = [('na', ''), ('td', 'Todos'), ('ni', 'Núm. Inv.'), ('placa', 'Placa'), ('res', 'Resguardante')]
   select1 = SelectField('Buscar por', choices=choices, )
-  select2 = SelectField('Opciones', choices=[])
+  select2 = SelectField('Opciones', choices=[('', ''),])
