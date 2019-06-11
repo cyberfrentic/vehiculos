@@ -1638,6 +1638,7 @@ def bitacora():
     tabla = False
     nuin = False
     depto = False
+    fecha = time.strftime("%d/%m/%Y")
     if request.method == 'POST':
         if "buscar" in request.form['buscar']:
             if 'td' in form.select1.data:
@@ -1648,7 +1649,7 @@ def bitacora():
                     depto = Resguardante.query.filter_by(nombreCompleto=nuin.resguardo).one()
                 else:
                     flash("No eligio ninguna opcion")
-    return render_template("bitacora.html", nombre=nombre, form=form, tabla=tabla, nuin=nuin, depto=depto)
+    return render_template("bitacora.html", nombre=nombre, form=form, tabla=tabla, nuin=nuin, depto=depto, fecha=fecha)
 
 
 #este metodo es necesario para enviar datos a los selectField desde python como un json de los selectField de bitacora
