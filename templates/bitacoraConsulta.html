@@ -1,7 +1,7 @@
 {% extends 'home.html' %}
 {% from "_macro.html" import render_field %}
 {% block content %}
-<head>
+<!--<head>
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +9,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</head>
+</head>-->
 	<br>
 	<br>
 	<div class="container">
@@ -29,115 +29,40 @@
 						<button type="submit" class="btn btn-outline-danger" id="buscar" name="buscar" value="buscar">Buscar</button>
 					</div>    
                 </div>
-
+		</form>
         </div>
     </div>
-    {% if nuin %}
-
-	    	<div class="container">
-	    		<div class="card">
-				  <div class="card-header bg-info text-white">
-					  	<center>
-					  		<h5>Datos Generales del Vehículo con placas {{nuin.placa}}</h5>
-					  	</center>
-				  </div>
-				  <div class="card-body">
-				  	<table class="table table-bordered table-hover">
-					    <thead class="bg-success">
-					      <tr>
-					        <th>Marca</th>
-					        <th>Modelo</th>
-					        <th>Rerguardante</th>
-					        <th>Usuario Actual</th>
-					        <th>Fecha Salida</th>
-					        <th>Departamento</th>
-					      </tr>
-					    </thead>
-					    <tbody>
-					      <tr class="bg-primary">
-					        <td>{{nuin.marca}}</td>
-					        <td>{{nuin.modelo}}</td>
-					        <td>{{nuin.resguardo}}</td>
-					        <td>{{form.resguardo}}</td>
-					        <td><input type="text" name="fechaS" class="control-form" value="{{fecha}}" ></td>
-					        <td>{{depto.departamento}}</td>
-					      </tr>
-					    </tbody>
-					</table>
-					<table class="table table-bordered table-hover">
-					    <thead class="bg-success">
-					    	<tr class="bg-success">
-					        	<th rowspan="2"><center>Fecha Entrada</center></th>
-							</tr>
-							<tr>
-						        <th colspan="3"><center>Kilometraje</center></th>
-						    </tr>
-						    <tr>
-						    	<th></th>
-						    	<th >Km Inicial</th>
-						        <th >Km Final</th>
-						        <th >Recorrido</th>
-						    </tr>
-					    </thead>
-					    <tbody>
-					      <tr class="bg-primary">
-					        <td><input type="hidden" name="placa" class="control-form" value="{{nuin.placa}}">
-					        	<input type="text" name="fechaE" class="control-form" value="{{fecha}}"></td>
-					        <td><input type="text" id="kminicial" name="kminicial" class="control-form" required></td>
-					        <td><input type="text" id="kmfinal" name="kmfinal" class="control-form"onblur="calculo()" required></td>
-					        <td> <input type="text" id="kilo" class="control-form" disabled> </td>
-					        
-					      </tr>
-					    </tbody>
-					</table>
-					
-					<div class="container bg-primary">
-						<br>
-						<center><textarea name="comentarios" rows="3" cols="140" class="control-form" placeholder="Escribe aqui tus comentarios" required></textarea></center>
-						<br>
-					</div>
-				  </div>
-
-				  <div class="card-footer"><div class="form-inline form-group align-items-center">
-						<button type="submit" class="btn btn-outline-danger" id="buscar" name="buscar" value="guardar">Guardar</button>
-					</div></div>
-				</div>
-				<br>
-				<br>
-				<br>
-			</div>
-		</form>
-    {% endif %}
     {% if tabla %}
     	<div class="container">
 	        <div class="row">
-	            <form method="POST">
-	                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+	        	<form method="POST">
+                	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 	                <div class="container mt-3">
-					  <h2>Tabla con filtro</h2>
-					  <p>escribe el argumento a buscar puede ser placa, núm inv, resguardante </p>  
-					  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+					  <!--<p>escribe el argumento a buscar puede ser placa, núm inv, resguardante </p>  
+					  <input class="form-control" id="myInput" type="text" placeholder="Search..">-->
 					  <br>
 					  <table class="table table-bordered table-hover">
 					    <thead>
-					      <tr>
-					        <th>placa</th>
-					        <th>num inv</th>
-					        <th>resguardante</th>
+					      <tr class="table-primary">
+					        <th>Fecha Salida</th>
+					        <th>Placa</th>
+					        <th>Nombre Conductor</th>
+					        <th>Fecha Entrada</th>
+					        <th>Observaciones</th>
 					      </tr>
 					    </thead>
 					    <tbody id="myTable">
 					    	{%for item in tabla %}
-					    		<tr>
+					    		<tr class="table-success">
+					        		<td>{{ item.fechasal }}</td>
 					        		<td>{{ item.placa }}</td>
-					        		<td>{{ item.numInv }}</td>
-					        		<td>{{ item.resguardo }}</td>
+					        		<td>{{ item.usu_actual }}</td>
+					        		<td>{{ item.fechaentra}}</td>
+					        		<td>{{ item.observaciones }}</td>
 					      		</tr>
 					      	{% endfor %}
 					    </tbody>
 					  </table>
-					  
-					  <p>Note that we start the search in tbody, to prevent filtering the table headers.</p>
 					</div>
 					
 	            </form>

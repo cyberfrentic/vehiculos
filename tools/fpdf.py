@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import make_response
 from models import db
 import flask
-from models import Ciudades
+from models import Ciudades, Vehiculo, Resguardante
 
 
 class PDF(FPDF):
@@ -13,21 +13,33 @@ class PDF(FPDF):
         imagenes = os.path.abspath("static/img/")
         # Logo  con esta ruta se dirige al server y no a la maquina cliente
         if tamaño:
-            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 350, 50)
-        else:
+            # hay que ajustar el tiop de página legal esto funciona con letter en landscape
+            self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 270, 40)
+        elif tamaño == False:
             self.image(os.path.join(imagenes, "sintitulo.png"), 10, 5, 200, 30)
         # Arial bold 15
-        self.set_font('Arial', 'B', 8)
-        self.ln(15)
+        self.set_font('Arial', 'B', 12)
+        self.ln(3)
         # Move to the right
         # self.cell(100)
         # Title
+        self.cell(0, 10, "GOBIERNO DEL ESTADO DE QUINTANA ROO" , 0, 0, 'C')
+        self.ln(4)
+        self.set_font('Arial', 'B', 8)
+        self.cell(0, 10, "COMISION DE AGUA POTABLE Y ALCANTARILLADO", 0, 0, 'C')
+        self.ln(4)
+        self.cell(0, 10, "COORDINACION ADMINISTRATIVA Y FINANCIERA", 0, 0, 'C')
+        self.ln(4)
+        self.set_font('Arial', 'B', 7)
+        self.cell(0, 10, "DIRECCION DE RECURSOS MATERIALES", 0, 0, 'C')
+        self.ln(15)
+        self.set_font('Arial', 'B', 8)
         self.cell(0, 10, Titulo, 0, 0, 'C')
-        self.ln(5)
-        self.cell(0, 10, (Ciudad + ' ' + fecha_actual()).upper(), 0, 0, 'C')
+        # self.ln(5)
+        # self.cell(0, 10, (Ciudad + ' ' + fecha_actual()).upper(), 0, 0, 'C')
         # Line break
         if tamaño:
-            self.ln(20)
+            self.ln(8)
         else:
             self.ln(10)
 
@@ -112,12 +124,22 @@ def letras():
     anio = str(datetime.today())[:4]
     return (dias[dia] + ' dias del mes de ' + meses[mes] + ' de ' + anios[anio]).upper()
 
-
 # consulta para pedir datos de las tablas directamente
 def ciudad():
   lugar = flask.session.get('ciudad')
   ci = Ciudades.query.filter_by(id=lugar).first()
   return  str(ci.ciudad)
+
+
+def carro(placas):
+    lugar = flask.session.get('ciudad')
+    x1 = Vehiculo.query.filter_by(placa=str(placas)).filter_by(idCiudad=lugar).first()
+    return x1
+
+
+def area(resguardo):
+    lugar = flask.session.get('ciudad')
+    return db.session.query(Resguardante).filter(Resguardante.nombreCompleto.like("%"+str(resguardo)+"%")).filter(Resguardante.idCiudad==lugar).first()
 
 
 def SetMoneda(num, simbolo="US$", n_decimales=2):
@@ -182,15 +204,36 @@ def fecha_actual():
     return (dia + ' de ' + meses[mes] + ' de ' + anio).upper()
 
 
+def mesanio(fecha):
+    meses = {
+        '01': 'Enero',
+        '02': 'Febrero',
+        '03': 'Marzo',
+        '04': 'Abril',
+        '05': 'Mayo',
+        '06': 'Junio',
+        '07': 'Julio',
+        '08': 'Agosto',
+        '09': 'Septiembre',
+        '10': 'Octubre',
+        '11': 'Noviembre',
+        '12': 'Diciembre',
+    }
+    #dia = str(datetime.today())[8:10]
+    mes = str(fecha)[5:7]
+    anio = str(fecha)[:4]
+    return ( meses[mes] + ' ' + anio).upper()
+
+
 def tabla(datos, totales, titulo):
     global Titulo
     Titulo=titulo
     global tamaño
-    tamaño = False
+    tamaño = True
     global Ciudad
     Ciudad = ciudad()
     # Instantiation of inherited class
-    pdf = PDF("P", 'mm', 'Letter')
+    pdf = PDF("L", 'mm', 'Letter')
     pdf.alias_nb_pages()
     pdf.add_page()
     pdf.set_fill_color(255, 0, 0)
@@ -208,9 +251,14 @@ def tabla(datos, totales, titulo):
 
     # Set column width to 1/4 of effective page width to distribute content 
     # evenly across table and page
-    col_width = epw / 6
-    data = ('Núm. Folio', 'Fecha', 'Placa', 'Cant. Litros', 'Tipo Comb.', 'Total')
-
+    plas = str(totales[0]['placa'])
+    c = carro(plas)
+    r = area(str(c.resguardo))
+    print(c.resguardo)
+    
+    ################ inicia encabezado ###################
+    col_width = epw / 4
+    data = ('Area: ' + r.area, "Tipo: " + c.tipoVehiculo, 'Bitacora mes y año', 'Núm. Licencia')
     # Document title centered, 'B'old, 14 pt
     pdf.set_font('Times', 'B', 14.0)
     # pdf.cell(epw, 0.0, 'Demographic data', align='C')
@@ -218,18 +266,80 @@ def tabla(datos, totales, titulo):
     pdf.ln(0.5)
 
     # Text height is the same as current font size
-    th = pdf.font_size
+    th = pdf.font_size+2
     for item in data:
         pdf.cell(col_width, th, str(item), border=1)
+    pdf.ln()    
+    col_width = epw / 4
+    pdf.cell(col_width, th, c.resguardo, border=1, align='C')
+    pdf.cell(col_width/3, th, c.marca, border=1, align='C')
+    pdf.cell(col_width/3, th, c.anio, border=1, align='C')
+    pdf.cell(col_width/3, th, totales[0]['placa'], border=1, align='C')
+    pdf.cell(col_width, th, mesanio(str(datos[0].fecha)[:10]), border=1, align='C')
+    pdf.cell(col_width, th, r.licencia, border=1, align='C')
+    print(str(datos[0].fecha)[:10])
     pdf.ln()
-    for row in datos:
-        pdf.cell(col_width, th, str(row['nuFolio']), border=1)
-        pdf.cell(col_width, th, str(row['fecha'][:10]), border=1)
-        pdf.cell(col_width, th, str(row['placa']), border=1)
-        pdf.cell(col_width, th, str(row['litros']), border=1)
-        pdf.cell(col_width, th, str(row['combustible']), border=1)
-        pdf.cell(col_width, th, str(row['total']), border=1)
+    pdf.ln()
+
+    col_width = epw / 11
+    pdf.cell(col_width, th, "Fecha de Carga", border=1, align='C')
+    pdf.cell(col_width*3-10, th, "Kilometraje", border=1, align='C')
+    pdf.cell(col_width-4, th, "Litros", border=1, align='C')
+    pdf.cell(col_width-2, th, "importe", border=1, align='C')
+    pdf.cell(col_width*4-8, th, "Forma de Carga", border=1, align='C')
+    pdf.cell(col_width+24, th, "Observaciones", border=1, align='C')
+    pdf.ln()
+    pdf.cell(col_width, th, "", border=1)
+    pdf.cell(col_width-2, th, "Inicial", border=1, align='C')
+    pdf.cell(col_width-2, th, "Final", border=1, align='C')
+    pdf.cell(col_width-6, th, "Recorrido", border=1, align='C')
+    pdf.cell(col_width-4, th, "", border=1, align='C')
+    pdf.cell(col_width-2, th, "$", border=1, align='C')
+    pdf.cell(col_width-2, th, "Vales", border=1, align='C')
+    pdf.cell(col_width-2, th, "Arillo", border=1, align='C')
+    pdf.cell(col_width-2, th, "Tarjeta", border=1, align='C')
+    pdf.cell(col_width-2, th, "Efectivo", border=1, align='C')
+    pdf.cell(col_width+24, th, "", border=1)
+
+
+    pdf.ln()
+    ##############termina encabezado ##########################
+    i=0
+
+    col_width = epw / 11
+    ############## Ciclo de impresion de datos ################
+    for i in range(len(datos)):
+        pdf.set_font('Times', '', 10.0)
+        pdf.cell(col_width, th, str(datos[i].fecha)[:10], border=1)
+        if c.odome =="Si":
+            #pdf.cell(col_width-2, th, str(c.kmInicio), border=1)
+            if datos[i].odometro == 0:
+                pdf.cell(col_width-2, th, str(c.kmInicio), border=1)
+                pdf.cell(col_width-2, th, str(datos[i].odometro), border=1)
+                pdf.cell(col_width-6, th, str(0), border=1)
+            else:
+                if i==0:
+                    pdf.cell(col_width-2, th, str(datos[i].odometro), border=1)
+                    pdf.cell(col_width-6, th, str(int(datos[i].odometro-datos[i].odometro)), border=1)
+                else:
+                    pdf.cell(col_width-2, th, str(datos[i-1].odometro), border=1)
+                    pdf.cell(col_width-2, th, str(datos[i].odometro), border=1)
+                    pdf.cell(col_width-6, th, str(int(datos[i].odometro-datos[i-1].odometro)), border=1)
+        else:
+            pdf.cell(col_width-2, th, str(c.kmInicio), border=1)
+            pdf.cell(col_width-2, th, str(datos[i].odometro), border=1)
+            pdf.cell(col_width-6, th, "0", border=1)
+        pdf.cell(col_width-4, th, str(datos[i].litros), border=1)
+        pdf.cell(col_width-2, th, str(datos[i].total), border=1)
+        pdf.cell(col_width-2, th, "", border=1)
+        pdf.cell(col_width-2, th, "", border=1)
+        pdf.cell(col_width-2, th, "", border=1)
+        pdf.cell(col_width-2, th, "", border=1)
+        pdf.set_font('Times', 'B', 5.0)
+        pdf.cell(col_width+24, th, str(datos[i].observaciones)[:40], border=1)
         pdf.ln(th)
+    ################ fin de ciclo de impresion #############
+
     pdf.ln(2)
     pdf.set_font('Times', 'B', 14.0)
     th = pdf.font_size
@@ -238,10 +348,15 @@ def tabla(datos, totales, titulo):
     pdf.ln(2)
     th = pdf.font_size
     for item in totales:
-        pdf.cell(col_width, th, str(item['placa']), border=1)
-        pdf.cell(col_width, th, '$ '+str("{0:.2f}".format(item['total'])), border=1)
+        pdf.cell(col_width, th+2, str(item['placa']), border=1)
+        pdf.cell(col_width, th+2, '$ '+str("{0:.2f}".format(item['total'])), border=1)
         pdf.ln()
-    #pdf.cell(30, th, 'TOTAL: $ ' + str(totales), 'C', 1)
+    pdf.ln()
+    pdf.cell(30, th,"NOTA: En la columna de observaciones registrar si fue" , 'C')
+    pdf.ln()
+    pdf.cell(30, th,"carga semanal o extraordinaria y en su caso anotar el                                    __________________________________________________________" , 'C')
+    pdf.ln()
+    pdf.cell(100, th,"numero de oficio de solicitud                                                                                                                 Firma del Responsable")
     ##########################################################################
     ######## imprimir desde una pagina web de flask con estas funciones ######
     ##########################################################################
@@ -662,7 +777,7 @@ def reporteVehiculos(datos, titulo):
     global Ciudad
     Ciudad = ciudad()
     # Instantiation of inherited class
-    pdf = PDF("L", 'mm', 'Legal')
+    pdf = PDF("L", 'mm', 'Letter')
     pdf.alias_nb_pages()
     pdf.add_page()
     #pdf.set_fill_color(255, 0, 0)

@@ -81,7 +81,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/home"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/casa.svg')}}" width="16" height="16" style="fill:red;">Inicio <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{{url_for('home')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/casa.svg')}}" width="16" height="16" style="fill:red;">Inicio <span class="sr-only">(current)</span></a>
           </li>
           
           <li class="nav-item dropdown" >
@@ -95,9 +95,19 @@
                   Vehiculos
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
-                  <a class="dropdown-item" href="/vehiculo/captura"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/coche2.svg')}}" width="16" height="16">Captura</a>
-                  <a class="dropdown-item" href="/vehiculo/searchvehiculo"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/apoyo-tecnico.svg')}}" width="16" height="16">Consulta</a>
-                  <a class="dropdown-item" href="/catalogo/bitacora/captura"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/Note.png')}}" width="16" height="16">Bitacora</a>
+                  <a class="dropdown-item" href="{{url_for('Vehiculow')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/coche2.svg')}}" width="16" height="16">Captura</a>
+                  <a class="dropdown-item" href="{{url_for('searchvehiculo')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/apoyo-tecnico.svg')}}" width="16" height="16">Consulta</a>
+                  <!--- esto es un submenu-->
+                  <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
+                    <a class="dropdown-item dropdown-toggle" href="#">
+                      <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/Note.png')}}" width="16" height="16"> Bitacora
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
+                      <a class="dropdown-item" href="{{url_for('bitacora')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/analitica.svg')}}" width="16" height="16">Captura</a>
+                      <a class="dropdown-item" href="{{url_for('bitaConsul')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/entrevista.svg')}}" width="16" height="16">Consulta</a>
+                    </div>
+                  </div>
+                  <!--- esto es un submenu-->
                 </div>
               </div>
               <div class="dropdown-divider"></div>

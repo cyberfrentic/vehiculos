@@ -5,14 +5,14 @@
 
 	{% block content %}
         <script>
-        function imprSelec(muestra){
-    var ficha = document.getElementById(muestra); //obtenemos el objeto a imprimir
-    var ventimp = window.open(' ','popimpr'); //abrimos una ventana vacía nueva
-    ventimp.document.write(ficha.innerHTML); //imprimimos el HTML del objeto en la nueva ventana
-    ventimp.document.close();  //cerramos el documento
-    ventimp.print(); //imprimimos la ventana
-    ventimp.close(); //cerramos la ventana
-}
+            var imprSelec = function (muestra){
+                var ficha = document.getElementById(muestra); //obtenemos el objeto a imprimir
+                var ventimp = window.open(' ','popimpr'); //abrimos una ventana vacía nueva
+                ventimp.document.write(ficha.innerHTML); //imprimimos el HTML del objeto en la nueva ventana
+                ventimp.document.close();  //cerramos el documento
+                ventimp.print(); //imprimimos la ventana
+                ventimp.close(); //cerramos la ventana
+            }
         </script>
         <div class="container">
 			<div class="row-fluid">
@@ -40,7 +40,6 @@
         <div class="container" >
             <div class="row-fluid">
                 <div class="form-goup col-xs-12 floating-label-form-group controls float-sm-right">
-                    <button class="btn btn-danger btn-sm" onclick="imprSelec('muestra')">Imprimir solo datos sin formato </button>
                     <button class="btn btn-danger btn-sm" name='buton' value="print">Imprimir con encabezado </button>
                 </div>
 

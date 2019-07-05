@@ -42,7 +42,6 @@ def proveedor():
   return Model_Proveedor.query.filter_by(idCiudad=lugar)
 
 
-
 def Query_placas():
   lugar = flask.session.get('ciudad')
   x = Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa')
@@ -128,7 +127,7 @@ class FormVehiculos(Form):
                                ('2004','2004'), ('2005','2006'), ('2007','2007'), ('2008','2009'), ('2010','2010'), ('2011','2011'), ('2012','2012'), ('2013','2013'), ('2014','2014'), ('2015','2015'),
                                ('2016','2016'), ('2017','2018'), ('2019','2019'), ('2020','2020'), ('2021','2021'), ('2022','2022'), ('2023','2023'), ('2024','2024')], )
     tipoVehiculo = SelectField('T. Vehiculo',
-                               choices=[('', ''), ('camioneta', 'camioneta'), ('Estaquitas', 'Estaquitas'), ("Automovil", 'Automovil'), ("Pipa", 'Pipa'), ("coche", 'coche')], )
+                               choices=[('', ''), ('camioneta', 'camioneta'),('moto','Motocicleta'), ('bidon','Bidon'), ('Estaquitas', 'Estaquitas'), ("Automovil", 'Automovil'), ("Pipa", 'Pipa'), ("coche", 'coche')], )
     nSerie = StringField('Núm. Serie',
                         [validators.DataRequired(message='El Número de serie es Obligatorio'),
                          validators.length(min=17, max=20, message='El Numero de serie es un campo obligatorio')
@@ -392,6 +391,13 @@ class formCotizacion(Form):
 
 
 class formBitacora(Form):
+  choices = [('na', ''), ('ni', 'Núm. Inv.'), ('placa', 'Placa'), ('res', 'Resguardante')]
+  select1 = SelectField('Buscar por', choices=choices, )
+  select2 = SelectField('Opciones', choices=[('', ''),])
+  resguardo = QuerySelectField(label='Resguardante', query_factory=resguard,
+                                  get_pk=get_pk, allow_blank=True, get_label="nombreCompleto")
+
+class formBitacora2(Form):
   choices = [('na', ''), ('td', 'Todos'), ('ni', 'Núm. Inv.'), ('placa', 'Placa'), ('res', 'Resguardante')]
   select1 = SelectField('Buscar por', choices=choices, )
   select2 = SelectField('Opciones', choices=[('', ''),])

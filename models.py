@@ -9,7 +9,7 @@ db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(93))
     email = db.Column(db.String(40))
@@ -33,7 +33,7 @@ class User(db.Model):
 
 class jefes(db.Model):
     __tablename__ = 'Bosses'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(50))
     cargo = db.Column(db.String(35))
 
@@ -47,7 +47,7 @@ class jefes(db.Model):
 
 class Ciudades(db.Model):
     __tablename__ = 'Ciudades'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ciudad = db.Column(db.String(35), unique=True)
 
     def __init__(self, ciudad):
@@ -59,7 +59,7 @@ class Ciudades(db.Model):
 
 class tipoVehiculos(db.Model):
     __tablename__ = 'tvehiculos'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tipo = db.Column(db.String(20), unique=True)
 
     def __repr__(self):
@@ -68,7 +68,7 @@ class tipoVehiculos(db.Model):
 
 class Resguardante(db.Model):
     __tablename__ = 'resguardantes'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(35))
     apellidoPat = db.Column(db.String(20))
     apellidoMat = db.Column(db.String(20))
@@ -92,12 +92,12 @@ class Resguardante(db.Model):
         self.idCiudad = idCiudad
 
     def __repr__(self):
-        return '{}'.format(self.nombre + " " + self.apellidoPat + " " + self.apellidoMat)
+        return '{}'.format(self.nombreCompleto)
 
 
 class Vehiculo(db.Model):
     __tablename__ = 'carros'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     numInv = db.Column(db.String(18), unique=True)
     numSicopa = db.Column(db.String(18), unique=True)#
     numTarCir = db.Column(db.String(10), unique=True)
@@ -152,7 +152,7 @@ class Vehiculo(db.Model):
 
 class Model_Proveedor(db.Model):
     __tablename__ = 'proveedores'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     razonSocial = db.Column(db.String(100))
     propietario = db.Column(db.String(50))
     direccion = db.Column(db.String(120))
@@ -182,8 +182,8 @@ class Model_Proveedor(db.Model):
 
 class Ticket(db.Model):
     __tablename__ = 'ticket'
-    id = db.Column(db.Integer, primary_key=True)
-    nuFolio = db.Column(db.Integer, unique=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nuFolio = db.Column(db.Integer)
     fecha = db.Column(db.DateTime)
     odometro = db.Column(db.Integer)
     litros = db.Column(db.Float)
@@ -213,7 +213,7 @@ class Ticket(db.Model):
 
 class Combustible(db.Model):
     __tablename__ = 'combustible'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     factura = db.Column(db.Integer)
     leyenda = db.Column(db.String(25))
     placa = db.Column(db.String(20))
@@ -311,7 +311,7 @@ class captura_Sol(db.Model):
 
 class Compras(db.Model):
     __tablename__='compras'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     UUiD = db.Column(db.String(36), unique=True)
     rfc = db.Column(db.String(13), index=True)
     nombre = db.Column(db.String(150))
@@ -341,7 +341,7 @@ class Compras(db.Model):
 
 class Articulos(db.Model):
     __tablename__ = 'articulos'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     compras_id = db.Column(db.Integer, db.ForeignKey("compras.id"), nullable=False)
     compras = relationship(Compras, backref = backref('comprass', uselist=True))
     cantidad = db.Column(db.Float)
@@ -358,7 +358,7 @@ class Articulos(db.Model):
 
 class Imagen(db.Model):
     __tablename__ = "imagenes"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     placa = db.Column(db.String(9))
     parte = db.Column(db.String(4))
     ruta = db.Column(db.String(150))
@@ -370,3 +370,25 @@ class Imagen(db.Model):
         self.ruta = ruta
         self.data = data
         
+
+class Bitacora(db.Model):
+    __tablename__="bitacoras"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_vehiculo = db.Column(db.Integer)
+    usu_actual = db.Column(db.String(35))
+    fechasal = db.Column(db.Date)
+    kmInicio = db.Column(db.Integer)
+    kmFinal = db.Column(db.Integer)
+    recorrido = db.Column(db.Integer)
+    fechaentra = db.Column(db.Date)
+    observaciones = db.Column(db.Text)
+
+    def __init__(self, id_vehiculo, usu_actual, fechasal, kmInicio, kmFinal, recorrido, fechaentra, observaciones):
+        self.id_vehiculo = id_vehiculo
+        self.usu_actual = usu_actual
+        self.fechasal = fechasal
+        self.kmInicio = kmInicio
+        self.kmFinal = kmFinal
+        self.recorrido = recorrido
+        self.fechaentra = fechaentra
+        self.observaciones = observaciones

@@ -5,11 +5,11 @@ from flask import Flask, session, render_template, url_for, request, flash, redi
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import text, distinct, desc
 from config import DevelopmentConfig
-from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades, Imagen
+from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades, Imagen, Bitacora
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
-    filtroServ, formCotizacion, formBitacora
+    filtroServ, formCotizacion, formBitacora, formBitacora2
 from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne
 from tools.tool import ToExcel
 from sqlalchemy.sql import func
@@ -829,14 +829,14 @@ def ticket():
             tra = 0
             flash('El ticket es un planchado y no cuenta con numero de folio')
         queryRendi = Ticket.query.filter_by(placa=str(form.placa.data)).filter_by(idCiudad=lugar).order_by(Ticket.fecha).all()
-        print(queryRendi)
+
         if queryRendi != []:
             flash('El rendimiento es de {} km./lts.'.format((int(form.odometro.data)-int(queryRendi[0].odometro))/int(form.cantidad.data)))
         else:
             queryPlec = Vehiculo.query.filter_by(placa=str(form.placa.data)).filter_by(idCiudad=lugar).one()
             flash('El rendimiento es de {} km./lts.'.format((int(queryPlec.kmInicio)-int(queryPlec.kmInicio))/int(form.cantidad.data)))
         ticket = Ticket(
-            nuFolio=tra,
+            nuFolio = tra,
             fecha=form.fecha.data,
             odometro = form.odometro.data,
             litros=form.cantidad.data,
@@ -884,7 +884,7 @@ def Consulta_ticket():
                 if placa != 'TODOS':
                     query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros,
                                              Ticket.combustible,
-                                             Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(placa=placa).filter_by(idCiudad=lugar)
+                                             Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(placa=placa).filter_by(idCiudad=lugar).all()
                     for x in query:
                         data = {
                             'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
@@ -952,27 +952,27 @@ def Consulta_ticket():
                 return imprimir
             else:
                 query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros, Ticket.combustible,
-                                         Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter(
-                    Ticket.placa == placa).filter(Ticket.idCiudad==lugar)
+                                         Ticket.total, Ticket.odometro, Ticket.observaciones).filter(Ticket.fecha.between(fi, ff)).filter(
+                    Ticket.placa == placa).filter(Ticket.idCiudad==lugar).all()
                 lista2 = []
-                for x in query:
-                    data = {
-                        'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
-                        'fecha': str(x.fecha),
-                        'placa': str(x.placa),
-                        'litros': x.litros,
-                        'combustible': x.combustible,
-                        'total': x.total,
-                    }
-                    lista.append(data)
-                valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.idCiudad==lugar)
-                for val in valor.all():
+                # for x in query:
+                #     data = {
+                #         'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
+                #         'fecha': str(x.fecha),
+                #         'placa': str(x.placa),
+                #         'litros': x.litros,
+                #         'combustible': x.combustible,
+                #         'total': x.total,
+                #     }
+                #     lista.append(data)
+                valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.idCiudad==lugar).filter(Ticket.fecha.between(fi, ff)).all()
+                for val in valor:
                     data = {
                         'placa': placa,
                         'total': val.total,
                     }
                     lista2.append(data)
-                imprimir = tabla(lista, lista2,'Reporte de consulta de Consumo de Combustible'.upper())
+                imprimir = tabla(query, lista2,'ORGANISMO OPERADOR FELIPE CARRILLO PUERTO'.upper())
                 return imprimir
 
     return render_template('TicketConsulta.html', form=form, nombre=nombre)
@@ -1617,7 +1617,7 @@ def rendimientos():
         lista1=[]
         dato={}
         for i in range(x):
-            rendimiento = 0 if i==0 else ((lista[i].odometro-lista[i-1].odometro)/lista[i].litros)
+            rendimiento = 0 if i == 0 else ((lista[i].odometro-lista[i-1].odometro)/lista[i].litros)
             dato={
             'fecha': lista[i].fecha,
             'litros': "{0:.2f}".format(lista[i].litros),
@@ -1630,7 +1630,7 @@ def rendimientos():
 
 
 
-@app.route("/catalogo/bitacora/captura", methods=["GET","POST"])
+@app.route("/catalogo/vehiculos/bitacora/captura", methods=["GET","POST"])
 def bitacora():
     nombre = session['username']
     lugar =session['ciudad']
@@ -1638,17 +1638,44 @@ def bitacora():
     tabla = False
     nuin = False
     depto = False
-    fecha = time.strftime("%d/%m/%Y")
+    fecha = time.strftime("%Y-%m-%d")
     if request.method == 'POST':
         if "buscar" in request.form['buscar']:
-            if 'td' in form.select1.data:
-                tabla = Vehiculo.query.all()
-            elif 'ni' in form.select1.data:
+            if 'ni' in form.select1.data:
                 if len(form.select2.data)>0:
                     nuin = Vehiculo.query.filter_by(id=form.select2.data).one()
                     depto = Resguardante.query.filter_by(nombreCompleto=nuin.resguardo).one()
                 else:
                     flash("No eligio ninguna opcion")
+            elif 'placa' in form.select1.data:
+                nuin = Vehiculo.query.filter_by(id=form.select2.data).one()
+                depto = Resguardante.query.filter_by(nombreCompleto=nuin.resguardo).one()
+            elif 'res' in form.select1.data:
+                nuin = Vehiculo.query.filter_by(id=form.select2.data).one()
+                depto = Resguardante.query.filter_by(nombreCompleto=nuin.resguardo).one()
+        elif "guardar" in request.form['buscar']:
+            usu = form.resguardo.data
+            ki = request.form.get('kminicial')
+            kf = request.form.get('kmfinal')
+            reco = int(kf) - int(ki)
+            obser = request.form.get('comentarios')
+            pla = request.form.get('placa')
+            dat = Vehiculo.query.filter_by(placa=pla).one()
+            fs = request.form.get('fechaS')
+            fe = request.form.get('fechaE')
+            print(dat)
+            bita = Bitacora(dat.id,
+                str(form.resguardo.data),
+                fs,
+                ki,
+                kf,
+                reco,
+                fe,
+                obser)
+            db.session.add(bita)
+            db.session.commit()
+            flash("Registro guardadocon exito")
+            return redirect(url_for("bitacora"))
     return render_template("bitacora.html", nombre=nombre, form=form, tabla=tabla, nuin=nuin, depto=depto, fecha=fecha)
 
 
@@ -1681,7 +1708,7 @@ def seek(busqueda):
             vehiArray.append(veObj)
         return jsonify({'datos':vehiArray})
     elif "td" in busqueda:
-        vehiArray = []
+        vehiArray = [{'id': 0, 'placa': 'Todos'}]
         return jsonify({'datos':vehiArray})
     elif "na" in busqueda:
         vehiArray = []
@@ -1689,6 +1716,67 @@ def seek(busqueda):
     return "nada"
 
 
+@app.route("/catalogo/vehiculos/bitacora/consulta", methods=["GET","POST"])
+def bitaConsul():
+    nombre = session['username']
+    lugar =session['ciudad']
+    form = formBitacora2(request.form)
+    tabla = False
+    fecha = time.strftime("%Y-%m-%d")
+    lista = []
+    data = []
+    if request.method == 'POST':
+        if "buscar" in request.form['buscar']:
+            print(form.select1.data)
+            if "td" in form.select1.data:
+                tabla = Bitacora.query.all()
+                for item in tabla:
+                    pl = Vehiculo.query.filter_by(id=item.id_vehiculo).one()
+                    data = {
+                        'fechasal': item.fechasal,
+                        'placa': pl.placa,
+                        'usu_actual': item.usu_actual,
+                        'fechaentra': item.fechaentra,
+                        'observaciones': item.observaciones,
+                    }
+                    lista.append(data)
+            elif "ni" in form.select1.data:
+                tabla = Bitacora.query.all()
+                for item in tabla:
+                    pl = Vehiculo.query.filter_by(id=item.id_vehiculo).one()
+                    data = {
+                        'fechasal': item.fechasal,
+                        'placa': pl.placa,
+                        'usu_actual': item.usu_actual,
+                        'fechaentra': item.fechaentra,
+                        'observaciones': item.observaciones,
+                    }
+                    lista.append(data)
+            elif "placa" in form.select1.data:
+                tabla = Bitacora.query.all()
+                for item in tabla:
+                    pl = Vehiculo.query.filter_by(id=item.id_vehiculo).one()
+                    data = {
+                        'fechasal': item.fechasal,
+                        'placa': pl.placa,
+                        'usu_actual': item.usu_actual,
+                        'fechaentra': item.fechaentra,
+                        'observaciones': item.observaciones,
+                    }
+                    lista.append(data)
+            elif "res" in form.select1.data:
+                tabla = Bitacora.query.all()
+                for item in tabla:
+                    pl = Vehiculo.query.filter_by(id=item.id_vehiculo).one()
+                    data = {
+                        'fechasal': item.fechasal,
+                        'placa': pl.placa,
+                        'usu_actual': item.usu_actual,
+                        'fechaentra': item.fechaentra,
+                        'observaciones': item.observaciones,
+                    }
+                    lista.append(data)
+    return render_template("bitacoraConsulta.html", nombre=nombre, form=form, tabla=lista)
 
 if __name__ == '__main__':
     crsf.init_app(app)
