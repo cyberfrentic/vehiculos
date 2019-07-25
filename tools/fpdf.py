@@ -319,6 +319,7 @@ def tabla(datos, totales, titulo):
                 pdf.cell(col_width-6, th, str(0), border=1)
             else:
                 if i==0:
+                    pdf.cell(col_width-2, th, str(c.kmInicio), border=1)
                     pdf.cell(col_width-2, th, str(datos[i].odometro), border=1)
                     pdf.cell(col_width-6, th, str(int(datos[i].odometro-datos[i].odometro)), border=1)
                 else:

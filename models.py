@@ -120,9 +120,11 @@ class Vehiculo(db.Model):
     placa = db.Column(db.String(10), unique=True)
     idCiudad=db.Column(db.Integer)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
+    tipoCarga = db.Column(db.String(15))
+    numDispositivo = db.Column(db.String(15))
 
     def __init__(self, numInv, numSicopa, numTarCir, marca, modelo, color, anio, tipoVehiculo, nSerie, nMotor, costo, tCombus, odome, kmInicio, nVehi, resguardo,
-                 cSeguros, nPoliza, placa, idCiudad):
+                 cSeguros, nPoliza, placa, idCiudad, tipoCarga, numDispositivo):
         self.numInv = numInv
         self.numSicopa = numSicopa
         self.numTarCir = numTarCir
@@ -145,6 +147,8 @@ class Vehiculo(db.Model):
         self.nPoliza = nPoliza
         self.placa = placa
         self.idCiudad = idCiudad
+        self.tipoCarga = tipoCarga
+        self.numDispositivo = numDispositivo
 
     def __repr__(self):
         return '{}'.format(self.placa)

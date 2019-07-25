@@ -166,8 +166,9 @@ class FormVehiculos(Form):
     factura = FileField('imagen de la factura')
     tarjeta = FileField('Imagen tarjeta de circulacion')
     poliza = FileField('Imagen Poliza de seguro')
-
-
+    tipoCarga = SelectField('Dispositivo de carga', choices=[('', ''), ('vales', 'Vales'), ('arillo', 'Arillo'), ('tarjeta', 'Tarjeta'), ('efectivo', 'Efectivo')])
+    numDispositivo = StringField('Num. Dispositivo',  
+                          [validators.DataRequired('El numero de Dispositivo es indispensable')])
     
 
 
