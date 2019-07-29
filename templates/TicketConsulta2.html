@@ -3,17 +3,39 @@
 
 
 
-	{% block content %}
+	{% block content %}  
+
+
+    <script>
+        function asignar(){
+            fetch('/combustible/ticket/consultagrupal/data').then(function(response){
+                response.json().then(function(data) {
+                    let optionHTML=""; 
+                    for (let opt of data.datos){
+                        optionHTML += '<option value="' + opt.id + '">' + opt.placa +'</option>';
+                    }
+                    document.getElementById('select1').setAttribute("multiple","multiple")
+                    document.getElementById('select1').innerHTML = optionHTML;
+                    
+                });
+            });
+        };
+        asignar();
+    </script>
+    
         <div class="container">
 			<div class="row-fluid">
 				<form  name="form1" class="form-horizontal" method="POST" accept-charset="utf-8">
     				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     				<div class="row form-control-feedback form-group">
     					<div class="form-goup col-xs-12 floating-label-form-group controls">
-                            {{ render_field(form.placas, class='form-control', placeholder="Seleccione una placa") }}
+                            <div class="container-fluid">
+                                {{ render_field(form.select1, class='form-control') }}
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            
                             {{ render_field(form.fechaI, class='form-control', placeholder="01/01/2018") }}
                             {{ render_field(form.fechaF, class='form-control', placeholder="31/12/2018") }}
-
                         </div>
                     </div>
                     <div class="success">
@@ -23,12 +45,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-                
-        </div>
-        
-
+        </div>  
+</form>
     {% if lista %}
         <div class="container" >
             <div class="row-fluid">
@@ -71,9 +90,6 @@
             </div>
 
         </div>
-
-
-<br>
-        <br>
+<br> <br>
     {% endif %}
     {% endblock %}

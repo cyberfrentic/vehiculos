@@ -10,7 +10,6 @@ from wtforms import DecimalField
 from wtforms import IntegerField
 from wtforms import DateField, DateTimeField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-#from flask_uploads import UploadSet, IMAGES
 from wtforms import validators
 from models import User, tipoVehiculos, Resguardante, Vehiculo, Ticket, Ciudades, Compras, Model_Proveedor
 from sqlalchemy.sql import distinct
@@ -44,17 +43,13 @@ def proveedor():
 
 def Query_placas():
   lugar = flask.session.get('ciudad')
-  x = Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa')
-  lista=[]
-  for item in x:
-      if len(item.numInv) > 1 and item.numInv != '0':
-          lista.append(item)
-  return lista
+  x = Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa').all()
+  return x
 
 
 def Query_placa_Ticket():
   lugar = flask.session.get('ciudad')
-  return Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa')
+  return Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa').all()
 
 # def tipos():
 #     return tipoVehiculos.query.order_by('tipo')
@@ -166,7 +161,7 @@ class FormVehiculos(Form):
     factura = FileField('imagen de la factura')
     tarjeta = FileField('Imagen tarjeta de circulacion')
     poliza = FileField('Imagen Poliza de seguro')
-    tipoCarga = SelectField('Dispositivo de carga', choices=[('', ''), ('vales', 'Vales'), ('arillo', 'Arillo'), ('tarjeta', 'Tarjeta'), ('efectivo', 'Efectivo')])
+    tipoCarga = SelectField('Disp. de carga', choices=[('', ''), ('vales', 'Vales'), ('arillo', 'Arillo'), ('tarjeta', 'Tarjeta'), ('efectivo', 'Efectivo')])
     numDispositivo = StringField('Num. Dispositivo',  
                           [validators.DataRequired('El numero de Dispositivo es indispensable')])
     
@@ -265,6 +260,7 @@ class VehiSearchForm(Form):
 
 class Form_Ticket(Form):
     plancha = BooleanField('Planchado?')
+    adicion = BooleanField('Adicional?')
     transaccion = StringField('Número de Transaccion')
     fecha = DateTimeField('Fecha y hora de Carga', format='%d/%m/%Y %H:%M:%S')
     odometro = IntegerField('Odometro')
@@ -277,12 +273,19 @@ class Form_Ticket(Form):
     total = DecimalField('Total',  places=4, rounding=None)
     placa = QuerySelectField(label='Placas', allow_blank=True, query_factory=Query_placas, get_pk=get_pk)
     obser = TextAreaField('Observaciones')
+    oficio = StringField("Núm. Oficio")
+
 
 
 class FormConsultaTicket(Form):
-    placas = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket, get_pk=get_pk)
-    fechaI= DateField('Fecha inicial', format='%d/%m/%Y', validators=(validators.Optional(),))
-    fechaF = DateField('Fecha Final', format='%d/%m/%Y', validators=(validators.Optional(),))
+  placas = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket, get_pk=get_pk)
+  fechaI= DateField('Fecha inicial', format='%d/%m/%Y', validators=(validators.Optional(),))
+  fechaF = DateField('Fecha Final', format='%d/%m/%Y', validators=(validators.Optional(),))
+
+class FormConsultaTicket2(Form):
+  select1 = SelectField('Opciones', choices=[('', ''),])
+  fechaI= DateField('Fecha inicial', format='%d/%m/%Y', validators=(validators.Optional(),))
+  fechaF = DateField('Fecha Final', format='%d/%m/%Y', validators=(validators.Optional(),))
 
 
 class Form_Grafica(Form):

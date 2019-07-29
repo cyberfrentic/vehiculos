@@ -367,6 +367,74 @@ def tabla(datos, totales, titulo):
     return response
 
 
+def tabla2(totales, titulo="pruebab nueva"):
+    global Titulo
+    Titulo=titulo
+    global tamaño
+    tamaño = True
+    global Ciudad
+    Ciudad = ciudad()
+    # Instantiation of inherited class
+    pdf = PDF("L", 'mm', 'Letter')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_fill_color(192, 192, 192)
+    pdf.set_text_color(64)
+    pdf.set_draw_color(0, 0, 0)
+    pdf.set_line_width(.3)
+    pdf.set_font('', 'B')
+    # cabecera de la tabla
+    # Remember to always put one of these at least once.
+    pdf.set_font('Times', '', 10.0)
+
+    # Effective page width, or just epw
+    epw = pdf.w - 2 * pdf.l_margin
+
+    col_width = epw / 5
+    data = ('Placas', 'Targeta', 'Litros', 'Importe', 'Combustible')
+
+    th = pdf.font_size
+    for item in data:
+        pdf.cell(col_width, th+5, str(item),fill=True,border=1,align='C')
+    
+    pdf.ln()
+    pdf.set_fill_color(255, 255, 255)
+    tot=0.
+    lit=0
+    bandera=0
+    for item in totales:
+        tot+=item['total'] if item['total'] != None else 0
+        lit+=item['litros'] if item['litros'] != None else 0
+        if bandera%2==0:
+            pdf.set_fill_color(255, 255, 255)
+            pdf.cell(col_width, th+5, item['placa'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+5, item['nombre'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+5, SetMoneda(item['litros'], " ", 2),fill=True,border=1,align='C')
+            pdf.cell(col_width, th+5, SetMoneda(item['total'],"$",2),fill=True,border=1,align='C')
+            pdf.cell(col_width, th+5, item['combustible'],fill=True,border=1,align='C')
+        else:
+            pdf.set_fill_color(192, 192, 192)
+            pdf.cell(col_width, th+5, item['placa'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+5, item['nombre'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+5, SetMoneda(item['litros'], " ", 2),fill=True,border=1,align='C')
+            pdf.cell(col_width, th+5, SetMoneda(item['total'],"$",2),fill=True,border=1,align='C')
+            pdf.cell(col_width, th+5, item['combustible'],fill=True,border=1,align='C')
+        pdf.ln()
+        bandera+=1
+    pdf.ln()
+    pdf.set_fill_color(255, 255, 255)
+    pdf.cell(col_width, th+5, "Total: "+SetMoneda(tot,"$",2),fill=True,border=1,align='C')
+    pdf.ln()
+    pdf.cell(col_width, th+5, "Litros: "+SetMoneda(lit," ",2),fill=True,border=1,align='C')
+    ##########################################################################
+    ######## imprimir desde una pagina web de flask con estas funciones ######
+    ##########################################################################
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % 'reporte'
+    return response
+
+
 def sol(datos, ve):
     global Titulo
     Titulo=str(datos['titulo'])

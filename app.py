@@ -9,12 +9,13 @@ from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Co
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
-    filtroServ, formCotizacion, formBitacora, formBitacora2
-from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne
+    filtroServ, formCotizacion, formBitacora, formBitacora2, FormConsultaTicket2
+from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne, tabla2
 from tools.tool import ToExcel
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
+from pygal.style import LightGreenStyle
 import time
 from werkzeug.datastructures import MultiDict
 from xml.dom import minidom
@@ -35,6 +36,25 @@ def allowed_file(filename):
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
 crsf = CSRFProtect()
+
+
+
+def meses(mes):
+    meses = {
+        '01': 'Enero',
+        '02': 'Febrero',
+        '03': 'Marzo',
+        '04': 'Abril',
+        '05': 'Mayo',
+        '06': 'Junio',
+        '07': 'Julio',
+        '08': 'Agosto',
+        '09': 'Septiembre',
+        '10': 'Octubre',
+        '11': 'Noviembre',
+        '12': 'Diciembre',
+    }
+    return meses[mes]
 
 
 def exceldate(serial):
@@ -244,7 +264,9 @@ def Vehiculow():
                                 vehi.cSeguros.data,
                                 vehi.nPoliza.data,
                                 vehi.placa.data,
-                                lugar)
+                                lugar,
+                                vehi.tipoCarga,
+                                vehi.numDispositivo)
             db.session.add(vehiculo)
             db.session.commit()
             ############### agregando imagenes ###############
@@ -459,11 +481,16 @@ def editarVehi(numInv):
             preciono=True
         elif "listo" in request.form['boton']: #and form.validate():
             x.numInv = form.numInv.data.upper()
+            x.numSicopa = form.numSicopa.data
+            x.numTarCir = form.numTarCir.data
             x.marca = form.marca.data.upper()
             x.modelo = form.modelo.data.upper()
+            x.color = form.color.data.upper()
+            x.anio = form.anio.data
             x.tipoVehiculo = str(form.tipoVehiculo.data)
             x.nSerie = form.nSerie.data.upper()
             x.nMotor = form.nMotor.data.upper()
+            x.costo = form.costo.data
             x.tCombus = form.tCombus.data
             x.odome = dict(form.odome.choices).get(form.odome.data)
             x.kmInicio = form.kmInicio.data.upper()
@@ -476,6 +503,8 @@ def editarVehi(numInv):
             x.cSeguros = form.cSeguros.data.upper()
             x.nPoliza = form.nPoliza.data.upper()
             x.placa = form.placa.data.upper()
+            x.tipoCarga = form.tipoCarga.data
+            x.numDispositivo = form.numDispositivo.data
             db.session.commit()
             ############## actulización de fotos#############
             ###### Aqui la solucion de ImmutableMultiDict ######
@@ -815,7 +844,9 @@ def ticket():
     nombre = session["username"].upper()
     lugar = session['ciudad']
     form = Form_Ticket(request.form)
+    tra=0
     if request.method == 'POST' and form.validate():
+        print(request.form.getlist('plancha'))
         if lugar==12:
             flash(("Disculpe usted no puede realizar ningún cambio"))
             return redirect(url_for("home"))
@@ -848,10 +879,12 @@ def ticket():
             placa=str(form.placa.data),
             observaciones=form.obser.data,
             idCiudad=lugar,
+            numOficio=form.oficio.data if form.oficio.data !="" else "0",
         )
+        print(ticket.numOficio)
         db.session.add(ticket)
         db.session.commit()
-        flash('Ticket Fue Agregado correctamente con numero de folio: {}'.format(str(tra)))
+        flash('Ticket Fue Agregado correctamente con numero de folio: {}'.format(str(tra if tra != "0" else "Planchado")))
         return redirect(url_for('ticket'))
     return render_template("ticket.html", form=form, nombre=nombre)
 
@@ -866,6 +899,7 @@ def Consulta_ticket():
     lugar = session['ciudad']
     form = FormConsultaTicket(request.form)
     if request.method == 'POST' and form.validate():
+        print(form.placas.data)
         if 'search' in request.form['buton']:
             fi = form.fechaI.data
             ff = form.fechaF.data
@@ -880,8 +914,8 @@ def Consulta_ticket():
             elif placa is None:
                 flash('Debe Seleccionar una opcion, para poder realizar una consulta')
                 return redirect(url_for("Consulta_ticket"))
-            elif placa is not None:
-                if placa != 'TODOS':
+            elif placa is not 'None':
+                if placa != 'None':
                     query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros,
                                              Ticket.combustible,
                                              Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(placa=placa).filter_by(idCiudad=lugar).all()
@@ -903,7 +937,7 @@ def Consulta_ticket():
                 else:
                     query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros,
                                              Ticket.combustible,
-                                             Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(idCiudad=lugar).order_by(Ticket.placa)
+                                             Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(idCiudad=lugar).order_by(Ticket.placa).all()
                     for x in query:
                         data = {
                             'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
@@ -923,38 +957,9 @@ def Consulta_ticket():
             fi = form.fechaI.data
             ff = form.fechaF.data
             placa = str(form.placas.data)
-            if placa == 'TODOS':
-                query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros, Ticket.combustible,
-                                         Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(idCiudad=lugar).order_by(Ticket.placa)
-                for x in query:
-                    data = {
-                        'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
-                        'fecha': str(x.fecha),
-                        'placa': str(x.placa),
-                        'litros': x.litros,
-                        'combustible': x.combustible,
-                        'total': x.total,
-                    }
-                    lista.append(data)
-                    x = Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa')
-                    lista2 = []
-                for item in x:
-                    if len(item.numInv) > 1 and item.numInv != '0':
-                        valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == (str(item))).filter(Ticket.idCiudad==lugar)
-                        for it in valor.all():
-                            resultado = it.total
-                        data = {
-                            'placa': item.placa,
-                            'total': resultado,
-                        }
-                        lista2.append(data)
-                imprimir = tabla(lista, lista2,'Reporte de consulta de Consumo de Combustible'.upper())
-                return imprimir
-            else:
-                query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros, Ticket.combustible,
-                                         Ticket.total, Ticket.odometro, Ticket.observaciones).filter(Ticket.fecha.between(fi, ff)).filter(
-                    Ticket.placa == placa).filter(Ticket.idCiudad==lugar).all()
-                lista2 = []
+            if 'None' in placa:
+                # query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros, Ticket.combustible,
+                #                          Ticket.total).filter(Ticket.fecha.between(fi, ff)).filter_by(idCiudad=lugar).order_by(Ticket.placa)
                 # for x in query:
                 #     data = {
                 #         'nuFolio': str(x.nuFolio) if x.nuFolio != 0 else 'Planchado',
@@ -965,6 +970,26 @@ def Consulta_ticket():
                 #         'total': x.total,
                 #     }
                 #     lista.append(data)
+                #     x = Vehiculo.query.filter_by(idCiudad=lugar).order_by('placa')
+                #     lista2 = []
+                # for item in x:
+                #     if len(item.numInv) > 1 and item.numInv != '0':
+                #         valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == (str(item))).filter(Ticket.idCiudad==lugar)
+                #         for it in valor.all():
+                #             resultado = it.total
+                #         data = {
+                #             'placa': item.placa,
+                #             'total': resultado,
+                #         }
+                #         lista2.append(data)
+                # imprimir = tabla(lista, lista2,'Reporte de consulta de Consumo de Combustible'.upper())
+                # return imprimir
+                flash("No puede imprimir multiples formatos")
+            else:
+                query = db.session.query(Ticket.nuFolio, Ticket.fecha, Ticket.placa, Ticket.litros, Ticket.combustible,
+                                         Ticket.total, Ticket.odometro, Ticket.observaciones).filter(Ticket.fecha.between(fi, ff)).filter(
+                    Ticket.placa == placa).filter(Ticket.idCiudad==lugar).all()
+                lista2 = []
                 valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.idCiudad==lugar).filter(Ticket.fecha.between(fi, ff)).all()
                 for val in valor:
                     data = {
@@ -976,6 +1001,60 @@ def Consulta_ticket():
                 return imprimir
 
     return render_template('TicketConsulta.html', form=form, nombre=nombre)
+
+
+@app.route("/combustible/ticket/consultagrupal/data")
+def seek2():
+    data = Vehiculo.query.all()
+    vehiArray = []
+    for vehi in data:
+        veObj = {}
+        veObj['id'] = vehi.id
+        veObj['placa'] = vehi.placa
+        vehiArray.append(veObj)
+    return jsonify({'datos':vehiArray})
+
+
+
+@app.route('/combustible/ticket/consultagrupal', methods=['GET', 'POST'])
+def Consulta_ticket2():
+    form = FormConsultaTicket2(request.form)
+    nombre = session['username'].upper()
+    lugar = session['ciudad']
+    if request.method == 'POST':
+        fi = form.fechaI.data
+        ff = form.fechaF.data
+        #trae el id del vehiculo en la tabla Vehiculos
+        tests = request.form.getlist('select1')
+        if tests:
+            lista2 = []
+            for item in tests:
+                placas = Vehiculo.query.filter_by(id=item).one()
+                valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placas.placa).filter(Ticket.idCiudad==lugar).filter(Ticket.fecha.between(fi, ff)).all()
+                lirtos = db.session.query(func.sum(Ticket.litros).label("litros")).filter(Ticket.placa == placas.placa).filter(Ticket.idCiudad==lugar).filter(Ticket.fecha.between(fi, ff)).all()
+                placas = Vehiculo.query.filter_by(id=item).one()
+                if valor[0].total==None:
+                    flash("no hay datos {} eliminelo de la lista".format(placas.placa))
+                    return render_template('TicketConsulta2.html', form=form, nombre=nombre)
+                data = {
+                    'placa': placas.placa,
+                    'combustible': placas.tCombus,
+                    'nombre': placas.nVehi,
+                    'total': valor[0].total,
+                    'litros': lirtos[0].litros,
+                }
+                lista2.append(data)
+            fecha1=str(fi)[8:]
+            fecha2=str(ff)[8:]
+            mes = meses(str(ff)[5:7])
+            anio1 = str(fi)[:4]
+            print(lista2)
+            titulo="combustible semana del {} al {} de {} de {}.".format(fecha1,fecha2,mes, anio1)
+            return tabla2(lista2,titulo)
+        else:
+            flash("Debe seleccionar al menos un elemento")
+    return render_template('TicketConsulta2.html', form=form, nombre=nombre)
+
 
 
 @app.route('/combustible/ticket/excell', methods=['GET', 'POST'])
@@ -1104,9 +1183,9 @@ def grafica():
             colors=('#991515','#1cbc7c'),
             background='#d2ddd9'
             )
-        #placa2= 'SZ-1007-H'
 
         data=dict
+        data2=dict
         lista=[]
         lista2=[]
 
@@ -1125,25 +1204,22 @@ def grafica():
                 11: 'Nov',
                 12: 'Dic',
             }
-            if dia<10:
-                query = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31')).filter(Ticket.idCiudad==lugar)
-                #query2 = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa2).filter(Ticket.fecha==('2018-08-0'+str(dia)))
-            else:
-                query = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31')).filter(Ticket.idCiudad==lugar)
-                #query2 = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa2).filter(Ticket.fecha==('2018-08-'+str(dia)))
-            suna=0
-            suna2=0
-            for value in query:
-                if value.total is None:
-                    suna=0
-                else:
-                    suna=value.total
+            query = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31')).filter(Ticket.idCiudad==lugar).all()
+            query2= db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.numOficio != "0").filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31')).filter(Ticket.idCiudad==lugar).all()
+        
             
-            data={'dia':meses[dia], 'suma':int(suna)}
+            data={'dia':meses[dia], 'suma':int(query[0].total) if query[0].total!=None else 0}
+            data2={'dia':meses[dia], 'suma':int(query2[0].total) if query2[0].total!=None else 0}
             lista.append(data)
-        chart = pygal.Bar()#style = custom_style)
+            lista2.append(data2)
+
+        chart = pygal.StackedBar(legend_box_size=22, stack_from_top=True, print_values=True, print_zeroes=False, human_readable=True, no_data_text='No result found', pretty_print=True, rounded_bars=10, style=LightGreenStyle)
+        
+        chart.title = 'Grafica de Consumo de combustible en ( $ )'
         mark_list = [x['suma'] for x in lista]
+        mark_list2 = [x['suma'] for x in lista2]
         chart.add(placa,mark_list)
+        chart.add("Adicional",mark_list2)
         chart.x_labels = [x['dia'] for x in lista]
         chart.render_to_file((os.path.join(app.config["UPLOAD_FOLDER"] +'//graficas' , 'bar_chart.svg')))
         img_url = 'uploads/graficas/bar_chart.svg'
@@ -1465,10 +1541,12 @@ def capturaManual():
     return render_template('capturaManual.html', nombre=nombre, form=form, articulos=session['listaManual'], boton=(len(session['listaManual']) if len(session['listaManual'])>0 else 0))
 
 
+####### Esto hay que convertirlo a una variable de session#########
 global opcion
 opcion=0
 global f1,f2,plac, nom, titulo
 f1,f2,plac,nom, titulo="","","","",""
+#######################################
 @app.route("/manteniminetos/solicitud/reportes/general", methods=['GET', 'POST'])
 def filtroServicios():
     global lista
@@ -1715,7 +1793,7 @@ def seek(busqueda):
         return jsonify({'datos':vehiArray})
     return "nada"
 
-
+### revisar y corregir######
 @app.route("/catalogo/vehiculos/bitacora/consulta", methods=["GET","POST"])
 def bitaConsul():
     nombre = session['username']

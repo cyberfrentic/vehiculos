@@ -149,7 +149,15 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
                   <a class="dropdown-item" href="/combustible/tickets/captura"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/agregar-usuario.svg')}}" width="16" height="16">Captura</a>
-                  <a class="dropdown-item" href="/combustible/ticket/consulta"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/apoyo-tecnico.svg')}}" width="16" height="16">Consulta</a>
+                  <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
+                    <a class="dropdown-item dropdown-toggle" href="#">
+                      <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/apoyo-tecnico.svg')}}" width="16" height="16"> Consultas
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
+                      <a class="dropdown-item" href="{{url_for('Consulta_ticket')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/analitica.svg')}}" width="16" height="16">Reporte por vehiculo</a>
+                      <a class="dropdown-item" href="{{url_for('Consulta_ticket2')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/entrevista.svg')}}" width="16" height="16">Reporte por Grupo de Vehiculos</a>
+                    </div>
+                  </div>
                   <a class="dropdown-item" href="/combustible/ticket/excell"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/sobresalir.svg')}}" width="16" height="16"> Forma Excel</a>
                 </div>
               </div>

@@ -119,9 +119,9 @@ class Vehiculo(db.Model):
     nPoliza = db.Column(db.String(19))
     placa = db.Column(db.String(10), unique=True)
     idCiudad=db.Column(db.Integer)
-    created_date = db.Column(db.DateTime, default=datetime.datetime.now)
     tipoCarga = db.Column(db.String(15))
-    numDispositivo = db.Column(db.String(15))
+    numDispositivo = db.Column(db.String(19))
+    created_date = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __init__(self, numInv, numSicopa, numTarCir, marca, modelo, color, anio, tipoVehiculo, nSerie, nMotor, costo, tCombus, odome, kmInicio, nVehi, resguardo,
                  cSeguros, nPoliza, placa, idCiudad, tipoCarga, numDispositivo):
@@ -199,8 +199,9 @@ class Ticket(db.Model):
     placa = db.Column(db.String(9))
     observaciones = db.Column(db.Text)
     idCiudad = db.Column(db.Integer)
+    numOficio = db.Column(db.String(20))
 
-    def __init__(self, nuFolio, fecha, odometro, litros, combustible, precio, subtotal, iva, total, placa, observaciones, idCiudad):
+    def __init__(self, nuFolio, fecha, odometro, litros, combustible, precio, subtotal, iva, total, placa, observaciones, idCiudad, numOficio):
         self.nuFolio = nuFolio
         self.fecha = fecha
         self.odometro = odometro
@@ -213,6 +214,7 @@ class Ticket(db.Model):
         self.placa = placa
         self.observaciones = observaciones
         self.idCiudad = idCiudad
+        self.numOficio = numOficio
 
 
 class Combustible(db.Model):

@@ -3,15 +3,18 @@
 {% from "_macro.html" import render_checkboxes %}
 	{% block content %}
 	<script>
-	 	
+
     	// Convierte en mayusculas los datos de un input
     	function mayus(e) {
     		e.value = e.value.toUpperCase();
 		}
     	// Desactivar un input
-    	function DesactivarContrato() {
+    	function Desactivartransa() {
     		document.getElementById("transaccion").disabled = document.getElementById("plancha").checked;
 		}
+        function desaparecer(){
+            document.getElementById("oficio").disabled = !document.getElementById("adicion").checked;
+        }
 		function valida(e){
     		tecla = (document.all) ? e.keyCode : e.which;
     		//Tecla de retroceso para borrar, siempre la permite
@@ -38,8 +41,10 @@
             				<div class="row form-control-feedback form-group">
                             <!--div class="form-group form-inline"-->
                                 <div class="form-group col-xs-12 floating-label-form-group controls">
-                                    {{ render_checkboxes(form.plancha, onclick="DesactivarContrato()") }}
-                                     <p class="help-block text-danger"></p>
+                                    {{ render_checkboxes(form.plancha, onclick="Desactivartransa()") }}
+                                    <p class="help-block text-danger"></p>
+                                    {{ render_checkboxes(form.adicion, onclick="desaparecer()") }}
+                                    <p class="help-block text-danger"></p>
                                 </div>
                                 
                                 
@@ -84,7 +89,12 @@
             					<div class="form-group col-xs-12 floating-label-form-group controls">
             						{{ render_field(form.placa, class='form-control') }}
                                      <p class="help-block text-danger"></p>
-                                </div>     
+                                </div>
+                                <div class="form-group col-xs-12 floating-label-form-group controls">
+                                    {{ render_field(form.oficio, class='form-control') }}
+                                     <p class="help-block text-danger"></p>
+                                </div>
+                                     
                                     {{ render_field(form.obser, class='form-control', placeholder="Escriba sus observaciones") }}
                                      <p class="help-block text-danger"></p>
             					</div>
@@ -108,5 +118,9 @@
     <br><br>
         <br>
         <br>
+        <script>
+            document.getElementById("oficio").disabled=true;
+        </script>
+    
 	</body>
 {% endblock %}
