@@ -1,42 +1,92 @@
 {% extends 'home.html' %}
 {% from "_macro.html" import render_field %}
-
-
-
-	{% block content %}  
-
-
+{% block content %}
+<style type="text/css" media="screen">
+    .prueba{
+        min-width: 400px;
+        list-style: none;
+    }
+</style>
     <script>
         function asignar(){
             fetch('/combustible/ticket/consultagrupal/data').then(function(response){
                 response.json().then(function(data) {
-                    let optionHTML=""; 
+                    var conten = document.getElementById("prueba1");
+                    var conten2 = document.getElementById("prueba2");
+                    x=0;
                     for (let opt of data.datos){
-                        optionHTML += '<option value="' + opt.id + '">' + opt.placa +'</option>';
+                        if (x<13){
+                            var etiqueta = document.createElement("label");
+                            var input =document.createElement("input");
+                            var enlace = document.createElement("a");
+
+                            enlace.setAttribute("class","dropdown-item")
+                            input.type="checkbox";
+                            input.setAttribute("class","form-check-input");
+                            etiqueta.setAttribute("class","form-check-label");
+                            etiqueta.innerHTML=" "+opt.placa+" ";
+                            input.id=opt.placa;
+                            input.value=opt.id;
+                            input.name="placa";
+                            //etiqueta.appendChild(input);
+                            enlace.appendChild(etiqueta);
+                            enlace.appendChild(input);
+                            conten.appendChild(enlace);
+
+                        }else{
+                            var etiqueta = document.createElement("label");
+                            var input =document.createElement("input");
+                            var enlace = document.createElement("a");
+
+                            enlace.setAttribute("class","dropdown-item")
+                            input.type="checkbox";
+                            input.setAttribute("class","form-check-input");
+                            etiqueta.setAttribute("class","form-check-label");
+                            etiqueta.innerHTML=" "+opt.placa+" ";
+                            input.id=opt.placa;
+                            input.value=opt.id;
+                            input.name="placa";
+                            etiqueta.appendChild(input);
+                            enlace.appendChild(etiqueta);
+                            conten2.appendChild(enlace);
+                        }
+                        x+=1;
                     }
-                    document.getElementById('select1').setAttribute("multiple","multiple")
-                    document.getElementById('select1').innerHTML = optionHTML;
                     
                 });
             });
         };
         asignar();
     </script>
-    
         <div class="container">
 			<div class="row-fluid">
 				<form  name="form1" class="form-horizontal" method="POST" accept-charset="utf-8">
     				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     				<div class="row form-control-feedback form-group">
     					<div class="form-goup col-xs-12 floating-label-form-group controls">
-                            <div class="container-fluid">
-                                {{ render_field(form.select1, class='form-control') }}
-                                <p class="help-block text-danger"></p>
-                            </div>
                             
+                            <div class="dropdown dropright prueba">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    Selecciona una opcion
+                                </button>
+                                <div class="dropdown-menu" >
+                                    <div class="container">
+                                        <div class="form-inline">
+                                            <div class="col-sm-6" id="prueba1">
+                                            
+                                            </div>
+                                            <div class="col-sm-6" id="prueba2">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             {{ render_field(form.fechaI, class='form-control', placeholder="01/01/2018") }}
                             {{ render_field(form.fechaF, class='form-control', placeholder="31/12/2018") }}
                         </div>
+                        
+                        
                     </div>
                     <div class="success">
                     <div class="row">
@@ -46,8 +96,8 @@
                     </div>
                 </div>
             </div>
-        </div>  
-</form>
+        </div>
+    </form>
     {% if lista %}
         <div class="container" >
             <div class="row-fluid">
@@ -90,6 +140,6 @@
             </div>
 
         </div>
-<br> <br>
+        <br> <br>
     {% endif %}
-    {% endblock %}
+{% endblock %}

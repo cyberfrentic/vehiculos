@@ -166,7 +166,6 @@ class FormVehiculos(Form):
                           [validators.DataRequired('El numero de Dispositivo es indispensable')])
     
 
-
 class Form_resguardos(Form):
     nombre = StringField("Nombre",
                          [validators.DataRequired(message="El campo nombre es obligatorio"),
@@ -276,11 +275,11 @@ class Form_Ticket(Form):
     oficio = StringField("Núm. Oficio")
 
 
-
 class FormConsultaTicket(Form):
   placas = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket, get_pk=get_pk)
   fechaI= DateField('Fecha inicial', format='%d/%m/%Y', validators=(validators.Optional(),))
   fechaF = DateField('Fecha Final', format='%d/%m/%Y', validators=(validators.Optional(),))
+
 
 class FormConsultaTicket2(Form):
   select1 = SelectField('Opciones', choices=[('', ''),])
@@ -400,6 +399,7 @@ class formBitacora(Form):
   select2 = SelectField('Opciones', choices=[('', ''),])
   resguardo = QuerySelectField(label='Resguardante', query_factory=resguard,
                                   get_pk=get_pk, allow_blank=True, get_label="nombreCompleto")
+
 
 class formBitacora2(Form):
   choices = [('na', ''), ('td', 'Todos'), ('ni', 'Núm. Inv.'), ('placa', 'Placa'), ('res', 'Resguardante')]
