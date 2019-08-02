@@ -17,10 +17,12 @@
                     for (let opt of data.datos){
                         if (x<13){
                             var etiqueta = document.createElement("label");
-                            var input =document.createElement("input");
+                            var input = document.createElement("input");
                             var enlace = document.createElement("a");
+                            var separador = document.createElement("div");
 
-                            enlace.setAttribute("class","dropdown-item")
+                            separador.setAttribute("class","form-inline");
+                            enlace.setAttribute("class","dropdown-item");
                             input.type="checkbox";
                             input.setAttribute("class","form-check-input");
                             etiqueta.setAttribute("class","form-check-label");
@@ -28,17 +30,19 @@
                             input.id=opt.placa;
                             input.value=opt.id;
                             input.name="placa";
-                            //etiqueta.appendChild(input);
-                            enlace.appendChild(etiqueta);
-                            enlace.appendChild(input);
+                            separador.appendChild(input);
+                            separador.appendChild(etiqueta);
+                            enlace.appendChild(separador);
                             conten.appendChild(enlace);
 
                         }else{
                             var etiqueta = document.createElement("label");
-                            var input =document.createElement("input");
+                            var input = document.createElement("input");
                             var enlace = document.createElement("a");
+                            var separador = document.createElement("div");
 
-                            enlace.setAttribute("class","dropdown-item")
+                            separador.setAttribute("class","form-inline");
+                            enlace.setAttribute("class","dropdown-item");
                             input.type="checkbox";
                             input.setAttribute("class","form-check-input");
                             etiqueta.setAttribute("class","form-check-label");
@@ -46,8 +50,9 @@
                             input.id=opt.placa;
                             input.value=opt.id;
                             input.name="placa";
-                            etiqueta.appendChild(input);
-                            enlace.appendChild(etiqueta);
+                            separador.appendChild(input);
+                            separador.appendChild(etiqueta);
+                            enlace.appendChild(separador);
                             conten2.appendChild(enlace);
                         }
                         x+=1;
@@ -65,17 +70,17 @@
     				<div class="row form-control-feedback form-group">
     					<div class="form-goup col-xs-12 floating-label-form-group controls">
                             
-                            <div class="dropdown dropright prueba">
+                            <div class="dropdown dropright col-xs-12 prueba">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                     Selecciona una opcion
                                 </button>
                                 <div class="dropdown-menu" >
-                                    <div class="container">
+                                    <div class="container-fluid">
                                         <div class="form-inline">
-                                            <div class="col-sm-6" id="prueba1">
+                                            <div class="col-sm" id="prueba1">
                                             
                                             </div>
-                                            <div class="col-sm-6" id="prueba2">
+                                            <div class="col-sm" id="prueba2">
                                                 
                                             </div>
                                         </div>
@@ -98,48 +103,4 @@
             </div>
         </div>
     </form>
-    {% if lista %}
-        <div class="container" >
-            <div class="row-fluid">
-                <div class="form-goup col-xs-12 floating-label-form-group controls float-sm-right">
-                    <button class="btn btn-danger btn-sm" name='buton' value="print">Imprimir con encabezado </button>
-                </div>
-
-
-                <div class="container mt-3" id="muestra">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr class="table-primary">
-                                <th>Núm Folio</th>
-                                <th>Fecha</th>
-                                <th>Placas</th>
-                                <th>Cant. Lts.</th>
-                                <th>T. Combus.</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                            <tbody id="myTable">
-                                {% for item in lista %}
-                                    <tr class="table-success">
-                                        <td>{{item['nuFolio']}}</td>
-                                        <td>{{item['fecha']}}</td>
-                                        <td>{{item['placa']}}</td>
-                                        <td>{{item['litros']}}</td>
-                                        <td>{{item['combustible']}}</td>
-                                        <td>{{item['total']}}</td>
-                                    </tr>
-                                {%endfor%}
-                            </tbody>
-                    </table>
-                </div>
-
-
-                <br>
-                <br>
-             </form>
-            </div>
-
-        </div>
-        <br> <br>
-    {% endif %}
 {% endblock %}

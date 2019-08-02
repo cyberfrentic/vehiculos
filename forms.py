@@ -277,14 +277,13 @@ class Form_Ticket(Form):
 
 class FormConsultaTicket(Form):
   placas = QuerySelectField('Selecciones una placa', allow_blank=True, query_factory=Query_placa_Ticket, get_pk=get_pk)
-  fechaI= DateField('Fecha inicial', format='%d/%m/%Y', validators=(validators.Optional(),))
-  fechaF = DateField('Fecha Final', format='%d/%m/%Y', validators=(validators.Optional(),))
+  fechaI= DateTimeField('Fecha inicial', format='%d/%m/%Y %H:%M:%S', validators=(validators.Optional(),))
+  fechaF = DateTimeField('Fecha Final', format='%d/%m/%Y %H:%M:%S', validators=(validators.Optional(),))
 
 
 class FormConsultaTicket2(Form):
-  select1 = SelectField('Opciones', choices=[('', ''),])
-  fechaI= DateField('Fecha inicial', format='%d/%m/%Y', validators=(validators.Optional(),))
-  fechaF = DateField('Fecha Final', format='%d/%m/%Y', validators=(validators.Optional(),))
+  fechaI= DateTimeField('Fecha inicial', format='%d/%m/%Y %H:%M:%S', validators=(validators.Optional(),))
+  fechaF = DateTimeField('Fecha Final', format='%d/%m/%Y %H:%M:%S', validators=(validators.Optional(),))
 
 
 class Form_Grafica(Form):

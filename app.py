@@ -15,7 +15,7 @@ from tools.tool import ToExcel
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
-from pygal.style import LightGreenStyle
+from pygal.style import LightGreenStyle, BlueStyle, DefaultStyle
 import time
 from werkzeug.datastructures import MultiDict
 from xml.dom import minidom
@@ -1025,7 +1025,8 @@ def Consulta_ticket2():
         fi = form.fechaI.data
         ff = form.fechaF.data
         #trae el id del vehiculo en la tabla Vehiculos
-        tests = request.form.getlist('select1')
+        tests = request.form.getlist('placa')
+        print(tests)
         if tests:
             lista2 = []
             for item in tests:
@@ -1044,12 +1045,11 @@ def Consulta_ticket2():
                     'litros': lirtos[0].litros,
                 }
                 lista2.append(data)
-            fecha1=str(fi)[8:]
-            fecha2=str(ff)[8:]
+            fecha1=str(fi)[8:10]
+            fecha2=str(ff)[8:10]
             mes = meses(str(ff)[5:7])
             anio1 = str(fi)[:4]
-            print(lista2)
-            titulo="combustible semana del {} al {} de {} de {}.".format(fecha1,fecha2,mes, anio1)
+            titulo="Combustible Del {} Al {} De {} De {}.".format(fecha1,fecha2,mes, anio1)
             return tabla2(lista2,titulo)
         else:
             flash("Debe seleccionar al menos un elemento")
@@ -1179,16 +1179,10 @@ def grafica():
     if request.method =='POST' and form.validate():
         placa= str(form.placa.data)
         anio= str(form.anio.data)
-        custom_style = Style(
-            colors=('#991515','#1cbc7c'),
-            background='#d2ddd9'
-            )
-
         data=dict
         data2=dict
         lista=[]
         lista2=[]
-
         for dia in range(1,13):
             meses={
                 1: 'Ene',
@@ -1206,27 +1200,30 @@ def grafica():
             }
             query = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31')).filter(Ticket.idCiudad==lugar).all()
             query2= db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.numOficio != "0").filter(Ticket.placa == placa).filter(Ticket.fecha.between(anio+'-'+str(dia)+'-01', anio+'-'+str(dia)+'-31')).filter(Ticket.idCiudad==lugar).all()
-        
-            
             data={'dia':meses[dia], 'suma':int(query[0].total) if query[0].total!=None else 0}
             data2={'dia':meses[dia], 'suma':int(query2[0].total) if query2[0].total!=None else 0}
             lista.append(data)
             lista2.append(data2)
-
-        chart = pygal.StackedBar(legend_box_size=22, stack_from_top=True, print_values=True, print_zeroes=False, human_readable=True, no_data_text='No result found', pretty_print=True, rounded_bars=10, style=LightGreenStyle)
-        
+        chart = pygal.StackedBar(legend_box_size=22, 
+        						stack_from_top=True, 
+        						print_values=True, 
+        						print_zeroes=False, 
+        						human_readable=True, 
+        						no_data_text='No result found', 
+        						pretty_print=True,
+        						rounded_bars=10, 
+        						style=DefaultStyle)
         chart.title = 'Grafica de Consumo de combustible en ( $ )'
         mark_list = [x['suma'] for x in lista]
         mark_list2 = [x['suma'] for x in lista2]
-        chart.add(placa,mark_list)
         chart.add("Adicional",mark_list2)
+        chart.add(placa,mark_list)
         chart.x_labels = [x['dia'] for x in lista]
         chart.render_to_file((os.path.join(app.config["UPLOAD_FOLDER"] +'//graficas' , 'bar_chart.svg')))
         img_url = 'uploads/graficas/bar_chart.svg'
         var='?cache=' + str(time.time())
         return render_template('app.html',image_url = img_url, var=var,  form=form, nombre= nombre)
     return render_template('app.html', form=form, nombre= nombre)
-    # Charting code will be here
 
 
 @app.route("/Mantenimientos/solicitud/generar-Solicitud", methods=['POST', 'GET'])

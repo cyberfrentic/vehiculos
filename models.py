@@ -199,7 +199,7 @@ class Ticket(db.Model):
     placa = db.Column(db.String(9))
     observaciones = db.Column(db.Text)
     idCiudad = db.Column(db.Integer)
-    numOficio = db.Column(db.String(20))
+    numOficio = db.Column(db.String(30))
 
     def __init__(self, nuFolio, fecha, odometro, litros, combustible, precio, subtotal, iva, total, placa, observaciones, idCiudad, numOficio):
         self.nuFolio = nuFolio

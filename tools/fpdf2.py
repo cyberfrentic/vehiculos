@@ -33,7 +33,7 @@ class PDF(FPDF):
         self.set_font('Arial', 'B', 7)
         self.cell(0, 10, "DIRECCION DE RECURSOS MATERIALES", 0, 0, 'C')
         self.ln(15)
-        self.set_font('Arial', 'B', 14)
+        self.set_font('Arial', 'B', 8)
         self.cell(0, 10, Titulo, 0, 0, 'C')
         # self.ln(5)
         # self.cell(0, 10, (Ciudad + ' ' + fecha_actual()).upper(), 0, 0, 'C')
@@ -126,9 +126,9 @@ def letras():
 
 # consulta para pedir datos de las tablas directamente
 def ciudad():
-  lugar = str(flask.session.get('ciudad'))
+  lugar = flask.session.get('ciudad')
   ci = Ciudades.query.filter_by(id=lugar).first()
-  return  str(ci)
+  return  str(ci.ciudad)
 
 
 def carro(placas):
@@ -272,13 +272,7 @@ def tabla(datos, totales, titulo):
     pdf.ln()    
     col_width = epw / 4
     pdf.cell(col_width, th, c.resguardo, border=1, align='C')
-    if len(c.marca)>9:
-        pdf.set_font('Times', '', 8.0)
-        pdf.cell(col_width/3, th, c.marca, border=1, align='C')
-    else:
-        pdf.set_font('Times', '', 10.0)
-        pdf.cell(col_width/3, th, c.marca, border=1, align='C')
-    pdf.set_font('Times', '', 10.0)
+    pdf.cell(col_width/3, th, c.marca, border=1, align='C')
     pdf.cell(col_width/3, th, c.anio, border=1, align='C')
     pdf.cell(col_width/3, th, totales[0]['placa'], border=1, align='C')
     pdf.cell(col_width, th, mesanio(str(datos[0].fecha)[:10]), border=1, align='C')
@@ -313,7 +307,6 @@ def tabla(datos, totales, titulo):
     i=0
 
     col_width = epw / 11
-    lit=0
     ############## Ciclo de impresion de datos ################
     for i in range(len(datos)):
         pdf.set_font('Times', '', 10.0)
@@ -338,29 +331,11 @@ def tabla(datos, totales, titulo):
             pdf.cell(col_width-2, th, str(datos[i].odometro), border=1)
             pdf.cell(col_width-6, th, "0", border=1)
         pdf.cell(col_width-4, th, str(datos[i].litros), border=1)
-        lit+=datos[i].litros
         pdf.cell(col_width-2, th, str(datos[i].total), border=1)
-        pdf.set_font('Times', '', 6)
-        if c.tipoCarga =="vales":
-            pdf.cell(col_width-2, th, "Vales", border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-        elif c.tipoCarga =="arillo":
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, c.numDispositivo, border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-        elif c.tipoCarga =="tarjeta":
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, c.numDispositivo, border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-        elif c.tipoCarga =="efectivo":
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, "", border=1)
-            pdf.cell(col_width-2, th, "Efectivo", border=1)
+        pdf.cell(col_width-2, th, "", border=1)
+        pdf.cell(col_width-2, th, "", border=1)
+        pdf.cell(col_width-2, th, "", border=1)
+        pdf.cell(col_width-2, th, "", border=1)
         pdf.set_font('Times', 'B', 5.0)
         pdf.cell(col_width+24, th, str(datos[i].observaciones)[:40], border=1)
         pdf.ln(th)
@@ -375,11 +350,8 @@ def tabla(datos, totales, titulo):
     th = pdf.font_size
     for item in totales:
         pdf.cell(col_width, th+2, str(item['placa']), border=1)
-        pdf.cell(col_width, th+2, '$ '+str("{0:.2f}".format(item['total'])), border=1, align="R")
+        pdf.cell(col_width, th+2, '$ '+str("{0:.2f}".format(item['total'])), border=1)
         pdf.ln()
-    pdf.cell(col_width, th+2, "Litros", border=1)
-    pdf.cell(col_width, th+2, str("{0:.2f}".format(lit)), border=1, align="R")
-    pdf.ln()
     pdf.ln()
     pdf.cell(30, th,"NOTA: En la columna de observaciones registrar si fue" , 'C')
     pdf.ln()
@@ -422,7 +394,6 @@ def tabla2(totales, titulo="pruebab nueva"):
     data = ('Placas', 'Targeta', 'Litros', 'Importe', 'Combustible')
 
     th = pdf.font_size
-    pdf.set_font('Times', 'B', 12)
     for item in data:
         pdf.cell(col_width, th+5, str(item),fill=True,border=1,align='C')
     
@@ -431,7 +402,6 @@ def tabla2(totales, titulo="pruebab nueva"):
     tot=0.
     lit=0
     bandera=0
-    pdf.set_font('Times', '', 12.0)
     for item in totales:
         tot+=item['total'] if item['total'] != None else 0
         lit+=item['litros'] if item['litros'] != None else 0
@@ -453,13 +423,9 @@ def tabla2(totales, titulo="pruebab nueva"):
         bandera+=1
     pdf.ln()
     pdf.set_fill_color(255, 255, 255)
-    pdf.set_font('Times', '', 12.0)
-    pdf.cell(col_width, th+5, "",fill=True,border=0,align='C')
-    pdf.cell(col_width, th+5, "",fill=True,border=0,align='C')
-    pdf.cell(col_width, th+5, "Litros: "+SetMoneda(lit," ",2),fill=True,border=1,align='C')
     pdf.cell(col_width, th+5, "Total: "+SetMoneda(tot,"$",2),fill=True,border=1,align='C')
-    
-    
+    pdf.ln()
+    pdf.cell(col_width, th+5, "Litros: "+SetMoneda(lit," ",2),fill=True,border=1,align='C')
     ##########################################################################
     ######## imprimir desde una pagina web de flask con estas funciones ######
     ##########################################################################
