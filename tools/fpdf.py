@@ -413,7 +413,7 @@ def tabla2(totales, titulo="pruebab nueva"):
     pdf.set_font('', 'B')
     # cabecera de la tabla
     # Remember to always put one of these at least once.
-    pdf.set_font('Times', '', 10.0)
+    pdf.set_font('Times', '', 8)
 
     # Effective page width, or just epw
     epw = pdf.w - 2 * pdf.l_margin
@@ -424,31 +424,31 @@ def tabla2(totales, titulo="pruebab nueva"):
     th = pdf.font_size
     pdf.set_font('Times', 'B', 12)
     for item in data:
-        pdf.cell(col_width, th+5, str(item),fill=True,border=1,align='C')
+        pdf.cell(col_width, th+2, str(item),fill=True,border=1,align='C')
     
     pdf.ln()
     pdf.set_fill_color(255, 255, 255)
     tot=0.
     lit=0
     bandera=0
-    pdf.set_font('Times', '', 12.0)
+    pdf.set_font('Times', '', 8)
     for item in totales:
         tot+=item['total'] if item['total'] != None else 0
         lit+=item['litros'] if item['litros'] != None else 0
         if bandera%2==0:
             pdf.set_fill_color(255, 255, 255)
-            pdf.cell(col_width, th+5, item['placa'],fill=True,border=1,align='C')
-            pdf.cell(col_width, th+5, item['nombre'],fill=True,border=1,align='C')
-            pdf.cell(col_width, th+5, SetMoneda(item['litros'], " ", 2),fill=True,border=1,align='C')
-            pdf.cell(col_width, th+5, SetMoneda(item['total'],"$",2),fill=True,border=1,align='C')
-            pdf.cell(col_width, th+5, item['combustible'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, item['placa'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, item['nombre'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, SetMoneda(item['litros'], " ", 2),fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, SetMoneda(item['total'],"$",2),fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, item['combustible'],fill=True,border=1,align='C')
         else:
             pdf.set_fill_color(192, 192, 192)
-            pdf.cell(col_width, th+5, item['placa'],fill=True,border=1,align='C')
-            pdf.cell(col_width, th+5, item['nombre'],fill=True,border=1,align='C')
-            pdf.cell(col_width, th+5, SetMoneda(item['litros'], " ", 2),fill=True,border=1,align='C')
-            pdf.cell(col_width, th+5, SetMoneda(item['total'],"$",2),fill=True,border=1,align='C')
-            pdf.cell(col_width, th+5, item['combustible'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, item['placa'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, item['nombre'],fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, SetMoneda(item['litros'], " ", 2),fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, SetMoneda(item['total'],"$",2),fill=True,border=1,align='C')
+            pdf.cell(col_width, th+2, item['combustible'],fill=True,border=1,align='C')
         pdf.ln()
         bandera+=1
     pdf.ln()

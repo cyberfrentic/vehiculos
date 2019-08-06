@@ -1034,16 +1034,14 @@ def Consulta_ticket2():
                 valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placas.placa).filter(Ticket.idCiudad==lugar).filter(Ticket.fecha.between(fi, ff)).all()
                 lirtos = db.session.query(func.sum(Ticket.litros).label("litros")).filter(Ticket.placa == placas.placa).filter(Ticket.idCiudad==lugar).filter(Ticket.fecha.between(fi, ff)).all()
                 placas = Vehiculo.query.filter_by(id=item).one()
-                if valor[0].total==None:
-                    flash("no hay datos {} eliminelo de la lista".format(placas.placa))
-                    return render_template('TicketConsulta2.html', form=form, nombre=nombre)
-                data = {
+                if valor[0].total!=None:
+                    data = {
                     'placa': placas.placa,
                     'combustible': placas.tCombus,
                     'nombre': placas.nVehi,
                     'total': valor[0].total,
                     'litros': lirtos[0].litros,
-                }
+                    }
                 lista2.append(data)
             fecha1=str(fi)[8:10]
             fecha2=str(ff)[8:10]
