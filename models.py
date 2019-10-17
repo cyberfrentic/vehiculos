@@ -398,3 +398,62 @@ class Bitacora(db.Model):
         self.recorrido = recorrido
         self.fechaentra = fechaentra
         self.observaciones = observaciones
+
+
+class setupdb(db.Model):
+    __tablename__ = "Setup"
+    id = db.Column(db.Integer, primary_key=True)
+    Fol_contador = db.Column(db.Integer)
+
+
+class Caja(db.Model):
+    __tablename__='cajaChica'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    UUiD = db.Column(db.String(36), unique=True)
+    rfc = db.Column(db.String(13), index=True)
+    nombre = db.Column(db.String(150))
+    subtotal = db.Column(db.Float)
+    iva = db.Column(db.Float)
+    total = db.Column(db.Float)
+    fecha = db.Column(db.DateTime)
+    placas = db.Column(db.String(8))
+    observaciones = db.Column(db.Text)
+    folio = db.Column(db.Integer)
+    year = db.Column(db.String(4))
+    Fol_contador = db.Column(db.Integer)
+    idCiudad = db.Column(db.Integer)
+
+
+    def __init__(self, UUiD, rfc, nombre, subtotal, iva, total, fecha, placas, observaciones, folio, year, Fol_contador, idCiudad):
+        self.UUiD = UUiD
+        self.rfc = rfc
+        self.nombre = nombre
+        self.subtotal = subtotal
+        self.iva = iva
+        self. total = total
+        self.fecha = fecha
+        self.placas = placas
+        self.observaciones = observaciones
+        self.folio = folio
+        self.year = year
+        self.Fol_contador = Fol_contador
+        self.idCiudad = idCiudad
+
+
+
+class ArtCaja(db.Model):
+    __tablename__ = 'artCaja'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    caja_id = db.Column(db.Integer, db.ForeignKey("cajaChica.id"), nullable=False)
+    caja = relationship(Caja, backref = backref('cajas', uselist=True))
+    cantidad = db.Column(db.Float)
+    descripcion = db.Column(db.String(150))
+    p_u = db.Column(db.Float)
+    importe = db.Column(db.Float)
+
+    def __init__(self, caja_id, cantidad, descripcion, p_u, importe):
+        self.caja_id = caja_id
+        self.cantidad = cantidad
+        self.descripcion = descripcion
+        self.p_u = p_u
+        self.importe = importe

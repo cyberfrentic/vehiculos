@@ -255,10 +255,11 @@ def tabla(datos, totales, titulo):
     c = carro(plas)
     r = area(str(c.resguardo))
     print(c.resguardo)
+    #print (r.area)
     
     ################ inicia encabezado ###################
     col_width = epw / 4
-    data = ('Area: ' + r.area, "Tipo: " + c.tipoVehiculo, 'Bitacora mes y año', 'Núm. Licencia')
+    data = ('Area: ' + r.area if r != None else "Area Tecnica" , "Tipo: " + c.tipoVehiculo, 'Bitacora mes y año', 'Núm. Licencia')
     # Document title centered, 'B'old, 14 pt
     pdf.set_font('Times', 'B', 14.0)
     # pdf.cell(epw, 0.0, 'Demographic data', align='C')

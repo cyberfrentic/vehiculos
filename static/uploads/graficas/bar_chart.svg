@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" class="pygal-chart" id="chart-29f8f66f-3b3a-4ff8-b013-8a373b217491" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><!--Generated with pygal 2.4.0 (etree) ©Kozea 2012-2016 on 2019-08-01--><!--http://pygal.org--><!--http://github.com/Kozea/pygal--><defs><style type="text/css">/*
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" class="pygal-chart" id="chart-ab3c2174-28a5-49a7-9c34-a5045a11734b" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><!--Generated with pygal 2.4.0 (etree) ©Kozea 2012-2016 on 2019-09-20--><!--http://pygal.org--><!--http://github.com/Kozea/pygal--><defs><style type="text/css">/*
  * This file is part of pygal
  *
  * A python svg graph plotting library
@@ -23,48 +23,48 @@
  * Font-sizes from config, override with care
  */
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491  {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b  {
   -webkit-user-select: none;
   -webkit-font-smoothing: antialiased;
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .title {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .title {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 16px;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .legends .legend text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .legends .legend text {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 14px;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis text {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 10px;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis text.major {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis text.major {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 10px;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .text-overlay text.value {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .text-overlay text.value {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 16px;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .text-overlay text.label {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .text-overlay text.label {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 10px;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 14px;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 text.no_data {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b text.no_data {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 64px;
 }
@@ -93,100 +93,100 @@
  * Styles from config
  */
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b {
   background-color: rgba(249, 249, 249, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 path,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 rect,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 circle {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b path,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b rect,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b circle {
   -webkit-transition: 150ms;
   -moz-transition: 150ms;
   transition: 150ms;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .graph &gt; .background {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .graph &gt; .background {
   fill: rgba(249, 249, 249, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .plot &gt; .background {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .plot &gt; .background {
   fill: rgba(255, 255, 255, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .graph {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .graph {
   fill: rgba(0, 0, 0, .87);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 text.no_data {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b text.no_data {
   fill: rgba(0, 0, 0, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .title {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .title {
   fill: rgba(0, 0, 0, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .legends .legend text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .legends .legend text {
   fill: rgba(0, 0, 0, .87);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .legends .legend:hover text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .legends .legend:hover text {
   fill: rgba(0, 0, 0, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis .line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis .line {
   stroke: rgba(0, 0, 0, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis .guide.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis .guide.line {
   stroke: rgba(0, 0, 0, .54);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis .major.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis .major.line {
   stroke: rgba(0, 0, 0, .87);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis text.major {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis text.major {
   fill: rgba(0, 0, 0, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.y .guides:hover .guide.line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .line-graph .axis.x .guides:hover .guide.line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .stackedline-graph .axis.x .guides:hover .guide.line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .xy-graph .axis.x .guides:hover .guide.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.y .guides:hover .guide.line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .line-graph .axis.x .guides:hover .guide.line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .stackedline-graph .axis.x .guides:hover .guide.line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .xy-graph .axis.x .guides:hover .guide.line {
   stroke: rgba(0, 0, 0, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis .guides:hover text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis .guides:hover text {
   fill: rgba(0, 0, 0, 1);
 }
 
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .reactive {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .reactive {
   fill-opacity: .7;
   stroke-opacity: .8;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .ci {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .ci {
     stroke: rgba(0, 0, 0, .87);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .reactive.active,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .active .reactive {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .reactive.active,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .active .reactive {
   fill-opacity: .8;
   stroke-opacity: .9;
   stroke-width: 4;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .ci .reactive.active {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .ci .reactive.active {
   stroke-width: 1.5;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .series text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .series text {
   fill: rgba(0, 0, 0, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip rect {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip rect {
   fill: rgba(255, 255, 255, 1);
   stroke: rgba(0, 0, 0, 1);
   -webkit-transition: opacity 150ms;
@@ -194,67 +194,67 @@
   transition: opacity 150ms;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip .label {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip .label {
   fill: rgba(0, 0, 0, .87);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip .label {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip .label {
   fill: rgba(0, 0, 0, .87);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip .legend {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip .legend {
   font-size: .8em;
   fill: rgba(0, 0, 0, .54);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip .x_label {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip .x_label {
   font-size: .6em;
   fill: rgba(0, 0, 0, 1);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip .xlink {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip .xlink {
   font-size: .5em;
   text-decoration: underline;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip .value {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip .value {
   font-size: 1.5em;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .bound {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .bound {
   font-size: .5em;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .max-value {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .max-value {
   font-size: .75em;
   fill: rgba(0, 0, 0, .54);
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .map-element {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .map-element {
   fill: rgba(255, 255, 255, 1);
   stroke: rgba(0, 0, 0, .54) !important;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .map-element .reactive {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .map-element .reactive {
   fill-opacity: inherit;
   stroke-opacity: inherit;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .color-0, #chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .color-0 a:visited {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .color-0, #chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .color-0 a:visited {
   stroke: #F44336;
   fill: #F44336;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .color-1, #chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .color-1 a:visited {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .color-1, #chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .color-1 a:visited {
   stroke: #3F51B5;
   fill: #3F51B5;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491  .text-overlay .color-0 text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b  .text-overlay .color-0 text {
   fill: black;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491  .text-overlay .color-1 text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b  .text-overlay .color-1 text {
   fill: black;
 }
 
@@ -281,136 +281,136 @@
  * along with pygal. If not, see &lt;http://www.gnu.org/licenses/&gt;.
 */
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 text.no_data {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b text.no_data {
   text-anchor: middle;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .guide.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .guide.line {
   fill: none;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .centered {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .centered {
   text-anchor: middle;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .title {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .title {
   text-anchor: middle;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .legends .legend text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .legends .legend text {
   fill-opacity: 1;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.x text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.x text {
   text-anchor: middle;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.x:not(.web) text[transform] {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.x:not(.web) text[transform] {
   text-anchor: start;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.x:not(.web) text[transform].backwards {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.x:not(.web) text[transform].backwards {
   text-anchor: end;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.y text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.y text {
   text-anchor: end;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.y text[transform].backwards {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.y text[transform].backwards {
   text-anchor: start;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.y2 text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.y2 text {
   text-anchor: start;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.y2 text[transform].backwards {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.y2 text[transform].backwards {
   text-anchor: end;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis .guide.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis .guide.line {
   stroke-dasharray: 4,4;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis .major.guide.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis .major.guide.line {
   stroke-dasharray: 6,6;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .horizontal .axis.y .guide.line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .horizontal .axis.y2 .guide.line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .vertical .axis.x .guide.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .horizontal .axis.y .guide.line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .horizontal .axis.y2 .guide.line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .vertical .axis.x .guide.line {
   opacity: 0;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .horizontal .axis.always_show .guide.line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .vertical .axis.always_show .guide.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .horizontal .axis.always_show .guide.line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .vertical .axis.always_show .guide.line {
   opacity: 1 !important;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.y .guides:hover .guide.line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.y2 .guides:hover .guide.line,
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis.x .guides:hover .guide.line {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.y .guides:hover .guide.line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.y2 .guides:hover .guide.line,
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis.x .guides:hover .guide.line {
   opacity: 1;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .axis .guides:hover text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .axis .guides:hover text {
   opacity: 1;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .nofill {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .nofill {
   fill: none;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .subtle-fill {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .subtle-fill {
   fill-opacity: .2;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .dot {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .dot {
   stroke-width: 1px;
   fill-opacity: 1;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .dot.active {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .dot.active {
   stroke-width: 5px;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .dot.negative {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .dot.negative {
   fill: transparent;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491  text, #chart-29f8f66f-3b3a-4ff8-b013-8a373b217491  tspan {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b  text, #chart-ab3c2174-28a5-49a7-9c34-a5045a11734b  tspan {
   stroke: none !important;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .series text.active {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .series text.active {
   opacity: 1;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip rect {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip rect {
   fill-opacity: .95;
   stroke-width: .5;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .tooltip text {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .tooltip text {
   fill-opacity: 1;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .showable {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .showable {
   visibility: hidden;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .showable.shown {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .showable.shown {
   visibility: visible;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .gauge-background {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .gauge-background {
   fill: rgba(229, 229, 229, 1);
   stroke: none;
 }
 
-#chart-29f8f66f-3b3a-4ff8-b013-8a373b217491 .bg-lines {
+#chart-ab3c2174-28a5-49a7-9c34-a5045a11734b .bg-lines {
   stroke: rgba(249, 249, 249, 1);
   stroke-width: 2px;
 }
-</style><script type="text/javascript">window.pygal = window.pygal || {};window.pygal.config = window.pygal.config || {};window.pygal.config['29f8f66f-3b3a-4ff8-b013-8a373b217491'] = {"js": ["//kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js"], "half_pie": false, "interpolation_precision": 250, "interpolate": null, "logarithmic": false, "css": ["file://style.css", "file://graph.css"], "style": {"legend_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "legend_font_size": 14, "value_font_size": 16, "foreground": "rgba(0, 0, 0, .87)", "label_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "stroke_opacity_hover": ".9", "value_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "foreground_subtle": "rgba(0, 0, 0, .54)", "opacity_hover": ".8", "major_label_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "foreground_strong": "rgba(0, 0, 0, 1)", "colors": ["#F44336", "#3F51B5", "#009688", "#FFC107", "#FF5722", "#9C27B0", "#03A9F4", "#8BC34A", "#FF9800", "#E91E63", "#2196F3", "#4CAF50", "#FFEB3B", "#673AB7", "#00BCD4", "#CDDC39", "#9E9E9E", "#607D8B"], "major_label_font_size": 10, "opacity": ".7", "tooltip_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "transition": "150ms", "value_background": "rgba(229, 229, 229, 1)", "guide_stroke_dasharray": "4,4", "tooltip_font_size": 14, "font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "value_colors": [], "title_font_size": 16, "title_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "no_data_font_size": 64, "no_data_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "ci_colors": [], "background": "rgba(249, 249, 249, 1)", "major_guide_stroke_dasharray": "6,6", "stroke_opacity": ".8", "plot_background": "rgba(255, 255, 255, 1)", "value_label_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "label_font_size": 10, "value_label_font_size": 10}, "interpolation_parameters": {}, "rounded_bars": 10, "max_scale": 16, "x_label_rotation": 0, "y_labels_major_every": null, "show_y_guides": true, "disable_xml_declaration": false, "legend_at_bottom": false, "y_title": null, "print_zeroes": false, "margin_right": null, "show_legend": true, "x_labels": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], "show_only_major_dots": false, "x_labels_major_count": null, "print_values_position": "center", "y_labels": null, "fill": false, "show_minor_x_labels": true, "stroke": true, "legends": ["Adicional", "SZ-9439-H"], "legend_at_bottom_columns": null, "xrange": null, "no_prefix": false, "inverse_y_axis": false, "truncate_legend": null, "stack_from_top": true, "y_label_rotation": 0, "height": 600, "x_labels_major": null, "order_min": null, "margin": 20, "include_x_axis": false, "zero": 0, "show_minor_y_labels": true, "missing_value_fill_truncation": "x", "pretty_print": true, "stroke_style": null, "range": null, "margin_bottom": null, "legend_box_size": 22, "strict": false, "spacing": 10, "margin_top": null, "no_data_text": "No result found", "show_x_guides": false, "tooltip_fancy_mode": true, "width": 800, "y_labels_major_count": null, "x_title": null, "title": "Grafica de Consumo de combustible en ( $ )", "classes": ["pygal-chart"], "min_scale": 4, "explicit_size": false, "show_y_labels": true, "print_labels": false, "tooltip_border_radius": 0, "margin_left": null, "inner_radius": 0, "print_values": true, "dots_size": 2.5, "allow_interruptions": false, "secondary_range": null, "force_uri_protocol": "https", "dynamic_print_values": false, "truncate_label": null, "show_x_labels": true, "box_mode": "extremes", "formatter": null, "x_labels_major_every": null, "defs": [], "y_labels_major": null, "show_dots": true}</script><script type="text/javascript" xlink:href="https://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js" /></defs><title>Grafica de Consumo de combustible en ( $ )</title><g class="graph stackedbar-graph vertical"><rect class="background" height="600" width="800" x="0" y="0" /><g class="plot" transform="translate(161, 46)"><rect class="background" height="514" width="618.4" x="0" y="0" /><g class="axis y always_show"><g class="guides"><path class="axis major line" d="M0.000000 504.115385 h618.400000" /><text class="major" x="-5" y="507.61538461538464">0</text><title>0</title></g><g class="guides"><path class="guide line" d="M0.000000 441.499045 h618.400000" /><text class="" x="-5" y="444.99904491808707">1000</text><title>1000</title></g><g class="guides"><path class="guide line" d="M0.000000 378.882705 h618.400000" /><text class="" x="-5" y="382.3827052207896">2000</text><title>2000</title></g><g class="guides"><path class="guide line" d="M0.000000 316.266366 h618.400000" /><text class="" x="-5" y="319.7663655234921">3000</text><title>3000</title></g><g class="guides"><path class="guide line" d="M0.000000 253.650026 h618.400000" /><text class="" x="-5" y="257.15002582619456">4000</text><title>4000</title></g><g class="guides"><path class="major guide line" d="M0.000000 191.033686 h618.400000" /><text class="major" x="-5" y="194.53368612889705">5000</text><title>5000</title></g><g class="guides"><path class="guide line" d="M0.000000 128.417346 h618.400000" /><text class="" x="-5" y="131.91734643159953">6000</text><title>6000</title></g><g class="guides"><path class="guide line" d="M0.000000 65.801007 h618.400000" /><text class="" x="-5" y="69.301006734302">7000</text><title>7000</title></g></g><g class="axis x"><path class="line" d="M0.000000 0.000000 v514.000000" /><g class="guides"><path class="guide line" d="M36.667949 0.000000 v514.000000" /><text class="" x="36.66794871794871" y="529.0">Ene</text></g><g class="guides"><path class="guide line" d="M86.219231 0.000000 v514.000000" /><text class="" x="86.21923076923076" y="529.0">Feb</text></g><g class="guides"><path class="guide line" d="M135.770513 0.000000 v514.000000" /><text class="" x="135.7705128205128" y="529.0">Mar</text></g><g class="guides"><path class="guide line" d="M185.321795 0.000000 v514.000000" /><text class="" x="185.32179487179488" y="529.0">Abr</text></g><g class="guides"><path class="guide line" d="M234.873077 0.000000 v514.000000" /><text class="" x="234.87307692307692" y="529.0">May</text></g><g class="guides"><path class="guide line" d="M284.424359 0.000000 v514.000000" /><text class="" x="284.42435897435894" y="529.0">Jun</text></g><g class="guides"><path class="guide line" d="M333.975641 0.000000 v514.000000" /><text class="" x="333.975641025641" y="529.0">Jul</text></g><g class="guides"><path class="guide line" d="M383.526923 0.000000 v514.000000" /><text class="" x="383.5269230769231" y="529.0">Ago</text></g><g class="guides"><path class="guide line" d="M433.078205 0.000000 v514.000000" /><text class="" x="433.0782051282051" y="529.0">Sep</text></g><g class="guides"><path class="guide line" d="M482.629487 0.000000 v514.000000" /><text class="" x="482.62948717948717" y="529.0">Oct</text></g><g class="guides"><path class="guide line" d="M532.180769 0.000000 v514.000000" /><text class="" x="532.1807692307692" y="529.0">Nov</text></g><g class="guides"><path class="guide line" d="M581.732051 0.000000 v514.000000" /><text class="" x="581.7320512820513" y="529.0">Dic</text></g></g><g class="series serie-1 color-1"><g class="bars"><g class="bar"><rect class="rect reactive tooltip-trigger" height="437.18728376653127" rx="10" ry="10" width="43.6051282051282" x="14.865384615384617" y="66.92810084885338" /><desc class="value">6982</desc><desc class="x centered">36.66794871794872</desc><desc class="y centered">285.52174273211904</desc><desc class="x_label">Ene</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="494.2307692307693" rx="10" ry="10" width="43.6051282051282" x="64.41666666666666" y="9.884615384615358" /><desc class="value">7893</desc><desc class="x centered">86.21923076923076</desc><desc class="y centered">257.0</desc><desc class="x_label">Feb</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="402.62306425362306" rx="10" ry="10" width="43.6051282051282" x="113.96794871794869" y="101.49232036176159" /><desc class="value">6430</desc><desc class="x centered">135.77051282051278</desc><desc class="y centered">302.8038524885731</desc><desc class="x_label">Mar</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="481.6448849516125" rx="10" ry="10" width="43.6051282051282" x="163.51923076923077" y="22.47049966377216" /><desc class="value">7692</desc><desc class="x centered">185.32179487179488</desc><desc class="y centered">263.2929421395784</desc><desc class="x_label">Abr</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="178.64441715638986" rx="10" ry="10" width="43.6051282051282" x="213.0705128205128" y="325.4709674589948" /><desc class="value">2853</desc><desc class="x centered">234.8730769230769</desc><desc class="y centered">414.7931760371897</desc><desc class="x_label">May</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="262.62179487179486" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">284.42435897435894</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Jun</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="296.86406650488755" rx="10" ry="10" width="43.6051282051282" x="312.1730769230769" y="207.2513181104971" /><desc class="value">4741</desc><desc class="x centered">333.975641025641</desc><desc class="y centered">355.68335136294087</desc><desc class="x_label">Jul</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="37.569803818378546" rx="10" ry="10" width="43.6051282051282" x="361.72435897435895" y="466.5455807970061" /><desc class="value">600</desc><desc class="x centered">383.526923076923</desc><desc class="y centered">485.33048270619537</desc><desc class="x_label">Ago</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="411.275641025641" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">433.07820512820507</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Sep</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="460.82692307692304" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">482.6294871794871</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Oct</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="510.3782051282051" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">532.1807692307692</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Nov</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="559.9294871794872" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">581.7320512820513</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Dic</desc></g></g></g><g class="series serie-0 color-0"><g class="bars"><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="14.865384615384617" y="66.92810084885338" /><desc class="value">0</desc><desc class="x centered">36.66794871794872</desc><desc class="y centered">66.92810084885338</desc><desc class="x_label">Ene</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="64.41666666666666" y="9.884615384615358" /><desc class="value">0</desc><desc class="x centered">86.21923076923076</desc><desc class="y centered">9.884615384615358</desc><desc class="x_label">Feb</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="113.96794871794869" y="101.49232036176159" /><desc class="value">0</desc><desc class="x centered">135.77051282051278</desc><desc class="y centered">101.49232036176159</desc><desc class="x_label">Mar</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="163.51923076923077" y="22.47049966377216" /><desc class="value">0</desc><desc class="x centered">185.32179487179488</desc><desc class="y centered">22.47049966377216</desc><desc class="x_label">Abr</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="213.0705128205128" y="325.4709674589948" /><desc class="value">0</desc><desc class="x centered">234.8730769230769</desc><desc class="y centered">325.4709674589948</desc><desc class="x_label">May</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="262.62179487179486" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">284.42435897435894</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Jun</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="37.56980381837849" rx="10" ry="10" width="43.6051282051282" x="312.1730769230769" y="169.6815142921186" /><desc class="value">600</desc><desc class="x centered">333.975641025641</desc><desc class="y centered">188.46641620130785</desc><desc class="x_label">Jul</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="361.72435897435895" y="466.5455807970061" /><desc class="value">0</desc><desc class="x centered">383.526923076923</desc><desc class="y centered">466.5455807970061</desc><desc class="x_label">Ago</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="411.275641025641" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">433.07820512820507</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Sep</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="460.82692307692304" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">482.6294871794871</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Oct</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="510.3782051282051" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">532.1807692307692</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Nov</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.6051282051282" x="559.9294871794872" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">581.7320512820513</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Dic</desc></g></g></g></g><g class="titles"><text class="title plot_title" x="400.0" y="26">Grafica de Consumo de combustible en ( $ )</text></g><g class="plot overlay" transform="translate(161, 46)"><g class="series serie-1 color-1" /><g class="series serie-0 color-0" /></g><g class="plot text-overlay" transform="translate(161, 46)"><g class="series serie-1 color-1"><text class="value" text-anchor="middle" x="36.66794871794872" y="290.85507606545235">6982</text><text class="value" text-anchor="middle" x="86.21923076923076" y="262.3333333333333">7893</text><text class="value" text-anchor="middle" x="135.77051282051278" y="308.1371858219064">6430</text><text class="value" text-anchor="middle" x="185.32179487179488" y="268.6262754729117">7692</text><text class="value" text-anchor="middle" x="234.8730769230769" y="420.126509370523">2853</text><text class="value" text-anchor="middle" x="284.42435897435894" y="509.44871794871796" /><text class="value" text-anchor="middle" x="333.975641025641" y="361.0166846962742">4741</text><text class="value" text-anchor="middle" x="383.526923076923" y="490.6638160395287">600</text><text class="value" text-anchor="middle" x="433.07820512820507" y="509.44871794871796" /><text class="value" text-anchor="middle" x="482.6294871794871" y="509.44871794871796" /><text class="value" text-anchor="middle" x="532.1807692307692" y="509.44871794871796" /><text class="value" text-anchor="middle" x="581.7320512820513" y="509.44871794871796" /></g><g class="series serie-0 color-0"><text class="value" text-anchor="middle" x="36.66794871794872" y="72.2614341821867" /><text class="value" text-anchor="middle" x="86.21923076923076" y="15.21794871794869" /><text class="value" text-anchor="middle" x="135.77051282051278" y="106.82565369509491" /><text class="value" text-anchor="middle" x="185.32179487179488" y="27.80383299710549" /><text class="value" text-anchor="middle" x="234.8730769230769" y="330.8043007923281" /><text class="value" text-anchor="middle" x="284.42435897435894" y="509.44871794871796" /><text class="value" text-anchor="middle" x="333.975641025641" y="193.7997495346412">600</text><text class="value" text-anchor="middle" x="383.526923076923" y="471.8789141303394" /><text class="value" text-anchor="middle" x="433.07820512820507" y="509.44871794871796" /><text class="value" text-anchor="middle" x="482.6294871794871" y="509.44871794871796" /><text class="value" text-anchor="middle" x="532.1807692307692" y="509.44871794871796" /><text class="value" text-anchor="middle" x="581.7320512820513" y="509.44871794871796" /></g></g><g class="plot tooltip-overlay" transform="translate(161, 46)"><g class="tooltip" style="opacity: 0" transform="translate(0 0)"><rect class="tooltip-box" height="0" rx="0" ry="0" width="0" /><g class="text" /></g></g><g class="legends" transform="translate(10, 56)"><g class="legend reactive activate-serie" id="activate-serie-0"><rect class="color-0 reactive" height="22" width="22" x="0.0" y="0.0" /><text x="27.0" y="15.2">Adicional</text></g><g class="legend reactive activate-serie" id="activate-serie-1"><rect class="color-1 reactive" height="22" width="22" x="0.0" y="33.0" /><text x="27.0" y="48.2">SZ-9439-H</text></g></g><g class="legends" transform="translate(790, 56)" /></g></svg>
+</style><script type="text/javascript">window.pygal = window.pygal || {};window.pygal.config = window.pygal.config || {};window.pygal.config['ab3c2174-28a5-49a7-9c34-a5045a11734b'] = {"max_scale": 16, "zero": 0, "secondary_range": null, "css": ["file://style.css", "file://graph.css"], "truncate_label": null, "title": "Grafica de Consumo de combustible en ( $ )", "logarithmic": false, "show_y_guides": true, "margin_right": null, "tooltip_fancy_mode": true, "half_pie": false, "style": {"value_font_size": 16, "font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "legend_font_size": 14, "transition": "150ms", "value_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "guide_stroke_dasharray": "4,4", "stroke_opacity": ".8", "value_colors": [], "foreground_subtle": "rgba(0, 0, 0, .54)", "foreground": "rgba(0, 0, 0, .87)", "label_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "value_background": "rgba(229, 229, 229, 1)", "tooltip_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "foreground_strong": "rgba(0, 0, 0, 1)", "background": "rgba(249, 249, 249, 1)", "major_guide_stroke_dasharray": "6,6", "opacity": ".7", "major_label_font_size": 10, "plot_background": "rgba(255, 255, 255, 1)", "no_data_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "tooltip_font_size": 14, "no_data_font_size": 64, "title_font_size": 16, "value_label_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "label_font_size": 10, "legend_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "colors": ["#F44336", "#3F51B5", "#009688", "#FFC107", "#FF5722", "#9C27B0", "#03A9F4", "#8BC34A", "#FF9800", "#E91E63", "#2196F3", "#4CAF50", "#FFEB3B", "#673AB7", "#00BCD4", "#CDDC39", "#9E9E9E", "#607D8B"], "ci_colors": [], "major_label_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "value_label_font_size": 10, "title_font_family": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace", "opacity_hover": ".8", "stroke_opacity_hover": ".9"}, "y_labels": null, "x_title": null, "legend_at_bottom_columns": null, "show_x_guides": false, "x_labels_major": null, "range": null, "formatter": null, "stroke_style": null, "strict": false, "fill": false, "y_labels_major_every": null, "legend_at_bottom": false, "y_labels_major": null, "classes": ["pygal-chart"], "print_labels": false, "x_labels": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], "width": 800, "show_legend": true, "show_minor_x_labels": true, "height": 600, "no_prefix": false, "inner_radius": 0, "order_min": null, "y_label_rotation": 0, "x_label_rotation": 0, "disable_xml_declaration": false, "show_minor_y_labels": true, "interpolation_parameters": {}, "truncate_legend": null, "stroke": true, "legends": ["Adicional", "SZ-1007-H"], "dynamic_print_values": false, "y_labels_major_count": null, "dots_size": 2.5, "print_zeroes": false, "interpolation_precision": 250, "js": ["//kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js"], "legend_box_size": 22, "margin": 20, "margin_left": null, "allow_interruptions": false, "show_x_labels": true, "show_dots": true, "force_uri_protocol": "https", "show_only_major_dots": false, "inverse_y_axis": false, "no_data_text": "No result found", "rounded_bars": 10, "box_mode": "extremes", "min_scale": 4, "explicit_size": false, "spacing": 10, "margin_top": null, "show_y_labels": true, "stack_from_top": true, "y_title": null, "x_labels_major_every": null, "x_labels_major_count": null, "tooltip_border_radius": 0, "missing_value_fill_truncation": "x", "xrange": null, "print_values_position": "center", "pretty_print": true, "margin_bottom": null, "include_x_axis": false, "interpolate": null, "print_values": true, "defs": []}</script><script type="text/javascript" xlink:href="https://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js" /></defs><title>Grafica de Consumo de combustible en ( $ )</title><g class="graph stackedbar-graph vertical"><rect class="background" height="600" width="800" x="0" y="0" /><g class="plot" transform="translate(167, 46)"><rect class="background" height="514" width="612.4" x="0" y="0" /><g class="axis y always_show"><g class="guides"><path class="axis major line" d="M0.000000 504.115385 h612.400000" /><text class="major" x="-5" y="507.61538461538464">0</text><title>0</title></g><g class="guides"><path class="guide line" d="M0.000000 466.254900 h612.400000" /><text class="" x="-5" y="469.75489976547124">1000</text><title>1000</title></g><g class="guides"><path class="guide line" d="M0.000000 428.394415 h612.400000" /><text class="" x="-5" y="431.8944149155579">2000</text><title>2000</title></g><g class="guides"><path class="guide line" d="M0.000000 390.533930 h612.400000" /><text class="" x="-5" y="394.0339300656445">3000</text><title>3000</title></g><g class="guides"><path class="guide line" d="M0.000000 352.673445 h612.400000" /><text class="" x="-5" y="356.17344521573114">4000</text><title>4000</title></g><g class="guides"><path class="major guide line" d="M0.000000 314.812960 h612.400000" /><text class="major" x="-5" y="318.31296036581773">5000</text><title>5000</title></g><g class="guides"><path class="guide line" d="M0.000000 276.952476 h612.400000" /><text class="" x="-5" y="280.4524755159043">6000</text><title>6000</title></g><g class="guides"><path class="guide line" d="M0.000000 239.091991 h612.400000" /><text class="" x="-5" y="242.59199066599098">7000</text><title>7000</title></g><g class="guides"><path class="guide line" d="M0.000000 201.231506 h612.400000" /><text class="" x="-5" y="204.73150581607757">8000</text><title>8000</title></g><g class="guides"><path class="guide line" d="M0.000000 163.371021 h612.400000" /><text class="" x="-5" y="166.87102096616422">9000</text><title>9000</title></g><g class="guides"><path class="major guide line" d="M0.000000 125.510536 h612.400000" /><text class="major" x="-5" y="129.01053611625082">10000</text><title>10000</title></g><g class="guides"><path class="guide line" d="M0.000000 87.650051 h612.400000" /><text class="" x="-5" y="91.15005126633747">11000</text><title>11000</title></g><g class="guides"><path class="guide line" d="M0.000000 49.789566 h612.400000" /><text class="" x="-5" y="53.289566416424066">12000</text><title>12000</title></g><g class="guides"><path class="guide line" d="M0.000000 11.929082 h612.400000" /><text class="" x="-5" y="15.429081566510717">13000</text><title>13000</title></g></g><g class="axis x"><path class="line" d="M0.000000 0.000000 v514.000000" /><g class="guides"><path class="guide line" d="M36.312179 0.000000 v514.000000" /><text class="" x="36.312179487179485" y="529.0">Ene</text></g><g class="guides"><path class="guide line" d="M85.382692 0.000000 v514.000000" /><text class="" x="85.3826923076923" y="529.0">Feb</text></g><g class="guides"><path class="guide line" d="M134.453205 0.000000 v514.000000" /><text class="" x="134.45320512820513" y="529.0">Mar</text></g><g class="guides"><path class="guide line" d="M183.523718 0.000000 v514.000000" /><text class="" x="183.52371794871797" y="529.0">Abr</text></g><g class="guides"><path class="guide line" d="M232.594231 0.000000 v514.000000" /><text class="" x="232.59423076923076" y="529.0">May</text></g><g class="guides"><path class="guide line" d="M281.664744 0.000000 v514.000000" /><text class="" x="281.6647435897436" y="529.0">Jun</text></g><g class="guides"><path class="guide line" d="M330.735256 0.000000 v514.000000" /><text class="" x="330.73525641025634" y="529.0">Jul</text></g><g class="guides"><path class="guide line" d="M379.805769 0.000000 v514.000000" /><text class="" x="379.8057692307692" y="529.0">Ago</text></g><g class="guides"><path class="guide line" d="M428.876282 0.000000 v514.000000" /><text class="" x="428.87628205128203" y="529.0">Sep</text></g><g class="guides"><path class="guide line" d="M477.946795 0.000000 v514.000000" /><text class="" x="477.94679487179485" y="529.0">Oct</text></g><g class="guides"><path class="guide line" d="M527.017308 0.000000 v514.000000" /><text class="" x="527.0173076923077" y="529.0">Nov</text></g><g class="guides"><path class="guide line" d="M576.087821 0.000000 v514.000000" /><text class="" x="576.0878205128205" y="529.0">Dic</text></g></g><g class="series serie-1 color-1"><g class="bars"><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="14.721153846153845" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">36.312179487179485</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Ene</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="63.791666666666664" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">85.38269230769231</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Feb</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="112.86217948717947" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">134.45320512820513</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Mar</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="161.9326923076923" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">183.52371794871794</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Abr</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="211.00320512820508" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">232.59423076923073</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">May</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="260.07371794871796" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">281.6647435897436</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Jun</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="39.94281151665865" rx="10" ry="10" width="43.18205128205128" x="309.1442307692308" y="464.172573098726" /><desc class="value">1055</desc><desc class="x centered">330.7352564102564</desc><desc class="y centered">484.14397885705534</desc><desc class="x_label">Jul</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="372.73647334739724" rx="10" ry="10" width="43.18205128205128" x="358.2147435897436" y="131.3789112679874" /><desc class="value">9845</desc><desc class="x centered">379.8057692307692</desc><desc class="y centered">317.747147941686</desc><desc class="x_label">Ago</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="342.25878304321697" rx="10" ry="10" width="43.18205128205128" x="407.2852564102564" y="161.85660157216768" /><desc class="value">9040</desc><desc class="x centered">428.87628205128203</desc><desc class="y centered">332.9859930937762</desc><desc class="x_label">Sep</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="494.2307692307693" rx="10" ry="10" width="43.18205128205128" x="456.3557692307692" y="9.884615384615358" /><desc class="value">13054</desc><desc class="x centered">477.94679487179485</desc><desc class="y centered">257.0</desc><desc class="x_label">Oct</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="387.23703904491407" rx="10" ry="10" width="43.18205128205128" x="505.42628205128204" y="116.87834557047057" /><desc class="value">10228</desc><desc class="x centered">527.0173076923077</desc><desc class="y centered">310.4968650929276</desc><desc class="x_label">Nov</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="382.20159455987556" rx="10" ry="10" width="43.18205128205128" x="554.4967948717948" y="121.91379005550908" /><desc class="value">10095</desc><desc class="x centered">576.0878205128205</desc><desc class="y centered">313.0145873354469</desc><desc class="x_label">Dic</desc></g></g></g><g class="series serie-0 color-0"><g class="bars"><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="14.721153846153845" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">36.312179487179485</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Ene</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="63.791666666666664" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">85.38269230769231</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Feb</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="112.86217948717947" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">134.45320512820513</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Mar</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="161.9326923076923" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">183.52371794871794</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Abr</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="211.00320512820508" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">232.59423076923073</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">May</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="260.07371794871796" y="504.11538461538464" /><desc class="value">0</desc><desc class="x centered">281.6647435897436</desc><desc class="y centered">504.11538461538464</desc><desc class="x_label">Jun</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="309.1442307692308" y="464.172573098726" /><desc class="value">0</desc><desc class="x centered">330.7352564102564</desc><desc class="y centered">464.172573098726</desc><desc class="x_label">Jul</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="358.2147435897436" y="131.3789112679874" /><desc class="value">0</desc><desc class="x centered">379.8057692307692</desc><desc class="y centered">131.3789112679874</desc><desc class="x_label">Ago</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="407.2852564102564" y="161.85660157216768" /><desc class="value">0</desc><desc class="x centered">428.87628205128203</desc><desc class="y centered">161.85660157216768</desc><desc class="x_label">Sep</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="456.3557692307692" y="9.884615384615358" /><desc class="value">0</desc><desc class="x centered">477.94679487179485</desc><desc class="y centered">9.884615384615358</desc><desc class="x_label">Oct</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="505.42628205128204" y="116.87834557047057" /><desc class="value">0</desc><desc class="x centered">527.0173076923077</desc><desc class="y centered">116.87834557047057</desc><desc class="x_label">Nov</desc></g><g class="bar"><rect class="rect reactive tooltip-trigger" height="0.0" rx="10" ry="10" width="43.18205128205128" x="554.4967948717948" y="121.91379005550908" /><desc class="value">0</desc><desc class="x centered">576.0878205128205</desc><desc class="y centered">121.91379005550908</desc><desc class="x_label">Dic</desc></g></g></g></g><g class="titles"><text class="title plot_title" x="400.0" y="26">Grafica de Consumo de combustible en ( $ )</text></g><g class="plot overlay" transform="translate(167, 46)"><g class="series serie-1 color-1" /><g class="series serie-0 color-0" /></g><g class="plot text-overlay" transform="translate(167, 46)"><g class="series serie-1 color-1"><text class="value" text-anchor="middle" x="36.312179487179485" y="509.44871794871796" /><text class="value" text-anchor="middle" x="85.38269230769231" y="509.44871794871796" /><text class="value" text-anchor="middle" x="134.45320512820513" y="509.44871794871796" /><text class="value" text-anchor="middle" x="183.52371794871794" y="509.44871794871796" /><text class="value" text-anchor="middle" x="232.59423076923073" y="509.44871794871796" /><text class="value" text-anchor="middle" x="281.6647435897436" y="509.44871794871796" /><text class="value" text-anchor="middle" x="330.7352564102564" y="489.47731219038866">1055</text><text class="value" text-anchor="middle" x="379.8057692307692" y="323.08048127501934">9845</text><text class="value" text-anchor="middle" x="428.87628205128203" y="338.3193264271095">9040</text><text class="value" text-anchor="middle" x="477.94679487179485" y="262.3333333333333">13054</text><text class="value" text-anchor="middle" x="527.0173076923077" y="315.8301984262609">10228</text><text class="value" text-anchor="middle" x="576.0878205128205" y="318.3479206687802">10095</text></g><g class="series serie-0 color-0"><text class="value" text-anchor="middle" x="36.312179487179485" y="509.44871794871796" /><text class="value" text-anchor="middle" x="85.38269230769231" y="509.44871794871796" /><text class="value" text-anchor="middle" x="134.45320512820513" y="509.44871794871796" /><text class="value" text-anchor="middle" x="183.52371794871794" y="509.44871794871796" /><text class="value" text-anchor="middle" x="232.59423076923073" y="509.44871794871796" /><text class="value" text-anchor="middle" x="281.6647435897436" y="509.44871794871796" /><text class="value" text-anchor="middle" x="330.7352564102564" y="469.5059064320593" /><text class="value" text-anchor="middle" x="379.8057692307692" y="136.71224460132075" /><text class="value" text-anchor="middle" x="428.87628205128203" y="167.18993490550102" /><text class="value" text-anchor="middle" x="477.94679487179485" y="15.21794871794869" /><text class="value" text-anchor="middle" x="527.0173076923077" y="122.2116789038039" /><text class="value" text-anchor="middle" x="576.0878205128205" y="127.24712338884241" /></g></g><g class="plot tooltip-overlay" transform="translate(167, 46)"><g class="tooltip" style="opacity: 0" transform="translate(0 0)"><rect class="tooltip-box" height="0" rx="0" ry="0" width="0" /><g class="text" /></g></g><g class="legends" transform="translate(10, 56)"><g class="legend reactive activate-serie" id="activate-serie-0"><rect class="color-0 reactive" height="22" width="22" x="0.0" y="0.0" /><text x="27.0" y="15.2">Adicional</text></g><g class="legend reactive activate-serie" id="activate-serie-1"><rect class="color-1 reactive" height="22" width="22" x="0.0" y="33.0" /><text x="27.0" y="48.2">SZ-1007-H</text></g></g><g class="legends" transform="translate(790, 56)" /></g></svg>

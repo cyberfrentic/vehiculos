@@ -5,13 +5,14 @@ from flask import Flask, session, render_template, url_for, request, flash, redi
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import text, distinct, desc
 from config import DevelopmentConfig
-from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades, Imagen, Bitacora
+from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Combustible, Solicitud_serv, captura_Sol, Compras, Articulos, Ciudades, Imagen, Bitacora, setupdb, Caja, ArtCaja
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
     filtroServ, formCotizacion, formBitacora, formBitacora2, FormConsultaTicket2
 from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne, tabla2
 from tools.tool import ToExcel
+from tools.fpdf import tabla
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
@@ -20,15 +21,14 @@ import time
 from werkzeug.datastructures import MultiDict
 from xml.dom import minidom
 import collections as co
+import json
 
 #import flask_excel as excel
-###########################################
+####################################4682#######
 import pymysql
 pymysql.install_as_MySQLdb()
 ###########################################
 ALLOWED_EXTENSIONS = set(["xml", "xls","pdf", "jpg", "png"])
-
-
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 ###########################################
@@ -1021,19 +1021,19 @@ def Consulta_ticket2():
     form = FormConsultaTicket2(request.form)
     nombre = session['username'].upper()
     lugar = session['ciudad']
+
     if request.method == 'POST':
         fi = form.fechaI.data
         ff = form.fechaF.data
         #trae el id del vehiculo en la tabla Vehiculos
         tests = request.form.getlist('placa')
-        print(tests)
         if tests:
+            data={}
             lista2 = []
             for item in tests:
                 placas = Vehiculo.query.filter_by(id=item).one()
                 valor = db.session.query(func.sum(Ticket.total).label("total")).filter(Ticket.placa == placas.placa).filter(Ticket.idCiudad==lugar).filter(Ticket.fecha.between(fi, ff)).all()
                 lirtos = db.session.query(func.sum(Ticket.litros).label("litros")).filter(Ticket.placa == placas.placa).filter(Ticket.idCiudad==lugar).filter(Ticket.fecha.between(fi, ff)).all()
-                placas = Vehiculo.query.filter_by(id=item).one()
                 if valor[0].total!=None:
                     data = {
                     'placa': placas.placa,
@@ -1042,7 +1042,7 @@ def Consulta_ticket2():
                     'total': valor[0].total,
                     'litros': lirtos[0].litros,
                     }
-                lista2.append(data)
+                    lista2.append(data)
             fecha1=str(fi)[8:10]
             fecha2=str(ff)[8:10]
             mes = meses(str(ff)[5:7])
@@ -1078,7 +1078,7 @@ def comparativo_vehiculos():
     nombre = (session['username']).upper()
     return render_template('comparativo_vehiculos.html', nombre=nombre)
 
-
+#excel de factura de combustible
 @app.route("/uploads/xls/<filename>", methods=['GET', 'POST'])
 def get_fileXls(filename):
     nombre = (session['username']).upper()
@@ -1459,81 +1459,340 @@ def get_fileXml(filename):
     return render_template("ListaXML.HTML", lista=lista1, lista2=sample, form=factura, nombre=nombre)
 
 
+## control de caja chica
+@app.route("/cajachica/archivoxml/adquirir", methods=["GET", "POST"])
+def upload_fileCC():
+    if request.method == "POST":
+        if not "file" in request.files:
+            flash("No file part in the form.")
+        f = request.files["file"]
+        if f.filename == "":
+            flash("No file selected.")
+        if f and allowed_file(f.filename):
+            filename = secure_filename(f.filename)
+            nombre, extension = filename.split('.')
+            if extension=='xml':
+                f.save(os.path.join(app.config["UPLOAD_FOLDER"]+'\\xml', filename))
+                return redirect(url_for("get_fileXmlCC", filename=filename))
+        return "File not allowed."
+    nombre = (session['username']).upper()
+    return render_template("leer.html", nombre=nombre)
 
-@app.route("/manteniminetos/solicitud/capturaDeServicio/manual", methods=['GET', 'POST'])
-def capturaManual():
-    nombre = session['username']
+
+@app.route("/cajachica/archivoxml/adquirir/xml/<filename>", methods=['GET', 'POST'])
+def get_fileXmlCC(filename):
     lugar = session['ciudad']
-    item={}
-    lista=[]
-    form =capturaFactura(request.form)
-    if request.method == 'POST': #and form.validate():
-        if lugar==12:
-            flash(("Disculpe usted no puede realizar ningún cambio"))
-            return redirect(url_for("home"))
-        if 'agregar' in request.form:
-            identificador = len(session['listaManual'])+1
-            item = {
-            'id': identificador,
-            'cantidad': str(form.cantidad.data),
-            'descripcion': form.descripcion.data,
-            'pUnit': str(form.pUnit.data),
-            'importe': str(form.importe.data),
+    lista1=[]
+    lista2=[]
+    articulo=[]
+    xmlDoc = minidom.parse(app.config["UPLOAD_FOLDER"]+'\\xml\\'+filename)
+    nodes = xmlDoc.childNodes
+    comprobante = nodes[0]
+    compAtrib = dict(comprobante.attributes.items())
+    atributos = dict()
+    articulos = dict()
+    atributos['fecha'] = compAtrib['Fecha']
+    atributos['total'] = compAtrib['Total']
+    atributos['subTotal'] = compAtrib['SubTotal']
+    for nodo in comprobante.getElementsByTagName("cfdi:Impuestos"):
+            atributos['IVA'] = nodo.getAttribute('TotalImpuestosTrasladados')
+            emisor = comprobante.getElementsByTagName('cfdi:Emisor')
+            atributos['rfc'] = emisor[0].getAttribute('Rfc')
+            atributos['nombre'] = emisor[0].getAttribute('Nombre')
+            timbre = comprobante.getElementsByTagName('tfd:TimbreFiscalDigital')
+            try:
+                atributos['UUiD'] = timbre[0].getAttribute('UUID')
+            except KeyError:
+                atributos['UUiD'] = ' '
+            conceptos = comprobante.getElementsByTagName('cfdi:Conceptos')
+            concept = conceptos[0].getElementsByTagName('cfdi:Concepto')
+            x = 0
+            for nodo in comprobante.getElementsByTagName("cfdi:Conceptos"):
+                x=0
+                for nodo2 in nodo.getElementsByTagName("cfdi:Concepto"):
+                    x += 1
+                    if nodo2.getAttribute('ClaveProdServ')!="01010101":
+                        articulos['cantidad'+str(x)] = nodo2.getAttribute('Cantidad')
+                        articulos['descripcion'+str(x)] = nodo2.getAttribute('Descripcion')
+                        articulos['valorUnitario'+str(x)] = nodo2.getAttribute('ValorUnitario')
+                        articulos['importe'+str(x)] = nodo2.getAttribute('Importe')
+                    elif nodo2.getAttribute('ClaveProdServ')=="01010101":
+                        flash("EL Articulo "+nodo2.getAttribute('Descripcion')+ " Tiene una clave prod-serv invalida 01010101")
+    Cant_Diccio = int(len(articulos)/4)
+    sample = [co.defaultdict(int) for _ in range(Cant_Diccio)]
+    for dc in range(Cant_Diccio):
+        sample[dc] = {
+            'cantidad' : articulos['cantidad'+str(dc+1)],
+            'descripcion' : articulos['descripcion'+str(dc+1)],
+            'valor' : articulos['valorUnitario'+str(dc+1)],
+            'importe' : articulos['importe'+str(dc+1)]
             }
-            lista.append(item)
-            session['listaManual']+=lista
-        elif 'guardar' in request.form:
-            uuid = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
-            proveedor = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(rfc=(form.rfc.data.upper())).first()
-            if (proveedor==None):
-                flash('El proveedor no existe, tiene que darlo de alta')
-                return redirect(url_for("proveedores"))
-            if (uuid==None):
-                compras=Compras(
-                UUiD = form.uuid.data.upper(),
-                rfc = form.rfc.data.upper().replace("-",""),
-                nombre = str(form.nombre.data),
-                subtotal = float(form.subtotal.data),
-                iva = float(form.iva.data),
-                total = float(form.total.data),
-                fecha = form.fecha.data,
-                placas = form.placas.data.upper(),
-                observaciones = form.obser.data.upper(),
-                idCiudad = lugar,
+    uuid = Caja.query.filter_by(UUiD = atributos['UUiD']).first()
+    if (uuid==None):
+        flash('El registro no existe')  
+    else:
+        flash('El registro Existe en la base de datos')
+        return render_template("leer.html") 
+    factura = Factura(request.form)
+    fol = setupdb.query.filter_by(id=1).one()
+    caja=Caja(
+            UUiD = atributos['UUiD'],
+            rfc = atributos['rfc'],
+            nombre = atributos['nombre'],
+            subtotal = atributos['subTotal'],
+            iva = atributos['IVA'],
+            total = atributos['total'],
+            fecha = atributos['fecha'],
+            placas = factura.placas.data,
+            observaciones = factura.observaciones.data,
+            folio = None,
+            year = datetime.datetime.now().year,
+            Fol_contador = fol.Fol_contador+1,
+            idCiudad = lugar,
+            )
+    db.session.commit()
+    if (request.method == 'POST') and (factura.validate()):
+        fol.Fol_contador=fol.Fol_contador+1
+        db.session.add(caja)
+        db.session.commit()
+        id_compra = Caja.query.filter_by(UUiD = atributos['UUiD']).first()
+        for dc in range(Cant_Diccio):
+            artCaja = ArtCaja(
+                caja_id = id_compra.id,
+                cantidad = articulos['cantidad'+str(dc+1)],
+                descripcion = articulos['descripcion'+str(dc+1)],
+                p_u = articulos['valorUnitario'+str(dc+1)],
+                importe = articulos['importe'+str(dc+1)]
                 )
-                db.session.add(compras)
-                db.session.commit()
-                id_compra = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
-                for dc in session['listaManual']:
-                    arti = Articulos(
-                        compras_id = id_compra.id,
-                        cantidad = dc['cantidad'],
-                        descripcion = dc['descripcion'],
-                        p_u = dc['pUnit'],
-                        importe = dc['importe'],
-                    )
-                    db.session.add(arti)
-                    db.session.commit()
-                    session.pop('listaManual')
-                    session['listaManual']=[]
-                flash('Registro guardado con exito con folio {}'.format(id_compra.id))
-                return redirect(url_for('capturaManual'))
+            db.session.add(artCaja)
+            db.session.commit()
+        flash('Registro agregado y tiene el Folio: {}'.format(fol.Fol_contador))
+    lista1.append(atributos)
+    nombre = (session['username']).upper()
+    return render_template("ListaXML.HTML", lista=lista1, lista2=sample, form=factura, nombre=nombre)
+
+
+@app.route('/cajaChica/AsignarNumfolio',  methods=["GET", "POST"])
+def folio():
+    nombre = (session['username']).upper()
+    if request.method == 'POST':
+        if 'form1' in request.form['btn1']:
+            session['folio'] = request.form['folio']
+            print(session['folio'])
+            query1=Caja.query.filter_by(Fol_contador=session['folio']).filter_by(year=str(datetime.datetime.now().year)).first()
+            if query1 != None:
+                lista=(query1.fecha, str(query1.total), str(query1.subtotal), str(query1.iva), query1.rfc, query1.nombre, query1.UUiD)
+                return render_template('folio.html', lista=lista, nombre=nombre)
             else:
-                session.pop('listaManual')
-                session['listaManual']=[]
-                flash('El registro Existe en la base de datos')
-                return redirect(url_for('capturaManual'))
-        else:
-            if 'eliminar' in request.form:
-                if len(session['listaManual'])==1:
-                    session.pop('listaManual')
-                    session['listaManual']=[]
-                else:
-                    temporal=session['listaManual']
-                    session.pop('listaManual')
-                    temporal.pop(int(request.form['eliminar'])-1)
-                    session['listaManual']=temporal
-    return render_template('capturaManual.html', nombre=nombre, form=form, articulos=session['listaManual'], boton=(len(session['listaManual']) if len(session['listaManual'])>0 else 0))
+                flash("El Folio no existe")
+        elif 'form2' in request.form['btn1']:
+            numero_folio = request.form['numero']
+            caja = Caja.query.filter_by(Fol_contador=session['folio']).filter_by(year=str(datetime.datetime.now().year)).first()
+            print(caja)
+            if caja.folio == None:
+                caja.folio=int(numero_folio)
+                db.session.commit()
+                flash('Número de Folio Agregado')
+                session.pop('folio')
+            else:
+                flash('El Registro Cuenta con un número de Fondo {}'.format(caja.folio))
+    return render_template('folio.html',nombre=nombre)
+
+
+# consulta de las facturas  
+@app.route('/cajaChica/ConsultaEimpresion',  methods=["GET", "POST"])
+def ConsultaCaja():
+    nombre = (session['username']).upper()
+    lista=()
+    lista2=[]
+    query1 = db.session.query(Caja.nombre).distinct(Caja.nombre).order_by(Caja.nombre)
+    row = query1.all()
+    if query1 != None:
+        for item in row:
+            lista+=item
+    if request.method=="POST":
+        if 'form1' in request.form['btn1']:
+            if request.form.getlist('mismo'):
+                valores = request.form.getlist('mismo')
+                if len(valores)!= 0:
+                    cuantos = len(valores)
+                    s=''
+                    for i in range(len(valores)):
+                        s+=valores[i]
+                if '1' == s:
+                    folio_text = request.form['folio_text']
+                    query2 = Caja.query.filter_by(folio=folio_text).filter_by(year=str(datetime.datetime.now().year)).all()
+                    session['consulta']={'filtro':1, 'folio_text':folio_text,}
+                    return render_template("consultaCajachica.html",lista=lista, lista2=query2, nombre=nombre)
+                elif '2' == s:
+                    fecha_ini = request.form['fecha_Inicial']
+                    fecha_fin = request.form['fecha_Final']
+                    if str(fecha_ini)> str(fecha_fin):
+                        flash('La consulta no se puede realizar, la fecha final debe ser mayo o igual a la fecha inicial')
+                        return render_template("consultaCajachica.html", nombre=nombre)
+                    else:
+                        query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.fecha.between(fecha_ini + " 00:00:00", fecha_fin + " 23:59:59"))
+                        session['consulta']={'filtro':2, 'fecha_ini':fecha_ini, 'fecha_fin':fecha_fin,}
+                        return render_template("consultaCajachica.html", lista=lista, lista2=query2, nombre=nombre)
+                elif '3' == s:
+                    proveedor = request.form['TextProv']
+                    query2 = Caja.query.filter_by(nombre=proveedor).filter_by(year=str(datetime.datetime.now().year)).all()
+                    session['consulta']={'filtro':3, 'proveedor':proveedor,}
+                    return render_template("consultaCajachica.html", lista=lista, lista2=query2, nombre=nombre)
+                elif '12' == s:
+                    folio_text = request.form['folio_text']
+                    fecha_ini = request.form['fecha_Inicial']
+                    fecha_fin = request.form['fecha_Final']
+                    query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.fecha.between(fecha_ini + " 00:00:00", fecha_fin + " 23:59:59")).filter(Caja.folio==folio_text)
+                    session['consulta']={'filtro':12, 'folio_text':folio_text, 'fecha_ini':fecha_ini, 'fecha_fin':fecha_fin,}
+                    return render_template("consultaCajachica.html", lista=lista, lista2=query2, nombre=nombre)
+                elif '23' == s:
+                    fecha_ini = request.form['fecha_Inicial']
+                    fecha_fin = request.form['fecha_Final']
+                    proveedor = request.form['TextProv']
+                    query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.fecha.between(fecha_ini + " 00:00:00", fecha_fin + " 23:59:59")).filter(Caja.nombre==proveedor)
+                    session['consulta']={'filtro':23, 'fecha_ini':fecha_ini, 'fecha_fin':fecha_fin,'proveedor':proveedor,}
+                    return render_template("consultaCajachica.html", lista=lista, lista2=query2, nombre=nombre)
+                elif '13' == s:
+                    folio_text = request.form['folio_text']
+                    proveedor = request.form['TextProv']
+                    query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.folio==folio_text).filter(Caja.nombre==proveedor)
+                    session['consulta']={'filtro':13, 'folio_text':folio_text, 'proveedor':proveedor,}
+                    return render_template("consultaCajachica.html", lista=lista, lista2=query2, nombre=nombre)
+                elif '123' == s:
+                    folio_text = request.form['folio_text']
+                    fecha_ini = request.form['fecha_Inicial']
+                    fecha_fin = request.form['fecha_Final']
+                    proveedor = request.form['TextProv']
+                    query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.folio==folio_text).filter(Caja.fecha.between(fecha_ini + " 00:00:00", fecha_fin + " 23:59:59")).filter(Caja.nombre==proveedor)
+                    session['consulta']={'filtro':123, 'folio_text':folio_text,'fecha_ini':fecha_ini, 'fecha_fin':fecha_fin, 'proveedor':proveedor,}
+                    return render_template("consultaCajachica.html", lista=lista, lista2=query2, nombre=nombre)
+            else:
+                flash('Debe elegir una opcion')
+        elif 'form2' in request.form['btn1']:
+            consulta=session['consulta']
+            if consulta['filtro'] == 1:
+                folio_text = consulta['folio_text']
+                query2 = Caja.query.filter_by(folio=folio_text).filter_by(year=str(datetime.datetime.now().year)).all()
+            elif consulta['filtro'] == 2:
+                    fecha_ini = consulta['fecha_ini']
+                    fecha_fin = consulta['fecha_fin']
+                    query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.fecha.between(fecha_ini + " 00:00:00", fecha_fin + " 23:59:59"))
+            elif consulta['filtro'] == 3:
+                    proveedor = consulta['proveedor']
+                    query2 = Caja.query.filter_by(nombre=proveedor).filter_by(year=str(datetime.datetime.now().year)).all()
+            elif consulta['filtro'] == 12:
+                    folio_text = consulta['folio_text']
+                    fecha_ini = consulta['fecha_ini']
+                    fecha_fin = consulta['fecha_fin']
+                    query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.fecha.between(fecha_ini + " 00:00:00", fecha_fin + " 23:59:59")).filter(Caja.folio==folio_text)
+            elif consulta['filtro'] == 23:
+                fecha_ini = consulta['fecha_ini']
+                fecha_fin = consulta['fecha_fin']
+                proveedor = consulta['proveedor']
+                query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.fecha.between(fecha_ini + " 00:00:00", fecha_fin + " 23:59:59")).filter(Caja.nombre==proveedor)
+            elif consulta['filtro'] == 13:
+                folio_text =consulta['folio_text']
+                proveedor = consulta['proveedor']
+                query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.folio==folio_text).filter(Caja.nombre==proveedor)
+            elif consulta['filtro'] == 123:
+                folio_text = consulta['folio_text']
+                fecha_ini = consulta['fecha_ini']
+                fecha_fin = consulta['fecha_fin']
+                proveedor = consulta['proveedor']
+                query2 = db.session.query(Caja.id, Caja.fecha, Caja.total, Caja.subtotal, Caja.folio, Caja.iva, Caja.rfc, Caja.nombre, Caja.UUiD).filter(Caja.folio==folio_text).filter(Caja.fecha.between(fecha_ini + " 00:00:00", fecha_fin + " 23:59:59")).filter(Caja.nombre==proveedor)
+            totales=0
+            for item in query2:
+                j=[
+                str(item.fecha)[:10],
+                item.total,
+                item.subtotal,
+                item.iva,
+                item.rfc,
+                item.nombre,
+                item.UUiD
+                ]
+                totales+=item.total
+                lista2.append(j)
+            x=tabla(lista2, totales)
+            return (x)
+    return render_template("consultaCajachica.html", lista=lista, nombre=nombre)
+
+
+# @app.route("/manteniminetos/solicitud/capturaDeServicio/manual", methods=['GET', 'POST'])
+# def capturaManual():
+#     nombre = session['username']
+#     lugar = session['ciudad']
+#     item={}
+#     lista=[]
+#     form =capturaFactura(request.form)
+#     if request.method == 'POST': #and form.validate():
+#         if lugar==12:
+#             flash(("Disculpe usted no puede realizar ningún cambio"))
+#             return redirect(url_for("home"))
+#         if 'agregar' in request.form:
+#             identificador = len(session['listaManual'])+1
+#             item = {
+#             'id': identificador,
+#             'cantidad': str(form.cantidad.data),
+#             'descripcion': form.descripcion.data,
+#             'pUnit': str(form.pUnit.data),
+#             'importe': str(form.importe.data),
+#             }
+#             lista.append(item)
+#             session['listaManual']+=lista
+#         elif 'guardar' in request.form:
+#             uuid = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
+#             proveedor = Model_Proveedor.query.filter_by(idCiudad=lugar).filter_by(rfc=(form.rfc.data.upper())).first()
+#             if (proveedor==None):
+#                 flash('El proveedor no existe, tiene que darlo de alta')
+#                 return redirect(url_for("proveedores"))
+#             if (uuid==None):
+#                 compras=Compras(
+#                 UUiD = form.uuid.data.upper(),
+#                 rfc = form.rfc.data.upper().replace("-",""),
+#                 nombre = str(form.nombre.data),
+#                 subtotal = float(form.subtotal.data),
+#                 iva = float(form.iva.data),
+#                 total = float(form.total.data),
+#                 fecha = form.fecha.data,
+#                 placas = form.placas.data.upper(),
+#                 observaciones = form.obser.data.upper(),
+#                 idCiudad = lugar,
+#                 )
+#                 db.session.add(compras)
+#                 db.session.commit()
+#                 id_compra = Compras.query.filter_by(idCiudad=lugar).filter_by(UUiD = form.uuid.data.upper()).first()
+#                 for dc in session['listaManual']:
+#                     arti = Articulos(
+#                         compras_id = id_compra.id,
+#                         cantidad = dc['cantidad'],
+#                         descripcion = dc['descripcion'],
+#                         p_u = dc['pUnit'],
+#                         importe = dc['importe'],
+#                     )
+#                     db.session.add(arti)
+#                     db.session.commit()
+#                     session.pop('listaManual')
+#                     session['listaManual']=[]
+#                 flash('Registro guardado con exito con folio {}'.format(id_compra.id))
+#                 return redirect(url_for('capturaManual'))
+#             else:
+#                 session.pop('listaManual')
+#                 session['listaManual']=[]
+#                 flash('El registro Existe en la base de datos')
+#                 return redirect(url_for('capturaManual'))
+#         else:
+#             if 'eliminar' in request.form:
+#                 if len(session['listaManual'])==1:
+#                     session.pop('listaManual')
+#                     session['listaManual']=[]
+#                 else:
+#                     temporal=session['listaManual']
+#                     session.pop('listaManual')
+#                     temporal.pop(int(request.form['eliminar'])-1)
+#                     session['listaManual']=temporal
+#     return render_template('capturaManual.html', nombre=nombre, form=form, articulos=session['listaManual'], boton=(len(session['listaManual']) if len(session['listaManual'])>0 else 0))
 
 
 ####### Esto hay que convertirlo a una variable de session#########
@@ -1850,6 +2109,7 @@ def bitaConsul():
                     }
                     lista.append(data)
     return render_template("bitacoraConsulta.html", nombre=nombre, form=form, tabla=lista)
+
 
 if __name__ == '__main__':
     crsf.init_app(app)

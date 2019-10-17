@@ -1,0 +1,62 @@
+{% extends 'home.html' %}
+    	{% block content %}
+            {% if lista %}
+            <center>
+    			<div class="table table-responsive"  >
+    				<table class="table table-hover table-responsive table-bordered" >
+    					<caption class="footer">Datos de Factura</caption>
+    					<tbody>
+    						<tr class="success">
+    							<td><strong>Fecha</strong></td>
+    							<td><strong>Total</strong></th>
+    							<td><strong>Subtotal</strong></th>
+    							<td><strong>I. V. A.</strong></th>
+    							<td><strong>R. F. C.</strong></th>
+    							<td><strong>Nombre</strong></th>
+    							<td><strong>UUID</strong></th>
+    						</tr>
+    						<tr class="info">
+    							{% for item in lista %}    								
+    								<td>
+    									{{ item }}
+    								</td>    	
+    							{% endfor %}
+    						</tr>
+    					</tbody>
+    				</table>
+    			</div>
+            </center>
+            <h1>Asignación de Número de Folio</h1>
+            <div class="container">
+                <div class="row-fluid">
+                    <form name ="form2" class="form-search" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">Folio</span>
+                            </div>
+                            <input type="text" class="form-control" id="numero" name="numero" placeholder="Numero de fondo">
+                        </div>
+                        <button type="submint" class="btn btn-success" name="btn1" value="form2" >Asignar</button>
+                    </form>
+                </div>
+            </div>
+        {%else%}
+            <h1>Busqueda de Factura</h1>
+                <div class="container">
+                    <div class="row">
+                        <form class="form-search" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                             <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">Folio</span>
+                                </div>
+                                <input type="text" class="form-control" id="folio" name="folio" placeholder="Numero de Folio">
+                            </div>
+                            <button type="submint" class="btn btn-success" name="btn1" value="form1">Buscar</button>   
+                        </form>
+                    </div>
+                </div>
+
+    	{% endif %}
+    {% endblock %}

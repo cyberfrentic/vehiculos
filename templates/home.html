@@ -70,7 +70,7 @@
 
     <!-- inicia el menu -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="{{url_for('home')}}">
        <img src="{{url_for('static', filename='img/capa.png') }}" width="80" height="45" alt="">
        <img src="{{url_for('static', filename='img/qroo.png') }}" width="80" height="45" alt="">
       </a>
@@ -138,6 +138,20 @@
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/caja-fuerte.svg')}}" width="16" height="16">
+              Caja Chica
+            </a>
+             <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041; ">
+              
+              <a class="dropdown-item" href="{{url_for('upload_fileCC')}}"> <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/xml.svg')}}" width="16" height="16">Subir Archivo XML</a>
+              <a class="dropdown-item" href="{{url_for('folio')}}"> <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/programacion.svg')}}" width="16" height="16">Asignar Núm. Fondo</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item  disabled" href="#"> <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/consulta2.svg')}}" width="16" height="16" disabled><strong>Consultas</strong></a>
+              <a class="dropdown-item" href="{{url_for('ConsultaCaja')}}"> <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/consulta.svg')}}" width="16" height="16">Consulta de Fondos</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/gas.svg')}}" width="16" height="16">
               Combustible
             </a>
@@ -199,7 +213,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
                       <a class="dropdown-item" href="/manteniminetos/solicitud/captura_servicio/factura_xml"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/xml.svg')}}" width="16" height="16">Factura xml</a>
-                      <a class="dropdown-item" href="/manteniminetos/solicitud/capturaDeServicio/manual"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/entrevista.svg')}}" width="16" height="16">Manual</a>
+                      <!-- <a class="dropdown-item" href="/manteniminetos/solicitud/capturaDeServicio/manual"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/entrevista.svg')}}" width="16" height="16">Manual</a> -->
                     </div>
                   </div>
                   <div class="dropdown-submenu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">

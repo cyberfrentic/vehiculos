@@ -1,0 +1,137 @@
+{% extends 'home.html' %}
+{%block nombre%}  
+    {% if nombre %}
+      <li><a href="#"><icon class="icon-user icon-white"></icon> {{nombre}}</a></li>
+    {% else %}
+        <li><a href="/login"><icon class="icon-user icon-white"></icon> Login</a></li> 
+    {% endif %}
+{%endblock%}
+    {% block content %}
+    <script>
+    	function DesactivarFolio() {
+    		document.getElementById("folio_text").disabled = !document.getElementById("folio_value").checked;
+		}
+		function DesactivarFechas() {
+    		document.getElementById("fecha1").disabled = !document.getElementById("fecha").checked;
+    		document.getElementById("fecha2").disabled = !document.getElementById("fecha").checked;
+		}
+		function DesactivarProveedor() {
+    		document.getElementById("TextProv").disabled = !document.getElementById("CheckProv").checked;
+		}
+    	function mayus(e) {
+    		e.value = e.value.toUpperCase();
+		}
+    	function valida(e){
+    		tecla = (document.all) ? e.keyCode : e.which;
+    		//Tecla de retroceso para borrar, siempre la permite
+    		if (tecla==8){
+        	return true;
+    	}
+    	// Patron de entrada, en este caso solo acepta numeros
+    	patron =/[0-9]/;
+    	tecla_final = String.fromCharCode(tecla);
+    	return patron.test(tecla_final);
+		}
+	</script>
+    	<div class="container">
+    		<div class="row-fluid">
+    			<form  name="form1" class="form-horizontal" method="POST" accept-charset="utf-8">
+    				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    				<legend>Consulta por Numero de fondo</legend>
+    				<div class="control-group info">
+    					<div class="controls">
+    						<label class="checkbox">
+    						<input type="checkbox"  name="mismo" id="folio_value" value="1" onclick="DesactivarFolio()"> Consulta por Fondo
+    						<input type="text" class="text" id="folio_text" name="folio_text" placeholder="Capture El Número de folio" onkeypress="return valida(event)" disabled>
+    						</label>
+    					</div>
+    					<div class="controls">
+    						<label class="checkbox">
+    							<input type="checkbox" name="mismo" id="fecha"value="2" onclick="DesactivarFechas()"> Consulta por Fecha
+    						</label>
+    								<div>
+    									Fecha Inicial
+    									<input type="date" id="fecha1" name="fecha_Inicial" step="1" min="2018-01-01" max="2020-12-31" value="2018-01-01" disabled> 
+    								</div>
+    								<br>
+    								<div>
+    									Fecha Final
+    									<input type="date" id="fecha2" name="fecha_Final" step="1" min="2018-01-01" max="2020-12-31" value="2018-01-01" disabled> 
+    								</div>
+    						
+    					</div>
+						<div class="controls">
+							<label class="checkbox">
+								<input type="checkbox" name="mismo" id="CheckProv" value="3" onclick="DesactivarProveedor()">
+								Seleccione un Proveedor
+								<select name="TextProv" id="TextProv" disabled>
+									{% if lista%}
+										{% for item in lista %}
+											<option>{{item}}</option>
+										{% endfor%}
+									{% else %}
+										<option>NO HAY DATOS</option>
+									{% endif %}
+								</select>
+							</label>
+						</div>
+						<br>
+						<div class="control-group">
+    						<div class="controls">
+    							<div class="btn-group">
+    								<button type="submit" class="btn btn-info" id="generar" name="btn1" value="form1"><i class="icon-list-alt icon-white"></i> Generar Consulta</button>
+    							</div>
+    							<div class="btn-group">
+    								<button type="reset" class="btn btn-info" ><i class="icon-remove-circle icon-white"></i> cancelar</button>
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+    			</form>
+    		</div>
+    	</div>
+    	{% if lista2 %}
+    		<center>
+                <div class="container">
+                    <div class="row-fluid">
+                        <form name="form2" class="form-search" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submint" class="btn btn-success" name="btn1" value="form2">Imprimir</button>   
+                        </form>
+                    </div>
+                </div>
+    			<div class="table table-responsive"  >
+    				<table class="table table-hover table-responsive table-bordered" >
+    					<caption class="footer">Datos de Factura</caption>
+    					<tbody>
+    						<tr class="success">
+                                <td><strong>Id</strong></td>
+    							<td><strong>Fecha</strong></td>
+    							<td><strong>Total</strong></th>
+    							<td><strong>Subtotal</strong></th>
+    							<td><strong>I. V. A.</strong></th>
+                                <td><strong>Núm. De Fondo</strong></td>
+    							<td><strong>R. F. C.</strong></th>
+    							<td><strong>Nombre</strong></th>
+    							<td><strong>UUID</strong></th>
+    						</tr>
+    						{% for item in lista2 %}
+    							<tr class="info">
+                                    <td>{{item.Fol_contador}}</td>								
+    								<td>{{ item.fecha }}</td>    	
+    								<td>{{ item.total }}</td>
+    								<td>{{ item.subtotal }}</td>
+    								<td>{{ item.iva }}</td>
+                                    <td>{{ item.folio}}</td>
+    								<td>{{ item.rfc }}</td>
+    								<td>{{ item.nombre }}</td>
+    								<td>{{ item.UUiD }}</td>    							
+    							</tr>
+    						{% endfor %}
+    					</tbody>
+    				</table>
+    			</div>
+            </center>
+            <br>
+        {% endif %}
+    {% endblock %}
