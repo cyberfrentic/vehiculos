@@ -85,7 +85,7 @@
           Fotografías
         </button></td>
                   <td><a type="submit" href="/itemVehi/{{datos.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
-                  <td><a type="submit" href="#"class="btn btn-outline-danger" name='oficialia' value="oficialia">Oficialia</a></td>
+                  <td><a type="submit" href="/catalogo/vehiculos/consulta/oficialia/{{datos.numInv}}"class="btn btn-outline-danger" name='oficialia' value="oficialia">Oficialia</a></td>
               </tr>
 
           </tbody>
@@ -229,7 +229,7 @@
     Fotografías
   </button></td>
             <td><a type="submit" href="/itemVehi/{{datos2.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
-            <td><a type="submit" href="#"class="btn btn-outline-danger" name='buton' value="oficialia">Oficialia</a></td>
+            <td><a type="submit" href="/catalogo/vehiculos/consulta/oficialia/{{datos2.numInv}}"class="btn btn-outline-danger" name='buton' value="oficialia">Oficialia</a></td>
         </tr>
 
     </tbody>
@@ -373,7 +373,7 @@
     Fotografías
   </button></td>
             <td><a type="submit" href="/itemVehi/{{datos3.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
-            <td><a type="submit" href="#" class="btn btn-outline-danger" name='buton' value="oficialia">Oficialia</a></td>
+            <td><a type="submit" href="/catalogo/vehiculos/consulta/oficialia/{{datos3.numInv}}" class="btn btn-outline-danger" name='buton' value="oficialia">Oficialia</a></td>
         </tr>
 
     </tbody>
@@ -515,7 +515,7 @@
             <td>{{item.odome}}</td>
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal{{item.placa}}">Fotografías</button></td>
             <td><a type="submit" href="/itemVehi/{{item.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
-            <td><a type="submit" href="#"class="btn btn-outline-danger" name='oficialia' value="oficialia">Oficialia</a></td>
+            <td><a type="submit" href="/catalogo/vehiculos/consulta/oficialia/{{item.numInv}}"class="btn btn-outline-danger" name='oficialia' value="oficialia">Oficialia</a></td>
         </tr>
       {% endfor %}
     </tbody>

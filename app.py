@@ -392,7 +392,6 @@ def searchvehiculo():
                 titulo = "Reporte de vehiculos"
                 query = Vehiculo.query.filter(Vehiculo.numInv.contains(str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
                 queryImg = Imagen.query.filter(Imagen.placa==query.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
-                print(queryImg)
                 diccionario = {
                         'derecho' : queryImg[0].ruta,
                         'izquierdo': queryImg[1].ruta,
@@ -475,6 +474,7 @@ def editarVehi(numInv):
 
     comparacion = [item for item in lista2 if item not in lista]
 
+
     if request.method == 'POST':
         if lugar==12:
             flash(("Disculpe usted no puede realizar ningún cambio"))
@@ -553,12 +553,47 @@ def editarVehi(numInv):
                     db.session.add(img)
                     db.session.commit()
             ##################################################
-
-                
-            
             flash('Registro modificado con exito')
             return redirect(url_for('searchvehiculo'))
     return render_template('vehiculos.html', nombre=nombre, form=form, edit=True, fotos=queryImg, doc=queryDoc, preciono=preciono, lista=comparacion)
+
+
+@app.route("/catalogo/vehiculos/consulta/oficialia/<numInv>", methods=['GET', 'POST'])
+def oficialia(numInv):
+    nombre = session["username"].upper()
+    lugar = session['ciudad']
+    lista=[]
+    lista2=['fro', 'izq', 'der', 'tras', 'inte']
+    nombre = session["username"].upper()
+    lugar = session['ciudad']
+    x = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
+    queryImg = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+    for item in queryImg:
+        if "fro" in item.parte:
+            lista.append(item.parte)
+        elif "izq" in item.parte:
+            lista.append(item.parte)
+        elif "der" in item.parte:
+            lista.append(item.parte)
+        elif "tras" in item.parte:
+            lista.append(item.parte)
+        elif "inte" in item.parte:
+            lista.append(item.parte)
+    comparacion = [item for item in lista2 if item not in lista]
+
+    try:
+        diccionario = {
+                        'derecho' : queryImg[0].ruta,
+                        'izquierdo': queryImg[1].ruta,
+                        'frontal' : queryImg[2].ruta,
+                        'trasera' : queryImg[3].ruta,
+                        'interna' : queryImg[4].ruta,
+                        }
+        x = reporteVehiculosOne(query, titulo, diccionario)
+        return x
+    except IndexError as e:
+        flash("noexisten imagenes de este vehiculo: {}".format(x.placa))
+        return redirect(url_for("searchvehiculo"))
 
 
 @app.route('/resguardante', methods=["GET", "POST"])
