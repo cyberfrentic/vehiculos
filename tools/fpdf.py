@@ -251,6 +251,7 @@ def tabla(datos, totales, titulo):
 
     # Set column width to 1/4 of effective page width to distribute content 
     # evenly across table and page
+    
     plas = str(totales[0]['placa'])
     c = carro(plas)
     r = area(str(c.resguardo))
@@ -396,7 +397,7 @@ def tabla(datos, totales, titulo):
     return response
 
 
-def tabla2(totales, titulo="pruebab nueva"):
+def tabla3(totales, titulo="prueba nueva"):
     global Titulo
     Titulo=titulo
     global tamaño
@@ -947,6 +948,7 @@ def reporteVehiculos(datos, titulo):
             pdf.cell(col_width, th, str(item.cSeguros), border=1,align='C')
             pdf.cell(col_width, th, str(item.nPoliza), border=1,align='C')
             pdf.cell(col_width, th, str(item.placa), border=1,align='C')
+            pdf.ln()
 
 
     #########################################

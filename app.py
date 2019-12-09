@@ -10,9 +10,10 @@ from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
     filtroServ, formCotizacion, formBitacora, formBitacora2, FormConsultaTicket2
-from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne, tabla2
+from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne, tabla3
 from tools.tool import ToExcel
-from tools.fpdf import tabla
+from tools.fpdf3 import tabla2
+from tools.fpdf4 import formatoBlanco
 from sqlalchemy.sql import func
 from pygal.style import Style
 import pygal
@@ -265,8 +266,8 @@ def Vehiculow():
                                 vehi.nPoliza.data,
                                 vehi.placa.data,
                                 lugar,
-                                vehi.tipoCarga,
-                                vehi.numDispositivo)
+                                vehi.tipoCarga.data,
+                                vehi.numDispositivo.data,)
             db.session.add(vehiculo)
             db.session.commit()
             ############### agregando imagenes ###############
@@ -391,6 +392,7 @@ def searchvehiculo():
                 titulo = "Reporte de vehiculos"
                 query = Vehiculo.query.filter(Vehiculo.numInv.contains(str(form.search.data.upper()))).filter_by(idCiudad=lugar).first()  # consulta de nombre se incluye en el nombre completo
                 queryImg = Imagen.query.filter(Imagen.placa==query.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+                print(queryImg)
                 diccionario = {
                         'derecho' : queryImg[0].ruta,
                         'izquierdo': queryImg[1].ruta,
@@ -1048,7 +1050,7 @@ def Consulta_ticket2():
             mes = meses(str(ff)[5:7])
             anio1 = str(fi)[:4]
             titulo="Combustible Del {} Al {} De {} De {}.".format(fecha1,fecha2,mes, anio1)
-            return tabla2(lista2,titulo)
+            return tabla3(lista2,titulo)
         else:
             flash("Debe seleccionar al menos un elemento")
     return render_template('TicketConsulta2.html', form=form, nombre=nombre)
@@ -1714,7 +1716,8 @@ def ConsultaCaja():
                 ]
                 totales+=item.total
                 lista2.append(j)
-            x=tabla(lista2, totales)
+
+            x=tabla2(lista2, totales)
             return (x)
     return render_template("consultaCajachica.html", lista=lista, nombre=nombre)
 
@@ -1961,6 +1964,33 @@ def rendimientos():
     return render_template("rendimientos.html", nombre=nombre, form=form)
 
 
+@app.route("/catalogo/vehiculos/bitacora/impresionFormatosVehiculos", methods=['GET', 'POST'])
+def BitacoraFormatos():
+    nombre = session['username']
+    lugar =session['ciudad']
+    form = formBitacora(request.form)
+    if request.method == 'POST':
+        if "buscar" in request.form['buscar']:
+            if 'ni' in form.select1.data:
+                if len(form.select2.data)>0:
+                    nuin = Vehiculo.query.filter_by(id=form.select2.data).first()
+                    depto = Resguardante.query.filter_by(nombreCompleto=nuin.resguardo).first()
+                    formWhite = formatoBlanco("bitacora de de uso vehicular".upper() , nuin, depto)
+                    return formWhite
+                else:
+                    flash("No eligio ninguna opcion")
+            elif 'placa' in form.select1.data:
+                nuin = Vehiculo.query.filter_by(id=form.select2.data).first()
+                depto = Resguardante.query.filter_by(nombreCompleto=nuin.resguardo).first()
+                formWhite = formatoBlanco("bitacora de de uso vehicular".upper() , nuin, depto)
+                return formWhite
+            elif 'res' in form.select1.data:
+                nuin = Vehiculo.query.filter_by(id=form.select2.data).first()
+                depto = Resguardante.query.filter_by(nombreCompleto=nuin.resguardo).first()
+                formWhite = formatoBlanco("bitacora de de uso vehicular".upper() , nuin, depto)
+                return formWhite
+    return render_template("bitacora.html", nombre=nombre, form=form)
+
 
 @app.route("/catalogo/vehiculos/bitacora/captura", methods=["GET","POST"])
 def bitacora():
@@ -2116,4 +2146,4 @@ if __name__ == '__main__':
     db.init_app(app)
     with app.app_context():
         db.create_all()
-    app.run(port=9000, host='0.0.0.0')
+    app.run(port=7000, host='0.0.0.0')

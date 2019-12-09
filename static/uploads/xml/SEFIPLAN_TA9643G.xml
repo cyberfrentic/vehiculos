@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ArrayOfClsAutoFacturacionFacturasClientes_Mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <clsAutoFacturacionFacturasClientes_Mod>
+    <RFCEmpresa>GEL741008GY9</RFCEmpresa>
+    <nombreEmpresa>GOBIERNO DEL ESTADO LIBRE Y SOBERANO DE QUINTANA ROO</nombreEmpresa>
+    <IdentificadorCliente1>51051145367232097</IdentificadorCliente1>
+    <IdentificadorCliente2>01050132525367</IdentificadorCliente2>
+    <IdentificadorCliente3 />
+    <fechaEmision>2019-06-06T13:08:16</fechaEmision>
+    <serie>AEA</serie>
+    <folio>325253</folio>
+    <fechaFactura>2019-06-06T13:38:47</fechaFactura>
+    <UUID>7DB510AB-A7BB-4D9E-8A5A-FFBD785076AA</UUID>
+    <fechatimbrado>2019-06-06T13:38:48</fechatimbrado>
+    <subtotal>42.000000</subtotal>
+    <descuento>0.000000</descuento>
+    <total>42.000000</total>
+    <moneda>MXN</moneda>
+    <claveSucursal />
+  </clsAutoFacturacionFacturasClientes_Mod>
+</ArrayOfClsAutoFacturacionFacturasClientes_Mod>

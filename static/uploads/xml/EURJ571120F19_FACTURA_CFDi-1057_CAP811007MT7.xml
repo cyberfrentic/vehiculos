@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cfdi:Comprobante xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="3.3" Folio="1057" Fecha="2018-07-28T15:40:23" Sello="XdJAFTSOvcnNNR7fOZwgLK02joVLkoozXT2NLRiVe1r6ik8B2xYg069bOU17KDQqGGSERWk+xVyNBj1yD2sRt2W1rGQ7PBhOVSDbt2IFJ6NOIvPiKzaEZNsI+4U5h5yEobIu7qoGSxga86UiUfUmlYQk/U+cl82Zn4AaVE1rPnQ=" FormaPago="01" NoCertificado="00001000000305827899" Certificado="MIIEZTCCA02gAwIBAgIUMDAwMDEwMDAwMDAzMDU4Mjc4OTkwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xNTAxMTMxNTUyMTlaFw0xOTAxMTMxNTUyMTlaMIGxMR0wGwYDVQQDExRKT1NFIEVTUVVJVkVMIFJBTkdFTDEdMBsGA1UEKRMUSk9TRSBFU1FVSVZFTCBSQU5HRUwxHTAbBgNVBAoTFEpPU0UgRVNRVUlWRUwgUkFOR0VMMRYwFAYDVQQtEw1FVVJKNTcxMTIwRjE5MRswGQYDVQQFExJFVVJKNTcxMTIwSEpDU05TMDkxHTAbBgNVBAsTFEVTUVVJVkVMIFJBTkdFTCBKT1NFMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEEBN/U2ZNNvjm2X26OklD90xyvq5svUC4s/VERP8QoVUH1OsFYZd8cbvYfruUYZxHfl1uakCV5buUYOCrg6nlUoCRaeIjFupVbLyXiIuPY1xsG/jvcsdH1R/unLcbe72fHuoSa9GKDKUGykRme1wxndLYIEGzfeiUofyPuk2UqwIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQUFAAOCAQEAv/e/1Dq9xZMDMasnDEufJT2gwA6vo6xnDY6IKlO1x8Zg2k8WJqNIyiimv3J3RzYZ5VQLTmWdiQ2aXbmjR3GQx9wIgOacPHbUHzeJZ/lqxXCe9F0/d9x6y5rbDLjLDO6PL17eouQizTWQAUNkyuuveiSKGmdXhDD3EezPcnzUGLAlMZ1xi2k/Rv7N8qVOBkhereq/JCUsYys4y9n13SUywfEVNexYYQB2MEO5GK+ozSYj5U5FT77y60afxIp9uqfpGBLmQYj1MCjvV/cbZp0T+6mJh66TOkciR4Pywg7St6x+n9/UkrPSMUYEOH0JZPcqa1cCFSceXonTKJepxmL0Ew==" CondicionesDePago="CONTADO" SubTotal="200.00" Moneda="MXN" TipoCambio="1" Total="232.00" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="77229">
+	<cfdi:Emisor Rfc="EURJ571120F19" Nombre="JOSE ESQUIVEL RANGEL" RegimenFiscal="621"/>
+	<cfdi:Receptor Rfc="CAP811007MT7" Nombre="COMISION DE AGUA POTABLE Y ALCANTARILLADO DEL ESTADO DE QROO" UsoCFDI="G03"/>
+	<cfdi:Conceptos>
+		<cfdi:Concepto ClaveProdServ="78181500" Cantidad="2" ClaveUnidad="E48" Unidad="SER" Descripcion="RECTIFICACION DE DISCO O TAMBOR " ValorUnitario="100.00" Importe="200.00">
+			<cfdi:Impuestos>
+				<cfdi:Traslados>
+					<cfdi:Traslado Base="200.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="32.000000"/>
+				</cfdi:Traslados>
+			</cfdi:Impuestos>
+		</cfdi:Concepto>
+	</cfdi:Conceptos>
+	<cfdi:Impuestos TotalImpuestosTrasladados="32.00">
+		<cfdi:Traslados>
+			<cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="32.00"/>
+		</cfdi:Traslados>
+	</cfdi:Impuestos>
+	<cfdi:Complemento>
+		<tfd:TimbreFiscalDigital Version="1.1" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" SelloSAT="pd1peFe4wsgyV28VELbhwvy96RHeAq6T1R1YvtziqnEptcUHtKFi9K4BacQMg8BOXH4k5bpHyxrf2/lQlcFxEEfWwsjDWpmJTievD6/Yt7qSyc+okT5MPlwYnAROZCcMi22mkNwlUl5vUvR45F82aQhEQhMyUZBkE0JWhSH4dehXvC33t7pluH1QA0mE6q4X/UICGXp0LUIrOsR3rMCp99WpeGiZBNPTKz+ondD+eVA63VjxuByHYFPvyX7NGGOicf32mn7M/MRkj/f8f10fy3IBHar8CnFQGHTljPBJMnJrDDF7PYSC0a8ZgLLRr7jrubESBq3HV19qZ0s1cSbXJg==" NoCertificadoSAT="00001000000404486074" UUID="7D06B7E1-0A05-4A47-ABBC-03D23C98D3D7" FechaTimbrado="2018-07-28T15:40:30" SelloCFD="XdJAFTSOvcnNNR7fOZwgLK02joVLkoozXT2NLRiVe1r6ik8B2xYg069bOU17KDQqGGSERWk+xVyNBj1yD2sRt2W1rGQ7PBhOVSDbt2IFJ6NOIvPiKzaEZNsI+4U5h5yEobIu7qoGSxga86UiUfUmlYQk/U+cl82Zn4AaVE1rPnQ=" RfcProvCertif="MAS0810247C0" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"/>
+	</cfdi:Complemento>
+</cfdi:Comprobante>

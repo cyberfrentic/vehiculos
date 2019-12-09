@@ -103,6 +103,7 @@
                       <img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/Note.png')}}" width="16" height="16"> Bitacora
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:  #3f4041 ;">
+                      <a class="dropdown-item" href="{{url_for('BitacoraFormatos')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/imprimir.svg')}}" width="16" height="16"> Impresion de formatos</a>
                       <a class="dropdown-item" href="{{url_for('bitacora')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/analitica.svg')}}" width="16" height="16">Captura</a>
                       <a class="dropdown-item" href="{{url_for('bitaConsul')}}"><img class="img-fluid" alt="Responsive image" src="{{ url_for('static', filename='img/svg/entrevista.svg')}}" width="16" height="16">Consulta</a>
                     </div>
@@ -339,10 +340,10 @@
         <div>
           <br>
           <center><p style="color:white";>Departamento de Informática y telecomunicaciones Org. Oper. Felipe Carrillo Puerto</p></center>
-            <!--<div style="text-align: center;">
+            <div style="text-align: center;">
               <a style= "@media screen and (max-width: 980px) display: none; right: 3px; height: 167px; width: 100px; position: fixed; bottom: -5px;">  <img src="{{ url_for('static', filename='img/ezgif_com_optimize.gif')}}" _fcksavedurl="" alt="" />
               </a>
-            </div>-->
+            </div>
           </div>
         </div>
         <!-- Footer -->

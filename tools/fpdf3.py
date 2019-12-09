@@ -1,5 +1,5 @@
 from fpdf import FPDF
-import os
+import os, time
 from datetime import datetime
 from flask import make_response
 
@@ -122,7 +122,51 @@ def letras():
     anio = str(datetime.today())[:4]
     return (dias[dia] + ' dias del mes de ' + meses[mes] + ' de ' + anios[anio]).upper()
 
-def tabla(datos, totales):
+
+def SetMoneda(num, simbolo="US$", n_decimales=2):
+    """Convierte el numero en un string en formato moneda
+    SetMoneda(45924.457, 'RD$', 2) --> 'RD$ 45,924.46'     
+    """
+    #con abs, nos aseguramos que los dec. sea un positivo.
+    n_decimales = abs(n_decimales)
+    
+    #se redondea a los decimales idicados.
+    num = round(num, n_decimales)
+
+    #se divide el entero del decimal y obtenemos los string
+    num, dec = str(num).split(".")
+
+    #si el num tiene menos decimales que los que se quieren mostrar,
+    #se completan los faltantes con ceros.
+    dec += "0" * (n_decimales - len(dec))
+    
+    #se invierte el num, para facilitar la adicion de comas.
+    num = num[::-1]
+    
+    #se crea una lista con las cifras de miles como elementos.
+    l = [num[pos:pos+3][::-1] for pos in range(0,50,3) if (num[pos:pos+3])]
+    l.reverse()
+    
+    #se pasa la lista a string, uniendo sus elementos con comas.
+    num = str.join(",", l)
+    
+    #si el numero es negativo, se quita una coma sobrante.
+    try:
+        if num[0:2] == "-,":
+            num = "-%s" % num[2:]
+    except IndexError:
+        pass
+    
+    #si no se especifican decimales, se retorna un numero entero.
+    if not n_decimales:
+        return "%s %s" % (simbolo, num)
+        
+    return "%s %s.%s" % (simbolo, num, dec)
+
+
+
+
+def tabla2(datos, totales):
     # Instantiation of inherited class
     pdf = PDF('L', 'mm', 'Letter')
     pdf.alias_nb_pages()
@@ -184,7 +228,7 @@ def tabla(datos, totales):
     pdf.ln(2)
     pdf.set_font('Times','B',14.0)
     th = pdf.font_size   
-    pdf.cell(30, th, 'TOTAL: $ '+ str(("{0:.2f}".format(totales))), 'C', 1)
+    pdf.cell(30, th, 'TOTAL: $ '+ str(totales), 'C', 1)
     
 
     response = make_response(pdf.output(dest='S').encode('latin-1'))

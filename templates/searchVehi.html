@@ -67,6 +67,7 @@
               <th>Odome.</th>
               <th>imagen</th>
               <th>Editar</th>
+              <th>oficialia</th>
             </tr>
           </thead>
           <tbody id="myTable">
@@ -81,9 +82,10 @@
                   <td>{{datos.tCombus}}</td>
                   <td>{{datos.odome}}</td>
                   <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-          Ver Expediente Fotografico
+          Fotografías
         </button></td>
                   <td><a type="submit" href="/itemVehi/{{datos.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+                  <td><a type="submit" href="#"class="btn btn-outline-danger" name='oficialia' value="oficialia">Oficialia</a></td>
               </tr>
 
           </tbody>
@@ -209,6 +211,7 @@
         <th>Odome.</th>
         <th>imagen</th>
         <th>Editar</th>
+        <th>oficialia</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -223,9 +226,10 @@
             <td>{{datos2.tCombus}}</td>
             <td>{{datos2.odome}}</td>
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    Ver Expediente Fotografico
+    Fotografías
   </button></td>
             <td><a type="submit" href="/itemVehi/{{datos2.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+            <td><a type="submit" href="#"class="btn btn-outline-danger" name='buton' value="oficialia">Oficialia</a></td>
         </tr>
 
     </tbody>
@@ -351,6 +355,7 @@
         <th>Odome.</th>
         <th>imagen</th>
         <th>Editar</th>
+        <th>oficialia</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -365,9 +370,10 @@
             <td>{{datos3.tCombus}}</td>
             <td>{{datos3.odome}}</td>
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    Ver Expediente Fotografico
+    Fotografías
   </button></td>
             <td><a type="submit" href="/itemVehi/{{datos3.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+            <td><a type="submit" href="#" class="btn btn-outline-danger" name='buton' value="oficialia">Oficialia</a></td>
         </tr>
 
     </tbody>
@@ -475,12 +481,12 @@
 
 </div>
     </div>
-    <div class="container mt-3">
+    <div class="container mt-3 table-responsive">
 
   <p>Teclea las iniciales o el nombre y filtra lo que necesites (Núm. Inv, Responsable, Serie) </p>
   <input class="form-control" id="myInput" type="text" placeholder="Search..">
   <br>
-  <table class="table table-bordered">
+  <table class="table  table-bordered table-condensed">
     <thead>
       <tr class="table-primary">
         <th>Núm. Inv.</th>
@@ -493,6 +499,7 @@
         <th>Odome.</th>
         <th>imagen</th>
         <th>Editar</th>
+        <th>oficialia</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -506,8 +513,9 @@
             <td>{{item.tipoVehiculo}}</td>
             <td>{{item.tCombus}}</td>
             <td>{{item.odome}}</td>
-            <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal{{item.placa}}">Ver Expediente Fotografico</button></td>
+            <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal{{item.placa}}">Fotografías</button></td>
             <td><a type="submit" href="/itemVehi/{{item.numInv}}"class="btn btn-outline-danger" name='buton' >Editar</a></td>
+            <td><a type="submit" href="#"class="btn btn-outline-danger" name='oficialia' value="oficialia">Oficialia</a></td>
         </tr>
       {% endfor %}
     </tbody>
