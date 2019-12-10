@@ -1,0 +1,40 @@
+{% extends 'home.html' %}
+{% from "_macro.html" import render_field %}
+{% block content %}
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group form-inline">
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.kilometraje, class='form-control') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="form-goup col-xs-12 floating-label-form-group controls">
+                            {{ render_field(form.observaciones, class='form-control') }}
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        
+                </div>
+                <div class="success">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <button type="submit" class="btn btn-outline-danger" name='buton' value='search'>Search...</button>
+                        </div>
+                        
+                <br>
+                  
+                      <div class="form-group col-xs-12">
+                        <button type="submit" class="btn btn-outline-danger" name='buton' value='printer'>Imprimir</button>
+                      </div>
+                    
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+        
+    </div>
+{% endblock %}

@@ -9,8 +9,8 @@ from models import db, User, Vehiculo, Resguardante, Model_Proveedor, Ticket, Co
 from flask_wtf import CSRFProtect
 from forms import Create_Form, FormVehiculos, Form_resguardos, ResSearchForm, Form_Proveedor, ProvSearchForm, \
     VehiSearchForm, Form_Ticket, FormConsultaTicket, Form_Grafica, Form_Solicitud, Form_CapSol, Factura, capturaFactura,\
-    filtroServ, formCotizacion, formBitacora, formBitacora2, FormConsultaTicket2
-from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne, tabla3
+    filtroServ, formCotizacion, formBitacora, formBitacora2, FormConsultaTicket2, Oficialia
+from tools.fpdf import tabla, sol, orden, consultaGeneral, cotizacionPdf, reporteVehiculos, reporteVehiculosOne, tabla3, reporteVehiculosTwo
 from tools.tool import ToExcel
 from tools.fpdf3 import tabla2
 from tools.fpdf4 import formatoBlanco
@@ -29,7 +29,7 @@ import json
 import pymysql
 pymysql.install_as_MySQLdb()
 ###########################################
-ALLOWED_EXTENSIONS = set(["xml", "xls","pdf", "jpg", "png"])
+ALLOWED_EXTENSIONS = set(["xml", "xls","pdf", "jpg", "png", "jpeg"])
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 ###########################################
@@ -369,14 +369,25 @@ def searchvehiculo():
                     for item in query:
                         placa2 = item.placa
                         queryImg = Imagen.query.filter(Imagen.placa==placa2).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
-                        diccionario = {
+                        if queryImg != []:
+                            diccionario = {
                                         'placa': placa2,
-                                        'derecho' : queryImg[0].ruta if len(queryImg)==1 else "derecho",
-                                        'izquierdo': queryImg[1].ruta if len(queryImg)==2 else "izquierdo",
-                                        'frontal' : queryImg[2].ruta if len(queryImg)==3 else "frontal",
-                                        'tarjeta' : queryImg[3].ruta if len(queryImg)==4 else "tarjeta",
-                                        'factura' : queryImg[4].ruta if len(queryImg)==5 else "factura",
+                                        'derecho' : queryImg[0].ruta if (queryImg[0].parte)=='der' else "derecho",
+                                        'izquierdo': queryImg[3].ruta if (queryImg[3].parte)=='izq' else "izquierdo",
+                                        'frontal' : queryImg[4].ruta if (queryImg[4].parte)=='fro' else "frontal",
+                                        'interior' : queryImg[2].ruta if (queryImg[2].parte)=='inte' else "interior",
+                                        'trasera' : queryImg[1].ruta if (queryImg[1].parte)=='tras' else "trasera",
                                     }
+                        else:
+                            diccionario = {
+                                        'placa': placa2,
+                                        'derecho' : "derecho",
+                                        'izquierdo':"izquierdo",
+                                        'frontal' : "frontal",
+                                        'interior' : "interior",
+                                        'trasera' : "trasera",
+                                    }
+                        print(diccionario)
                         lista.append(diccionario)
                         diccionario.pop
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos4=query, fotos=lista )
@@ -530,6 +541,7 @@ def editarVehi(numInv):
             print(photos)
             ######################################################
             for titulo, x in photos.items():
+                print(x)
                 if x and allowed_file(x.filename):
                     filename = secure_filename(x.filename)
                     nombre, extension = filename.split('.')
@@ -543,6 +555,11 @@ def editarVehi(numInv):
                         _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename)
                         _path = 'uploads/img/'+ filename
                         flash("Archivo jpg guardado exitosamente")
+                    elif extension == 'jpeg':
+                        x.save(os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename))
+                        _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename)
+                        _path = 'uploads/img/'+ filename
+                        flash("Archivo jpeg guardado exitosamente")
                     elif extension == 'png':
                         x.save(os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename))
                         _path2 =os.path.join(app.config["UPLOAD_FOLDER"] + '\\img', filename)
@@ -550,6 +567,7 @@ def editarVehi(numInv):
                         flash("Archivo png guardado exitosamente")
                     data = read_file(_path2)
                     img = Imagen(form.placa.data, titulo, _path, data)
+                    print("#######",img)
                     db.session.add(img)
                     db.session.commit()
             ##################################################
@@ -562,38 +580,41 @@ def editarVehi(numInv):
 def oficialia(numInv):
     nombre = session["username"].upper()
     lugar = session['ciudad']
+    form = Oficialia(request.form)
     lista=[]
     lista2=['fro', 'izq', 'der', 'tras', 'inte']
     nombre = session["username"].upper()
     lugar = session['ciudad']
-    x = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
-    queryImg = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
-    for item in queryImg:
-        if "fro" in item.parte:
-            lista.append(item.parte)
-        elif "izq" in item.parte:
-            lista.append(item.parte)
-        elif "der" in item.parte:
-            lista.append(item.parte)
-        elif "tras" in item.parte:
-            lista.append(item.parte)
-        elif "inte" in item.parte:
-            lista.append(item.parte)
-    comparacion = [item for item in lista2 if item not in lista]
-
-    try:
-        diccionario = {
-                        'derecho' : queryImg[0].ruta,
-                        'izquierdo': queryImg[1].ruta,
-                        'frontal' : queryImg[2].ruta,
-                        'trasera' : queryImg[3].ruta,
-                        'interna' : queryImg[4].ruta,
-                        }
-        x = reporteVehiculosOne(query, titulo, diccionario)
-        return x
-    except IndexError as e:
-        flash("noexisten imagenes de este vehiculo: {}".format(x.placa))
-        return redirect(url_for("searchvehiculo"))
+    if request.method == 'POST':
+        x = Vehiculo.query.filter_by(numInv=numInv).filter_by(idCiudad=lugar).first()
+        queryImg = Imagen.query.filter(Imagen.placa==x.placa).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+        for item in queryImg:
+            if "fro" in item.parte:
+                lista.append(item.parte)
+            elif "izq" in item.parte:
+                lista.append(item.parte)
+            elif "der" in item.parte:
+                lista.append(item.parte)
+            elif "tras" in item.parte:
+                lista.append(item.parte)
+            elif "inte" in item.parte:
+                lista.append(item.parte)
+        comparacion = [item for item in lista2 if item not in lista]
+        try:
+            diccionario = {
+                            'derecho' : queryImg[0].ruta,
+                            'izquierdo': queryImg[1].ruta,
+                            'frontal' : queryImg[2].ruta,
+                            'trasera' : queryImg[3].ruta,
+                            'interna' : queryImg[4].ruta,
+                            }
+            x = reporteVehiculosTwo(x, titulo, diccionario, form.kilometraje.data)
+            return x
+        except IndexError as e:
+            flash("noexisten imagenes de este vehiculo: {}".format(x.placa))
+            return redirect(url_for("searchvehiculo"))
+        print(form.kilometraje)
+    return render_template("oficialia.html", nombre=nombre, form=form)
 
 
 @app.route('/resguardante', methods=["GET", "POST"])

@@ -153,11 +153,11 @@ class FormVehiculos(Form):
     placa = StringField('Placa del vehiculo',
                         [validators.DataRequired('La Placa es indispensable para el control vehicular')
                          ])
-    frontal = FileField('Imagen Vehiculo Frontal')
-    izq = FileField('Imagen Vehiculo lado Izquiero')
-    der = FileField('Imagen Vehiculo lado Derecho')
-    tras = FileField('Imagen Vehiculo lado trasero')
-    inte = FileField('Imagen Vehiculo interior')
+    frontal = FileField('Imagen Vehiculo vertice Frontal')
+    izq = FileField('Imagen Vehiculo lado vertice trasero')
+    der = FileField('Imagen Vehiculo interior')
+    tras = FileField('Imagen Vehiculo motor')
+    inte = FileField('Imagen Vehiculo Serie')
     factura = FileField('imagen de la factura')
     tarjeta = FileField('Imagen tarjeta de circulacion')
     poliza = FileField('Imagen Poliza de seguro')
@@ -404,3 +404,9 @@ class formBitacora2(Form):
   choices = [('na', ''), ('td', 'Todos'), ('ni', 'Núm. Inv.'), ('placa', 'Placa'), ('res', 'Resguardante')]
   select1 = SelectField('Buscar por', choices=choices, )
   select2 = SelectField('Opciones', choices=[('', ''),])
+
+
+class Oficialia(Form):
+  kilometraje = StringField("Kilometraje",[
+    validators.DataRequired(message="Tiene que capturar el Kilometraje")])
+  observaciones = TextAreaField("Observaciones")
