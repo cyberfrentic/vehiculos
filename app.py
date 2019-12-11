@@ -369,15 +369,17 @@ def searchvehiculo():
                     for item in query:
                         placa2 = item.placa
                         queryImg = Imagen.query.filter(Imagen.placa==placa2).filter(Imagen.parte!="fac").filter(Imagen.parte!="tar").filter(Imagen.parte!="pol").all()
+
                         if queryImg != []:
                             diccionario = {
                                         'placa': placa2,
-                                        'derecho' : queryImg[0].ruta if (queryImg[0].parte)=='der' else "derecho",
-                                        'izquierdo': queryImg[3].ruta if (queryImg[3].parte)=='izq' else "izquierdo",
-                                        'frontal' : queryImg[4].ruta if (queryImg[4].parte)=='fro' else "frontal",
-                                        'interior' : queryImg[2].ruta if (queryImg[2].parte)=='inte' else "interior",
-                                        'trasera' : queryImg[1].ruta if (queryImg[1].parte)=='tras' else "trasera",
+                                        'derecho' : [item.ruta for item in queryImg if item.parte == "der"],
+                                        'izquierdo': [item.ruta for item in queryImg if item.parte == "izq"],
+                                        'frontal' : [item.ruta for item in queryImg if item.parte == "fro"],
+                                        'interior' : [item.ruta for item in queryImg if item.parte == "inte"],
+                                        'trasera' : [item.ruta for item in queryImg if item.parte == "tras"],
                                     }
+                            print(diccionario)
                         else:
                             diccionario = {
                                         'placa': placa2,
@@ -387,7 +389,6 @@ def searchvehiculo():
                                         'interior' : "interior",
                                         'trasera' : "trasera",
                                     }
-                        print(diccionario)
                         lista.append(diccionario)
                         diccionario.pop
                     return render_template('searchVehi.html', form=form, nombre=nombre, datos4=query, fotos=lista )
@@ -602,13 +603,14 @@ def oficialia(numInv):
         comparacion = [item for item in lista2 if item not in lista]
         try:
             diccionario = {
-                            'derecho' : queryImg[0].ruta,
-                            'izquierdo': queryImg[1].ruta,
-                            'frontal' : queryImg[2].ruta,
-                            'trasera' : queryImg[3].ruta,
-                            'interna' : queryImg[4].ruta,
+                            'derecho' : [item.ruta for item in queryImg if item.parte == "der"], #queryImg[0].ruta,
+                            'izquierdo': [item.ruta for item in queryImg if item.parte == "izq"],
+                            'frontal' : [item.ruta for item in queryImg if item.parte == "fro"],
+                            'trasera' : [item.ruta for item in queryImg if item.parte == "tras"],
+                            'interna' : [item.ruta for item in queryImg if item.parte == "inte"],
                             }
-            x = reporteVehiculosTwo(x, titulo, diccionario, form.kilometraje.data)
+            print(diccionario)
+            x = reporteVehiculosTwo(x, titulo, diccionario, form.kilometraje.data, form.observaciones.data)
             return x
         except IndexError as e:
             flash("noexisten imagenes de este vehiculo: {}".format(x.placa))

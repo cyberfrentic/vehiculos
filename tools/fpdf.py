@@ -1097,7 +1097,7 @@ def reporteVehiculosOne(datos, titulo, rutas):
     return response
 
 
-def reporteVehiculosTwo(datos, titulo, rutas, kilo):
+def reporteVehiculosTwo(datos, titulo, rutas, kilo, obser):
     global Titulo
     Titulo=titulo
     global tamaño
@@ -1124,18 +1124,18 @@ def reporteVehiculosTwo(datos, titulo, rutas, kilo):
     imagenes = os.path.abspath("static")
 
     pdf.cell(18,7," ",0,0,'C')
-    pdf.image(os.path.join(imagenes, rutas['interna']), 30, 45, 110, 60)
+    pdf.image(os.path.join(imagenes, rutas['izquierdo'][0] ), 30, 45, 110, 55)
     pdf.cell(5,7," ",0,0,'C')
-    pdf.image(os.path.join(imagenes, rutas['trasera']), 150, 45, 110, 60)
+    pdf.image(os.path.join(imagenes, rutas['frontal'][0]), 150, 45, 110, 55)
     pdf.cell(5,7," ",0,0,'C')
-    pdf.image(os.path.join(imagenes, rutas['derecho']), 30, 110, 75, 50)
+    pdf.image(os.path.join(imagenes, rutas['derecho'][0]), 30, 105, 75, 45)
     pdf.cell(43,7," ",0,0,'C')
-    pdf.image(os.path.join(imagenes, rutas['izquierdo']), 108, 110, 75, 50)
+    pdf.image(os.path.join(imagenes, rutas['trasera'][0]), 108, 105, 75, 45)
     pdf.cell(5,7," ",0,0,'C')
-    pdf.image(os.path.join(imagenes, rutas['frontal']), 185, 110, 75, 50)
+    pdf.image(os.path.join(imagenes, rutas['interna'][0]), 185, 105, 75, 45)
 
     ######################  fin imagenes  ##############################
-    pdf.ln(116)
+    pdf.ln(105)
     pdf.set_font('Times', '', 10.0)
     pdf.set_fill_color(179, 182, 183)
     pdf.cell(35,7,"Núm. Inventario",1,0,'C',True)
@@ -1156,64 +1156,11 @@ def reporteVehiculosTwo(datos, titulo, rutas, kilo):
     pdf.cell(21,7,kilo,1,0,'C')
     pdf.cell(51,7,"Org. Oper. "+ciudad(),1,0,'C')
     pdf.cell(51,7,datos.resguardo,1,0,'C')
-    # pdf.ln(10)
-    # pdf.set_font('Times', '', 12.0)
-    # pdf.cell(15,7,"Año",1,0,'C',True)
-    # pdf.cell(35,7,"Tipo de Vehículo",1,0,'C',True)
-    # pdf.cell(53,7,"Núm. de Serie",1,0,'C',True)
-    # pdf.cell(33,7,"Núm. de Motor",1,0,'C',True)
-    # pdf.cell(33,7,"Costo",1,0,'C',True)
-    # pdf.cell(31,7,"Combustible",1,0,'C',True)
-    # pdf.ln()
-    # pdf.set_font('Times', '', 10.0)
-    # pdf.cell(15,7,datos.anio,1,0,'C')
-    # pdf.cell(35,7,datos.tipoVehiculo,1,0,'C')
-    # pdf.cell(53,7,datos.nSerie,1,0,'C')
-    # pdf.cell(33,7,datos.nMotor,1,0,'C')
-    # pdf.cell(33,7,str(datos.costo),1,0,'C')
-    # pdf.cell(31,7,datos.tCombus,1,0,'C')
-    # pdf.ln(10)
+    pdf.ln()
+    pdf.cell(262,7,"Situacion de Funcionamiento (30 de Noviembre 2019)",1,0)
+    pdf.ln()
+    pdf.multi_cell(262,15,obser, 1 ,"J")
 
-    # pdf.set_font('Times', '', 12.0)
-    # pdf.set_fill_color(179, 182, 183)
-    # if datos.odome=="Si":
-    #     pdf.cell(15,7," ",0,0,'C')
-    #     pdf.cell(35,7,"Odometro",1,0,'C',True)
-    #     pdf.cell(35,7,"Km. Inicial",1,0,'C',True)
-    # else:
-    #     pdf.cell(33,7," ",0,0,'C')
-    #     pdf.cell(35,7,"Odometro",1,0,'C',True)    
-    # pdf.cell(35,7,"Aseguradora",1,0,'C',True)
-    # pdf.cell(33,7,"Núm. Poliza",1,0,'C',True)
-    # pdf.cell(33,7,"Placa",1,0,'C',True)
-    # pdf.ln()
-
-    # pdf.set_font('Times', '', 10.0)
-    # if datos.odome=="Si":
-    #     pdf.cell(15,7," ",0,0,'C')
-    #     pdf.cell(35,7,datos.odome,1,0,'C')
-    #     pdf.cell(35,7,datos.kmInicio,1,0,'C')
-    # else:
-    #     pdf.cell(33,7," ",0,0,'C')
-    #     pdf.cell(35,7,datos.odome,1,0,'C')
-    # pdf.cell(35,7,datos.cSeguros,1,0,'C')
-    # pdf.cell(33,7,datos.nPoliza,1,0,'C')
-    # pdf.cell(33,7,datos.placa,1,0,'C')
-    # pdf.ln(10)
-
-    # pdf.set_font('Times', '', 12.0)
-    # pdf.cell(40,7,"Resguardante Ant.",1,0,'C',True)
-    # pdf.set_font('Times', '', 10.0)
-    # if datos.resguardoAnte == None:
-    #     pdf.cell(160,7,"Sin resguardo anterior",1,0,'C')
-    # else:
-    #     pdf.cell(160,7,datos.resguardoAnte,1,0,'C')
-    # pdf.ln(10)
-    # pdf.set_font('Times', '', 12.0)
-    # pdf.cell(40,7,"Resguardante Actual",1,0,'C',True)
-    # pdf.set_font('Times', '', 10.0)
-    # pdf.cell(160,7,datos.resguardo,1,0,'C')
-    # pdf.ln(10)
 
     #########################################
     response = make_response(pdf.output(dest='S').encode('latin-1'),200)
