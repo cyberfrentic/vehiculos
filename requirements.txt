@@ -43,7 +43,7 @@ SQLAlchemy==1.2.11
 SQLAlchemy-ImageAttach==1.1.0
 texttable==1.6.1
 validators==0.12.2
-waitress==1.1.0
+waitress==1.4.2
 Wand==0.5.2
 Werkzeug==0.14.1
 WTForms==2.2.1
