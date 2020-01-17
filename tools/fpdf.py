@@ -1159,7 +1159,7 @@ def reporteVehiculosTwo(datos, titulo, rutas, kilo, obser):
     pdf.ln()
     pdf.cell(262,7,"Situacion de Funcionamiento (30 de Noviembre 2019)",1,0)
     pdf.ln()
-    pdf.multi_cell(262,15,obser, 1 ,"J")
+    pdf.multi_cell(262,10,obser, 1 ,"J")
 
 
     #########################################
