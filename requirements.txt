@@ -2,7 +2,7 @@ asn1crypto==0.24.0
 Babel==2.6.0
 cffi==1.11.5
 click==6.7
-cryptography==2.3.1
+cryptography==3.2
 cycler==0.10.0
 decorator==4.3.0
 defusedxml==0.6.0
